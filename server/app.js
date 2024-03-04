@@ -1,0 +1,38 @@
+import express from 'express'
+
+import { getNotes, getNote, createNote } from './database.js'
+
+const app = express()
+
+app.use(express.json())
+
+// use database.js file
+app.get("/notes",  async (req, res) => {
+    const notes = await getNotes()
+    res.send(notes)
+})
+
+// use database.js file to return a user defined note in directory
+app.get("/notes/:id",  async (req, res) => {
+    const id = req.params.id
+    const note = await getNote(id)
+    res.send(note)
+})
+
+// craete a database entry from a post request to /notes
+app.post("/notes", async (req, res) => {
+    const { title, contents } = req.body    // sets title and contents to parameters from post request body
+    const note = await createNote(title, contents)  // uses our database function to create an sql entry
+    res.status(201).send(note)  // returns to our user what our database function returned to us. status 201 indicates item created
+})
+
+// error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
+
+// server start
+app.listen(8080, () => {
+    console.log('Server is running on port 8080')
+})
