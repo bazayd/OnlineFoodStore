@@ -1,0 +1,141 @@
+REQUIREMENTS ------------------------------------------------------------------------------
+
+Install Node.js LTS
+
+Install Git
+(setup git with ssh key to your computer)
+
+Install MySql
+(i needed to add mysql to path
+to do this navigate to mysql bin directory
+probably at C:\Program Files\MySQL Server 8.0\bin
+once you find it copy this path should look like such above
+hit windows
+type env
+click edit the system environment variables
+click Enviroment Variables
+in bottom half in system variables find variable path
+click that shit
+edit
+new
+past in the path
+ok, ok, ok)
+(remember the password you give mysql we will remove later it for the sake of development)
+
+PRE-SETUP ---------------------------------------------------------------------------------
+
+Make folder for project
+
+Open terminal
+
+Navigate to folder
+
+run: git init
+
+run: git remote add origin git@github.com:bazayd/OnlineFoodStore
+
+run: git pull origin main
+
+MySQL-SET-UP ---------------------------------------------------------------------------------
+
+Open VSCode
+
+Open the folder you created
+
+Double check you see client and server folders (as well as aditional txt files)
+
+Open two integrated terminals
+
+Navigate one to server folder
+
+Navigate the other to vite-project folder within the client folder (these will run the backend node.js and frontend react development server respectively)
+
+Select server terminal
+
+run: mysql -u root -p
+
+enter the password you gave it
+
+should be within the mysql server
+
+run: SET PASSWORD FOR root@localhost='';         (this removes the password, there is an .env file that the node.js server uses to authenticate you can change password of root on mysql and password in emv file accordingly)
+
+In VSCode in the server folder find schema.MySql    (schema setup for notes app for testing purposes)
+
+Copy everything inside
+
+click back into mysql terminal
+
+paste everything w/ right click (should do multiple commands at once to create database and table)
+
+make sure to press enter to run last command
+
+run: show databaes;
+
+make sure there is the notes_app database
+
+run: use notes_app;
+
+run: show tables;
+
+make sure there is notes table
+
+run: select * from notes;
+
+make sure you have two notes
+
+run: exit
+
+Node.js-SET-UP ---------------------------------------------------------------------------------
+
+get in server directory
+
+run: node app.js        (this starts back end node server)
+
+allow any permissions
+
+Vite&React-SET-UP ------------------------------------------------------------------------------
+
+click onto vite-project (within client folder) terminal
+
+run: npm install        (npm is Node Package Manager & came with node, I am not sure what this even does, must find and install all the dependencies or smthing)
+
+wait
+
+run: npm run dev
+
+should start
+
+copy the local url (http://localhost:5173) & slap it into your browser
+
+on the site enter in a title and contents for a note and click submit (this sends a request from the react frontend to the node backend which makes a command to mysql.  its a poc)
+
+ALL Parts Proof of Concept ------------------------------------------------------------------------------
+
+open a third terminal (for accessing database)
+
+run: mysql -u root -p
+
+password should be nothing now so just hit enter
+
+run: use notes_app;
+
+run: select * from notes;
+
+put your hands together and pray that you see the note you created on frontend
+
+CLEAN-UP ------------------------------------------------------------------------------
+
+run: exit       (in mysql)
+
+click on server terminal 
+
+ctrl+C
+
+click on client terminal
+
+ctrl+C
+
+enter: y
+
+save everything
