@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import logo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import testLogo from './assets/logo.jpg'
+import testLogo from './assets/Tsrpj1ULCwemwDaJEHXcGh3rG9nOrs6P.png'
 import './App.css'
 
 
