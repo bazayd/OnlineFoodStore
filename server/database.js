@@ -4,11 +4,33 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+
+export async function createUser(username, password){ // prepared statement using input for query
+
+    // use accounts database
+    const pool = mysql.createPool({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
+    }).promise()
+
+    const [result] = await pool.query(`
+    INSERT INTO users (user, pass, usertype)
+    VALUES (?, ?, ?)
+    `, [username, password, 1])
+    // the rest of function just displays added user
+    const id = result.insertId
+    return getNote(id)
+}
+
+// ------------Notes app methods-----------
+
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
+    database: 'notes_app'
 }).promise()
 
 export async function getNotes() { // the const[rows] method just grabs the first item in returned array
@@ -34,8 +56,5 @@ export async function createNote(title, content){ // prepared statement using in
     const id = result.insertId
     return getNote(id)
 }
+// -------------------------------------------
 
-/*
-const test = await createNote('test', 'test')
-console.log(test)
-*/
