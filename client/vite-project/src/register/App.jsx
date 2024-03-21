@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
+import testLogo from '/assets/OFSLogo.png'
 import './App.css'
 
 
 
 function App() {
 
-  const getAccount = (inputusername, inputpassword) => {
+  const createAccount = (inputusername, inputpassword) => {
     // create account request
     const requestOptions = {
-      method: 'GET',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: inputusername , password: inputpassword})
     }
-    fetch('/users/username', requestOptions).then(
+    fetch('/users', requestOptions).then(
       response => response.json,
     )
   }
@@ -20,10 +21,11 @@ function App() {
   return (
     <>
       <div>
-        <h1>Login</h1>
+        <h3>Register</h3>
+        <img src={testLogo}></img>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
-          getAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values
+          createAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values
         }}>
           <label>
             Username: <br />
@@ -35,7 +37,7 @@ function App() {
             <input type="text" name="pass" />
           </label>
           <br></br>
-          <input type="submit" value="Login" />
+          <input id="registerBtn" type="submit" value="Register" />
         </form>
       </div>
     </>
