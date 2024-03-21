@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import testLogo from '/assets/OFSLogo.png'
+import OFSLogo from '/assets/OFSLogo.png'
 import './App.css'
 
 
@@ -18,11 +18,11 @@ function App() {
     )
   }
 
-  return (
+  return ( 
     <>
       <div>
         <h3>Register</h3>
-        <img src={testLogo}></img>
+        <img src={OFSLogo}></img>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           createAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values

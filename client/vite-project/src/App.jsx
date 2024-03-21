@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import logo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
-import testLogo from './assets/Tsrpj1ULCwemwDaJEHXcGh3rG9nOrs6P.png'
+import OFSLogo from './assets/OFSLogo.png'
 import './App.css'
 
 
@@ -26,7 +26,7 @@ function App() {
     <>
       <div>
         <a href="" target="_blank">
-          <img src={testLogo} className="logo" alt="React logo" />
+          <img src={OFSLogo} className="logo" alt="React logo" />
         </a>
       </div>
       <h1>OFS</h1>
