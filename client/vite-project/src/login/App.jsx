@@ -36,6 +36,11 @@ function App() {
           </label>
           <br></br>
           <input type="submit" value="Login" />
+          <br />
+          <div id="newUserCont">
+            <p><strong>New User? &#8594; </strong></p>
+            <button type="button">Register</button> 
+          </div>
         </form>
       </div>
     </>

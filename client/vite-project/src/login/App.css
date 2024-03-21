@@ -1,3 +1,5 @@
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -15,6 +17,24 @@
   transform: scale(1.1);
   transition: transform 0.3s ease;
   filter: drop-shadow(0 0 2em #000000);
+}
+
+#newUserCont {
+  display: flex;
+  justify-content: space-around;
+}
+
+#newUserCont button{
+  padding: 3px 3px;
+  margin: 10px 10px;
+}
+
+#newUserCont button:hover{
+  background-color: #756c6c;
+}
+
+form input {
+  margin: 10px 10px;
 }
 
 /* roation for logo

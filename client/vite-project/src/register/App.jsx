@@ -37,7 +37,7 @@ function App() {
             <input type="text" name="pass" />
           </label>
           <br></br>
-          <input id="registerBtn" type="submit" value="Register" />
+          <input id="registerBtn" type="submit" value="Register" /> 
         </form>
       </div>
     </>
