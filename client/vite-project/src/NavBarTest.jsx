@@ -1,9 +1,10 @@
 import React from 'react';
 import NavBar from './Components/NavBar';
+import './NavBarTest.css'
 
 const NavBarTest = () => {
   return (
-    <div>
+    <div className='container'>
       <NavBar></NavBar>
     </div>
   );
