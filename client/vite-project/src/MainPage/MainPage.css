@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
+
+.navbar{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+
+}
+.logo{
+    min-height: auto;
+    width: 165px;
+    cursor: pointer;
+}
+ul{
+    list-style: none;
+}
+ul li{
+    cursor: pointer;
+    display: inline-block;
+}
+.Location_Icon{
+    min-height: auto;
+    width: 50px;
+}
+.Profile_Icon{
+    min-height: auto;
+    width: 50px;
+}
+.Cart_Icon{
+    min-height: auto;
+    width: 50px;
+}
+.text{
+    color: white;
+    font-family: "ADLaM Display", system-ui;
+    font-size: 25px;
+    margin-right: 10px;
+    margin-left: 5px;
+    text-align: center;
+    font-weight: bolder;
+}
+.icon-text {
+    display: flex;
+    align-items: center;    
+}
+  
