@@ -8,10 +8,21 @@
     background-color: black;
 
 }
+
+h1, h2, h3, h4 {
+    color: white;
+}
+
+
+
 .logo{
     min-height: auto;
     width: 165px;
     cursor: pointer;
+    margin-left: 25px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 4px;
 }
 ul{
     list-style: none;
@@ -23,26 +34,38 @@ ul li{
 .Location_Icon{
     min-height: auto;
     width: 50px;
+    margin: 0px 10px;
 }
 .Profile_Icon{
     min-height: auto;
     width: 50px;
+    margin: 0px 10px;
 }
 .Cart_Icon{
     min-height: auto;
     width: 50px;
+    margin: 0px 10px;
 }
 .text{
     color: white;
-    font-family: "ADLaM Display", system-ui;
+    /* font-family: "ADLaM Display", system-ui; */
+    font-family: 'Courier New', Courier, monospace;
     font-size: 25px;
-    margin-right: 10px;
+    margin-right: 15px;
     margin-left: 5px;
     text-align: center;
     font-weight: bolder;
 }
-.icon-text {
+
+
+.icon-text a{
     display: flex;
-    align-items: center;    
+    align-items: center; 
+    text-decoration: none;   
 }
-  
+
+
+.icon-text a:hover {
+    transform: scale(1.2); /* Scale up the image on hover */
+  }
+
