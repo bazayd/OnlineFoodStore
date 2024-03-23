@@ -15,13 +15,24 @@ export async function createUser(username, password){ // prepared statement usin
         database: process.env.MYSQL_DATABASE
     }).promise()
 
-    const [result] = await pool.query(`
-    INSERT INTO users (user, pass, usertype)
-    VALUES (?, ?, ?)
-    `, [username, password, 1])
-    // the rest of function just displays added user
-    const id = result.insertId
-    return getNote(id)
+    // we need to check if the user already exists
+
+
+    // insert new user
+    try{
+        const [result] = await pool.query(`
+        INSERT INTO users (user, pass, usertype)
+        VALUES (?, ?, ?)
+        `, [username, password, 1])
+        // the rest of function just displays added user
+        const id = result.insertId
+        //return getNote(id)
+        return "Successfully Created User: "+username+"!"
+    } catch(error) {
+        return("Error Adding User To Database, "+error)
+    }
+    
+    
 }
 
 // ------------Notes app methods-----------

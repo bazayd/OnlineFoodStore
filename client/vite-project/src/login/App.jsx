@@ -13,7 +13,11 @@ function App() {
       body: JSON.stringify({ username: inputusername , password: inputpassword})
     }
     fetch('/users', requestOptions).then(
-      response => response.json,
+      response => response.json()
+    ).then(
+      data => { console.log(data)
+        document.getElementById("loginRespose").textContent = data.resp
+      }
     )
   }
 
@@ -39,6 +43,7 @@ function App() {
           <br></br>
           <input type="submit" value="Submit" />
         </form>
+        <div id="loginRespose"></div>
       </div>
     </>
   )

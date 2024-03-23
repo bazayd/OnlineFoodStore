@@ -3,7 +3,7 @@ use accounts;
 
 CREATE TABLE users (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  user VARCHAR(255) NOT NULL,
+  user VARCHAR(255) NOT NULL UNIQUE,
   pass VARCHAR(255) NOT NULL,
   usertype integer NOT NULL
 );
