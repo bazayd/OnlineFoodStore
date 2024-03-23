@@ -3,14 +3,19 @@ use accounts;
 
 CREATE TABLE users (
   id integer PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL,
   user VARCHAR(255) NOT NULL,
   pass VARCHAR(255) NOT NULL,
+  addr VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  stte VARCHAR(255) NOT NULL,
+  zipc VARCHAR(255) NOT NULL,
   usertype integer NOT NULL
 );
 
-INSERT INTO users (user, pass, usertype)
+INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
 VALUES 
-('joe', 'smith', 1);
+('joe@smith.com', 'joe', 'smith', '111 Average Road', 'Normalton', 'California', '11111', 1);
 
 CREATE DATABASE notes_app;
 USE notes_app;

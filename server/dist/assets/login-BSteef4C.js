@@ -1,1 +1,0 @@
-import{j as e,c as t,R as r}from"./client-DXzp9lcG.js";function n(){return e.jsx(e.Fragment,{children:e.jsx("div",{children:e.jsx("p",{children:"test seperate login page"})})})}t.createRoot(document.getElementById("root")).render(e.jsx(r.StrictMode,{children:e.jsx(n,{})}));

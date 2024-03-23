@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 
-export async function createUser(username, password){ // prepared statement using input for query
+export async function createUser(email, username, password, address, city, state, zipcode){ // prepared statement using input for query
 
     // use accounts database
     const pool = mysql.createPool({
@@ -16,9 +16,9 @@ export async function createUser(username, password){ // prepared statement usin
     }).promise()
 
     const [result] = await pool.query(`
-    INSERT INTO users (user, pass, usertype)
-    VALUES (?, ?, ?)
-    `, [username, password, 1])
+    INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [email, username, password, address, city, state, zipcode, 1])
     // the rest of function just displays added user
     const id = result.insertId
     return getNote(id)

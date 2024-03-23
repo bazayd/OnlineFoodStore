@@ -20,8 +20,8 @@ app.get('*', (req, res) => {
 
 // create a database entry from a post request to /notes
 app.post("/users", async (req, res) => {
-    const { username, password } = req.body    // sets title and contents to parameters from post request body
-    const account = await createUser(username, password)  // uses our database function to create an sql entry
+    const { email, username, password, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
+    const account = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
     
     console.log("User was created! Username: " + username +" Password: "+password)
     

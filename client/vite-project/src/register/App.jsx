@@ -6,12 +6,12 @@ import './App.css'
 
 function App() {
 
-  const createAccount = (inputusername, inputpassword) => {
+  const createAccount = (inputemail, inputusername, inputpassword, inputaddress, inputcity, inputstate, inputzipcode) => {
     // create account request
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: inputusername , password: inputpassword})
+      body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
     }
     fetch('/users', requestOptions).then(
       response => response.json,
@@ -24,27 +24,28 @@ function App() {
         <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
-          createAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values
+          //(email, username, password, address, city, state, zipcode)
+          createAccount(e.target.email.value, e.target.username.value, e.target.password.value, e.target.address.value, e.target.city.value, e.target.state.value, e.target.zipcode.value); // Call postNote function with form values
         }}>
           <div className='parentContainer'>
             <div className='childContainer1'>
-              <input type="text" name="user" placeholder='Email'/>
+              <input type="text" name="email" placeholder='Email'/>
               <br></br>
-              <input type="text" name="user" placeholder='Username'/>
+              <input type="text" name="username" placeholder='Username'/>
               <br />
-              <input type="password" name="user" placeholder='Password'/>
+              <input type="password" name="password" placeholder='Password'/>
               <br />
               <input type="password" name="pass" placeholder='Confirm Password'/>
               <br />
             </div>
             <div className='childContainer2'>
-              <input type="text" name="pass" placeholder='Address'/>
+              <input type="text" name="address" placeholder='Address'/>
               <br />
-              <input type="text" name="user" placeholder='City'/>
+              <input type="text" name="city" placeholder='City'/>
               <br></br>
-              <input type="text" name="user" placeholder='State'/>
+              <input type="text" name="state" placeholder='State'/>
               <br />
-              <input type="text" name="user" placeholder='Zip Code'/>
+              <input type="text" name="zipcode" placeholder='Zip Code'/>
               <br />
             </div>
           </div>
