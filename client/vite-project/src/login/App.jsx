@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import OFSLogo from '../assets/OFS Logo.png'
 import './App.css'
 
 
@@ -20,22 +21,16 @@ function App() {
   return (
     <>
       <div>
-        <h1>Login</h1>
+        <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           getAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values
         }}>
-          <label>
-            Username: <br />
-            <input type="text" name="user" />
-          </label>
+          <input type="text" name="user" placeholder='Username'/>
           <br></br>
-          <label>
-            Password: <br />
-            <input type="text" name="pass" />
-          </label>
+            <input type="password" name="pass" placeholder='Password'/>
           <br></br>
-          <input type="submit" value="Login" />
+          <input type="submit" value="Login" id="loginBtn"/>
           <br />
           <div id="newUserCont">
             <p><strong>New User? &#8594; </strong></p>

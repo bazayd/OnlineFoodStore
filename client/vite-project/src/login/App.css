@@ -19,6 +19,11 @@
   filter: drop-shadow(0 0 2em #000000);
 }
 
+#OFSLogo {
+  border-radius: 10px;
+  margin: 50px 40px;
+}
+
 #newUserCont {
   display: flex;
   justify-content: space-around;
@@ -35,8 +40,23 @@
 
 form input {
   margin: 10px 10px;
+  border-radius: 5px;
 }
 
+#loginBtn {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 20px 10px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#loginBtn:hover {
+  opacity: 25%;
+}
+
+#loginBtn:active {
+  opacity: 80%;
+}
 /* roation for logo
 @keyframes logo-spin {
   from {

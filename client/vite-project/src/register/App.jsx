@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import OFSLogo from '/assets/OFSLogo.png'
+import OFSLogo from '/assets/OFS Logo.png'
 import './App.css'
 
 
@@ -21,23 +21,34 @@ function App() {
   return ( 
     <>
       <div>
-        <h3>Register</h3>
-        <img src={OFSLogo}></img>
+        <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           createAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values
         }}>
-          <label>
-            Username: <br />
-            <input type="text" name="user" />
-          </label>
-          <br></br>
-          <label>
-            Password: <br />
-            <input type="text" name="pass" />
-          </label>
-          <br></br>
-          <input id="registerBtn" type="submit" value="Register" /> 
+          <div className='parentContainer'>
+            <div className='childContainer1'>
+              <input type="text" name="user" placeholder='Email'/>
+              <br></br>
+              <input type="text" name="user" placeholder='Username'/>
+              <br />
+              <input type="password" name="user" placeholder='Password'/>
+              <br />
+              <input type="password" name="pass" placeholder='Confirm Password'/>
+              <br />
+            </div>
+            <div className='childContainer2'>
+              <input type="text" name="pass" placeholder='Address'/>
+              <br />
+              <input type="text" name="user" placeholder='City'/>
+              <br></br>
+              <input type="text" name="user" placeholder='State'/>
+              <br />
+              <input type="text" name="user" placeholder='Zip Code'/>
+              <br />
+            </div>
+          </div>
+            <input id="registerBtn" type="submit" value="Register" /> 
         </form>
       </div>
     </>

@@ -3,9 +3,10 @@ form {
   margin: 5px;
 }
 
-img {
-  height: 50px;3
-  width: 50px;
+
+
+.parentContainer {
+  display: flex;
 }
 
 #root {
@@ -20,8 +21,14 @@ img {
   padding: 5px 5px;
 }
 
+#OFSLogo {
+  border-radius: 10px;
+  margin: 50px 40px;
+}
+
 form input {
   margin: 10px 10px;
+  border-radius: 5px;
 }
 
 
@@ -37,6 +44,22 @@ form input {
   filter: drop-shadow(0 0 2em #000000);
 }
 
+
+
+#registerBtn {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 20px 10px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#registerBtn:hover {
+  opacity: 25%;
+}
+
+#registerBtn:active {
+  opacity: 80%;
+}
 /* roation for logo
 @keyframes logo-spin {
   from {
