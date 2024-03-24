@@ -42,7 +42,7 @@ function App() {
   return ( 
     <>
       <div>
-        <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
+        <img src={OFSLogo} alt="OFS Logos" className="logo" id="OFSLogo"/>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           //(email, username, password, address, city, state, zipcode)
@@ -50,23 +50,23 @@ function App() {
         }}>
           <div className='parentContainer'>
             <div className='childContainer1'>
-              <input type="email" name="email" placeholder='Email'/>
+              <input type="email" name="email" placeholder='Email' required/>
               <br></br>
-              <input type="text" name="username" placeholder='Username'/>
+              <input type="text" name="username" placeholder='Username' required/>
               <br />
-              <input type="password" name="password" placeholder='Password'/>
+              <input type="password" name="password" placeholder='Password' required/>
               <br />
-              <input type="password" name="pass" placeholder='Confirm Password'/>
+              <input type="password" name="pass" placeholder='Confirm Password' required/>
               <br />
             </div>
             <div className='childContainer2'>
-              <input type="text" name="address" placeholder='Address'/>
+              <input type="text" name="address" placeholder='Address' required/>
               <br />
-              <input type="text" name="city" placeholder='City'/>
+              <input type="text" name="city" placeholder='City' required/>
               <br></br>
-              <input type="text" name="state" placeholder='State'/>
+              <input type="text" name="state" placeholder='State' required/>
               <br />
-              <input type="text" name="zipcode" placeholder='Zip Code'/>
+              <input type="text" name="zipcode" placeholder='Zip Code' required/>
               <br />
             </div>
           </div>
