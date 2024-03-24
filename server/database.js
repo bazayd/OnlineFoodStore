@@ -23,18 +23,20 @@ export async function createUser(email, username, password, address, city, state
         
         if(checkUsername[0]!=null){
             console.log("Acount with username "+username+" already exists in database.")
-            return("Account with that username already exists!")  
+            
+            return{status: 409, message: 'Account with that username already exists!'} 
         }
-        
 
     } catch(error) {
         // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
         console.log("Error Checking for Username, "+error)
 
-        return("We have encountered database error, sorry ;(")
+        return{error: 500, message: 'Encountered database error, sorry ;('}
     }
 
-    // insert new user
+
+
+    // Username avaible! Enter into database
     try {
         const [result] = await pool.query(`
         INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
@@ -48,16 +50,20 @@ export async function createUser(email, username, password, address, city, state
         console.log("User was created! Username: " + username +" Password: "+password)
 
         // tell user their account was generated
-        return "Hello "+username+", your account has been created!"
+        return {status: 200, message: "Hello "+username+", your account has been created!"}
 
     } catch (error) {
         // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
         console.log("Error Adding To Database, "+error)
 
         // tell user that some database error happened
-        return("We have encountered database error, sorry ;(")
+        return{error: 500, message: 'Encountered database error, sorry ;('}
     }
 }
+
+
+
+
 
 // ------------Notes app methods-----------
 

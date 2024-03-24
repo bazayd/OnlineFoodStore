@@ -21,9 +21,9 @@ app.get('*', (req, res) => {
 // create a database entry from a post request to /notes
 app.post("/users", async (req, res) => {
     const { email, username, password, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
-    const resp = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
+    const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
     
-    res.status(201).type('text').send({ resp })  // returns to our user what our database function returned to us. status 201 indicates item created
+    res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
 })
 
 

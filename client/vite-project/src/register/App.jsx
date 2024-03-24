@@ -6,18 +6,35 @@ import './App.css'
 
 function App() {
 
+  const [showBackToLogin, setShowBackToLogin] = useState(false);
+
   const createAccount = (inputemail, inputusername, inputpassword, inputaddress, inputcity, inputstate, inputzipcode) => {
+
     // create account request
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
     }
+
     fetch('/users', requestOptions).then(
-      response => response.json()
+      response => {
+        if (response.status==200){
+          console.log("status code 200: "+response.status)
+          setShowBackToLogin(true);
+          return response.json()
+        } else {
+          console.log("status code not 200: "+response.status)
+          setShowBackToLogin(false);
+          return response.json()
+        }
+      }
     ).then(
-      data => { console.log(data)
-        document.getElementById("registerBackendResponse").textContent = data.resp
+      data => {
+
+        // display the message returned by backend
+        document.getElementById("registerBackendResponse").textContent = data.message
+        
       }
     )
   }
@@ -56,6 +73,15 @@ function App() {
           <input id="registerBtn" type="submit" value="Register" /> 
         </form>
         <div id="registerBackendResponse"></div>
+        
+        { // In react you have to use this method to dynamically show objects
+        showBackToLogin && (
+        <div id="backToLogin">
+          <br></br>
+          <button type="button" onClick={() => window.location.href="/login/"}>Login</button>
+        </div>
+        ) }
+
       </div>
     </>
   )
