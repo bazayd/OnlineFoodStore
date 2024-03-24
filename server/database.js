@@ -28,7 +28,7 @@ export async function createUser(email, username, password, address, city, state
         }
 
     } catch(error) {
-        // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
+        // some error occured checking for username in database
         console.log("Error Checking for Username, "+error)
 
         return{error: 500, message: 'Encountered database error, sorry ;('}
@@ -36,16 +36,12 @@ export async function createUser(email, username, password, address, city, state
 
 
 
-    // Username avaible! Enter into database
+    // Username avaible! Enter user into database
     try {
         const [result] = await pool.query(`
         INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `, [email, username, password, address, city, state, zipcode, 1])
-
-
-        // the rest of function just displays added user
-        const id = result.insertId
 
         console.log("User was created! Username: " + username +" Password: "+password)
 
@@ -60,6 +56,65 @@ export async function createUser(email, username, password, address, city, state
         return{error: 500, message: 'Encountered database error, sorry ;('}
     }
 }
+
+
+export async function login(username, password) {
+
+    // use accounts database
+    const pool = mysql.createPool({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: 'accounts'
+    }).promise()
+
+    // check if username exists
+    try {
+        const [checkUsername] = await pool.query(`
+        SELECT id FROM users WHERE user=(?)
+        `, [username])
+        
+        if(checkUsername[0]==null){
+            console.log("Acount with username "+username+" does not exist in database.")
+            
+            return{status: 401, message: 'Username or password is incorrect'} 
+        }
+
+    } catch(error) {
+        // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
+        console.log("Error Checking for Username, "+error)
+
+        return{error: 500, message: 'Encountered database error, sorry ;('}
+    }
+
+    // Username in database, attempt login
+    try {
+        const [tryLogin] = await pool.query(`
+        SELECT id FROM users WHERE user=(?) AND pass=(?)
+        `, [username, password])
+
+        console.log("User logging in with Username: "+username+" Password: "+password)
+
+        // check if user and password was found
+        if(tryLogin[0]==null){
+            console.log("Acount with Username: "+username+" and Password: "+password+" does not exist in database")
+            
+            return{status: 401, message: 'Username or password is incorrect'} 
+        } else {
+            // LOGIN SUCCESS  <--------------------------------------------------------------------------------------------------------------- provide user some form of login session
+            return {status: 200, message: "Hello "+username+", you have been successfully logged in!"}
+        }
+
+    } catch (error) {
+        // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
+        console.log("Error checking credentials on database, "+error)
+
+        // tell user that some database error happened
+        return{error: 500, message: 'Encountered database error, sorry ;('}
+    }
+
+}
+
 
 
 

@@ -1,6 +1,6 @@
 import express from 'express'
 import path from 'path';
-import { getNotes, getNote, createNote, createUser } from './database.js'
+import { getNotes, getNote, createNote, createUser, login } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -19,9 +19,17 @@ app.get('*', (req, res) => {
 
 
 // create a database entry from a post request to /notes
-app.post("/users", async (req, res) => {
+app.post("/users/register", async (req, res) => {
     const { email, username, password, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
     const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
+    
+    res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
+})
+
+// create a database entry from a post request to /notes
+app.post("/users/login", async (req, res) => {
+    const { username, password } = req.body    // sets details to parameters from post request body
+    const { message, status } = await login(username, password)  // uses our database function to create an sql entry
     
     res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
 })

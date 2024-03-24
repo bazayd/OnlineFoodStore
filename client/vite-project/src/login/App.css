@@ -23,6 +23,12 @@
   border-radius: 10px;
   margin: 50px 40px;
 }
+#OFSLogo:hover {
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 0 1em #000000);
+}
+
 
 #newUserCont {
   display: flex;
@@ -41,6 +47,10 @@
 form input {
   margin: 10px 10px;
   border-radius: 5px;
+}
+form:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
 }
 
 #loginBtn {

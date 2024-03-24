@@ -17,7 +17,7 @@ function App() {
       body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
     }
 
-    fetch('/users', requestOptions).then(
+    fetch('/users/register', requestOptions).then(
       response => {
         if (response.status==200){
           console.log("status code 200: "+response.status)
