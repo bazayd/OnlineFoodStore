@@ -14,7 +14,11 @@ function App() {
       body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
     }
     fetch('/users', requestOptions).then(
-      response => response.json,
+      response => response.json()
+    ).then(
+      data => { console.log(data)
+        document.getElementById("registerBackendResponse").textContent = data.resp
+      }
     )
   }
 
@@ -29,7 +33,7 @@ function App() {
         }}>
           <div className='parentContainer'>
             <div className='childContainer1'>
-              <input type="text" name="email" placeholder='Email'/>
+              <input type="email" name="email" placeholder='Email'/>
               <br></br>
               <input type="text" name="username" placeholder='Username'/>
               <br />
@@ -49,8 +53,9 @@ function App() {
               <br />
             </div>
           </div>
-            <input id="registerBtn" type="submit" value="Register" /> 
+          <input id="registerBtn" type="submit" value="Register" /> 
         </form>
+        <div id="registerBackendResponse"></div>
       </div>
     </>
   )

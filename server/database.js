@@ -12,16 +12,51 @@ export async function createUser(email, username, password, address, city, state
         host: process.env.MYSQL_HOST,
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE
+        database: 'accounts'
     }).promise()
 
-    const [result] = await pool.query(`
-    INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `, [email, username, password, address, city, state, zipcode, 1])
-    // the rest of function just displays added user
-    const id = result.insertId
-    return getNote(id)
+    // we need to check if username already exists
+    try {
+        const [checkUsername] = await pool.query(`
+        SELECT id FROM users WHERE user=(?)
+        `, [username])
+        
+        if(checkUsername[0]!=null){
+            console.log("Acount with username "+username+" already exists in database.")
+            return("Account with that username already exists!")  
+        }
+        
+
+    } catch(error) {
+        // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
+        console.log("Error Checking for Username, "+error)
+
+        return("We have encountered database error, sorry ;(")
+    }
+
+    // insert new user
+    try {
+        const [result] = await pool.query(`
+        INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, [email, username, password, address, city, state, zipcode, 1])
+
+
+        // the rest of function just displays added user
+        const id = result.insertId
+
+        console.log("User was created! Username: " + username +" Password: "+password)
+
+        // tell user their account was generated
+        return "Hello "+username+", your account has been created!"
+
+    } catch (error) {
+        // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
+        console.log("Error Adding To Database, "+error)
+
+        // tell user that some database error happened
+        return("We have encountered database error, sorry ;(")
+    }
 }
 
 // ------------Notes app methods-----------
