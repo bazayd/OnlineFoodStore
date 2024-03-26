@@ -24,14 +24,14 @@ export async function createUser(email, username, password, address, city, state
         if(checkUsername[0]!=null){
             console.log("Acount with username "+username+" already exists in database.")
             
-            return{status: 409, message: 'Account with that username already exists!'} 
+            return{status: 409, message: "Account with that username already exists!"} 
         }
 
     } catch(error) {
         // some error occured checking for username in database
         console.log("Error Checking for Username, "+error)
 
-        return{error: 500, message: 'Encountered database error, sorry ;('}
+        return{error: 500, message: "Encountered database error, sorry ;("}
     }
 
 
@@ -53,7 +53,7 @@ export async function createUser(email, username, password, address, city, state
         console.log("Error Adding To Database, "+error)
 
         // tell user that some database error happened
-        return{error: 500, message: 'Encountered database error, sorry ;('}
+        return{error: 500, message: "Encountered database error, sorry ;("}
     }
 }
 
@@ -77,14 +77,14 @@ export async function login(username, password) {
         if(checkUsername[0]==null){
             console.log("Acount with username "+username+" does not exist in database.")
             
-            return{status: 401, message: 'Username or password is incorrect'} 
+            return{status: 401, message: "Username or password is incorrect"} 
         }
 
     } catch(error) {
         // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
         console.log("Error Checking for Username, "+error)
 
-        return{error: 500, message: 'Encountered database error, sorry ;('}
+        return{error: 500, message: "Encountered database error, sorry ;("}
     }
 
     // Username in database, attempt login
@@ -99,7 +99,7 @@ export async function login(username, password) {
         if(tryLogin[0]==null){
             console.log("Acount with Username: "+username+" and Password: "+password+" does not exist in database")
             
-            return{status: 401, message: 'Username or password is incorrect'} 
+            return{status: 401, message: "Username or password is incorrect"} 
         } else {
             // LOGIN SUCCESS  <--------------------------------------------------------------------------------------------------------------- provide user some form of login session
             return {status: 200, message: "Hello "+username+", you have been successfully logged in!"}

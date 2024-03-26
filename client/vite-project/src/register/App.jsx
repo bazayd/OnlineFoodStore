@@ -20,11 +20,11 @@ function App() {
     fetch('/users/register', requestOptions).then(
       response => {
         if (response.status==200){
-          console.log("status code 200: "+response.status)
+          
           setShowBackToLogin(true);
           return response.json()
         } else {
-          console.log("status code not 200: "+response.status)
+        
           setShowBackToLogin(false);
           return response.json()
         }
