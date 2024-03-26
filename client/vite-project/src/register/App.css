@@ -1,0 +1,84 @@
+form {
+  padding: 20px;
+  margin: 5px;
+}
+form:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+filter: drop-shadow(0 0 1em #000000);
+}
+
+.parentContainer {
+  display: flex;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#registerBtn {
+  margin: 20px 20px;
+  padding: 5px 5px;
+}
+
+#OFSLogo {
+  border-radius: 10px;
+  margin: 50px 40px;
+}
+
+form input {
+  margin: 10px 10px;
+  border-radius: 5px;
+}
+
+
+.logo {
+  transition: filter 300ms;
+}
+.logo:hover {
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 0 1em #000000);
+}
+
+
+
+#registerBtn {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 20px 10px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#registerBtn:hover {
+  opacity: 25%;
+}
+
+#registerBtn:active {
+  opacity: 80%;
+}
+/* roation for logo
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(1) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+*/
+.card {
+  padding: 1em;
+}
