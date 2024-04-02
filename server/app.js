@@ -12,7 +12,8 @@ const app = express()
 app.use(session({
     secret: 'blah blah blah',
     cookie: { maxAge: 10800000},
-    saveUninitilized: false
+    resave: true,
+    saveUninitialized: false
 }))
 
 app.use(express.json())
@@ -41,10 +42,19 @@ app.post("/users/getUser", async (req, res) => {
 
 // User registration backend api handler
 app.post("/users/register", async (req, res) => {
-    const { email, username, password, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
-    const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
-    
-    res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
+    const { email, username, password, password2, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
+    console.log(password + "  " + password2)
+
+    if(password===password2){
+        const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
+        
+        res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
+    } else {
+        const doNotMatch = {
+            message: "Passwords do not match!"
+        }
+        res.status(401).type('text').send(doNotMatch)
+    }
 })
 
 // user login backend api handler
@@ -97,6 +107,7 @@ app.post("/notes", async (req, res) => {
     console.log("Note was posted! Title: " + title +" Contents: "+contents)
     
     res.status(201).send(note)  // returns to our user what our database function returned to us. status 201 indicates item created
+    
 })
 
 

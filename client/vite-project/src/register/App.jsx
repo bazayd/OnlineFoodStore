@@ -8,13 +8,13 @@ function App() {
 
   const [showBackToLogin, setShowBackToLogin] = useState(false);
 
-  const createAccount = (inputemail, inputusername, inputpassword, inputaddress, inputcity, inputstate, inputzipcode) => {
+  const createAccount = (inputemail, inputusername, inputpassword, inputpassword2, inputaddress, inputcity, inputstate, inputzipcode) => {
 
     // create account request
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
+      body: JSON.stringify({ email: inputemail, username: inputusername, password: inputpassword, password2: inputpassword2, address: inputaddress, city: inputcity, state: inputstate, zipcode: inputzipcode})
     }
 
     fetch('/users/register', requestOptions).then(
@@ -46,7 +46,7 @@ function App() {
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           //(email, username, password, address, city, state, zipcode)
-          createAccount(e.target.email.value, e.target.username.value, e.target.password.value, e.target.address.value, e.target.city.value, e.target.state.value, e.target.zipcode.value); // Call postNote function with form values
+          createAccount(e.target.email.value, e.target.username.value, e.target.password.value, e.target.password2.value, e.target.address.value, e.target.city.value, e.target.state.value, e.target.zipcode.value); // Call postNote function with form values
         }}>
           <div className='parentContainer'>
             <div className='childContainer1'>
@@ -56,7 +56,7 @@ function App() {
               <br />
               <input type="password" name="password" placeholder='Password' required/>
               <br />
-              <input type="password" name="pass" placeholder='Confirm Password' required/>
+              <input type="password" name="password2" placeholder='Confirm Password' required/>
               <br />
             </div>
             <div className='childContainer2'>
