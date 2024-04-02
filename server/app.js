@@ -43,7 +43,6 @@ app.post("/users/getUser", async (req, res) => {
 // User registration backend api handler
 app.post("/users/register", async (req, res) => {
     const { email, username, password, password2, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
-    console.log(password + "  " + password2)
 
     if(password===password2){
         const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
