@@ -58,7 +58,7 @@ export async function createUser(email, username, password, address, city, state
 }
 
 
-export async function login(username, password) {
+export async function login(username, password, authed) {
 
     // use accounts database
     const pool = mysql.createPool({
@@ -77,14 +77,14 @@ export async function login(username, password) {
         if(checkUsername[0]==null){
             console.log("Acount with username "+username+" does not exist in database.")
             
-            return{status: 401, message: "Username or password is incorrect"} 
+            return{status: 401, message: "Username or password is incorrect", authed: false} 
         }
 
     } catch(error) {
         // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
         console.log("Error Checking for Username, "+error)
 
-        return{error: 500, message: "Encountered database error, sorry ;("}
+        return{error: 500, message: "Encountered database error, sorry ;(", authed: false}
     }
 
     // Username in database, attempt login
@@ -99,10 +99,10 @@ export async function login(username, password) {
         if(tryLogin[0]==null){
             console.log("Acount with Username: "+username+" and Password: "+password+" does not exist in database")
             
-            return{status: 401, message: "Username or password is incorrect"} 
+            return{status: 401, message: "Username or password is incorrect", authed: false} 
         } else {
             // LOGIN SUCCESS  <--------------------------------------------------------------------------------------------------------------- provide user some form of login session
-            return {status: 200, message: "Hello "+username+", you have been successfully logged in!"}
+            return {status: 200, message: "Hello "+username+", you have been successfully logged in!", authed: true}
         }
 
     } catch (error) {
@@ -110,7 +110,7 @@ export async function login(username, password) {
         console.log("Error checking credentials on database, "+error)
 
         // tell user that some database error happened
-        return{error: 500, message: 'Encountered database error, sorry ;('}
+        return{error: 500, message: 'Encountered database error, sorry ;(', authed: false}
     }
 
 }

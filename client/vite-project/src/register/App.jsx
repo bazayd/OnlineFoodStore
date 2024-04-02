@@ -42,7 +42,7 @@ function App() {
   return ( 
     <>
       <div>
-        <img src={OFSLogo} alt="OFS Logos" className="logo" id="OFSLogo"/>
+        <img src={OFSLogo} onClick={() => window.location.href="/MainPage/"} alt="OFS Logos" className="logo" id="OFSLogo"/>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           //(email, username, password, address, city, state, zipcode)
