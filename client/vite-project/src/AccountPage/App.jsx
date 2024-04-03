@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import './AccountPage.css'
 import ProfilePicture from '../assets/ProfilePic.jpg'
 import OFSLogo from '../assets/OFS Logo.png'
@@ -9,9 +10,39 @@ import cardbackground  from '../assets/cardBackground.png'
 
 
 const AccountPage = () => {
+
+    
+
+    // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
+
+    // create account request
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify()
+    }
+
+    // create account request
+    fetch('/users/getUserInfo', requestOptions).then(
+        response => {
+            if (response.status==200){
+                // We have a session !
+                // Resolve promise and return username
+                const myData = response.json().then(data => data);
+                console.log(myData)
+
+            } else {
+                // No session ;(
+                // Make account button link to login page
+                window.location.href="/login/"
+            
+            }
+        }
+    )
+    
     return (
         <div className='page-div'>
-            <a href='#'> {/* Clickin on logo will redirect to main page */}
+            <a href='/MainPage/'> {/* Clickin on logo will redirect to main page */}
                 <img src={OFSLogo} alt="" id='logoIcon'/>
             </a>
             <div className='parentContainer'>

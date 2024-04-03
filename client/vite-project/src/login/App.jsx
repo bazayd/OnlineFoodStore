@@ -20,12 +20,10 @@ function App() {
       response => {
         if (response.status==200){
           
-          console.log("status code 200: "+response.status)
           return response.json()
 
         } else {
 
-          console.log("status code not 200: "+response.status)
           return response.json()
 
         }
@@ -43,7 +41,9 @@ function App() {
   return (
     <>
       <div>
-        <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
+        <a href="/MainPage/">
+          <img href="/MainPage/" src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
+        </a>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           getAccount(e.target.user.value, e.target.pass.value); // Call postNote function with form values

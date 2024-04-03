@@ -1,11 +1,20 @@
 import express from 'express'
 import path from 'path';
-import { getNotes, getNote, createNote, createUser, login } from './database.js'
+import session from 'express-session';
+import { getNotes, getNote, createNote, createUser, login, getUserInformation } from './database.js'
 
 // working directory
 const dir = process.cwd();
 
 const app = express()
+
+// Set up session cookies
+app.use(session({
+    secret: 'blah blah blah',
+    cookie: { maxAge: 10800000},
+    resave: true,
+    saveUninitialized: false
+}))
 
 app.use(express.json())
 
@@ -17,27 +26,75 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(dir, 'dist', 'index.html'));
 });
 
+// -------------------------------------- Info Retrival Api Handlers -----------------------------------
 
-// create a database entry from a post request to /notes
-app.post("/users/register", async (req, res) => {
-    const { email, username, password, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
-    const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
-    
-    res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
+// Return Username of Session Cookie
+app.post("/users/getUser", async (req, res) => {
+    if (req.session.authenticated) {
+        const userData = req.session.user;
+        res.status(200).send(userData);
+    } else {
+        res.status(401).send('Unauthorized');
+    }
 })
 
-// create a database entry from a post request to /notes
+app.post("/users/getUserInfo", async (req, res) => {
+    if (req.session.authenticated) {
+        const userData = req.session.user;
+        const userName = userData.username;
+        const info = getUserInformation(userName).then((data)=>{
+            console.log("Info: "+data)
+            res.status(200).send(data)
+        });  
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+// -------------------------------------- Account Creation Api Handlers -----------------------------------
+
+// User registration backend api handler
+app.post("/users/register", async (req, res) => {
+    const { email, username, password, password2, address, city, state, zipcode } = req.body    // sets details to parameters from post request body
+
+    if(password===password2){
+        const { message, status } = await createUser(email, username, password, address, city, state, zipcode)  // uses our database function to create an sql entry
+        
+        res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
+    } else {
+        const doNotMatch = {
+            message: "Passwords do not match!"
+        }
+        res.status(401).type('text').send(doNotMatch)
+    }
+})
+
+// user login backend api handler
 app.post("/users/login", async (req, res) => {
     const { username, password } = req.body    // sets details to parameters from post request body
-    const { message, status } = await login(username, password)  // uses our database function to create an sql entry
+    const { message, status, authed } = await login(username, password)  // uses our database function to create an sql entry
     
+    // Give user session if login is valid
+    if(authed){
+        // Store the session in the backend
+        req.session.authenticated = true;
+        // Store the username tied to the session
+        req.session.user = {
+            username: username
+        }
+    } else {
+        // If authentication is not successful des
+        req.session.destroy(); // Destroy the current session
+        res.clearCookie('session-id'); // Clear the session cookie
+    }
+
     res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
 })
 
 
 
 
-// --------------------------------------Notes app methods -----------------------------------
+// -------------------------------------- Notes app methods -----------------------------------
 
 // use database.js file
 app.get("/notes",  async (req, res) => {
@@ -62,6 +119,7 @@ app.post("/notes", async (req, res) => {
     console.log("Note was posted! Title: " + title +" Contents: "+contents)
     
     res.status(201).send(note)  // returns to our user what our database function returned to us. status 201 indicates item created
+    
 })
 
 
