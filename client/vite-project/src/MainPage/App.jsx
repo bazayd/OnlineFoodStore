@@ -1,9 +1,12 @@
 import React from 'react'
-import './MainPage.css'
+import './App.css'
 import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
 import Profile_Icon from '../assets/Profile Icon.png'
 import Cart_Icon from '../assets/Cart Icon.png'
+import Vegetable_Icon from '../assets/Vegetable Icon.png'
+import Fruit_Icon from '../assets/Fruit Icon.png'
+import Apple from '../assets/Apple.jpg'
 
 const MainPage = () => {
 
