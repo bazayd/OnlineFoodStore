@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './App.css'
 import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
@@ -9,8 +9,51 @@ import Fruit_Icon from '../assets/Fruit Icon.png'
 import Apple from '../assets/Apple.jpg'
 
 const MainPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+
+  // Define items here
+  const categories = [
+    {
+      name: 'Fruits',
+      items: [
+        {
+          name: 'Vegetables',
+          image: Vegetable_Icon,
+          description: 'These are the freshest vegetables ever.',
+          price: '$9.99'
+        },
+        {
+          name: 'Fruits',
+          image: Fruit_Icon,
+          description: 'This is a very sweet fruit.',
+          price: '$8.99'
+        }
+      ]
+    },
+    {
+      name: 'Vegetables',
+      items: [
+        {
+          name: 'Vegetables',
+          image: Vegetable_Icon,
+          description: 'These are the freshest vegetables ever.',
+          price: '$9.99'
+        },
+        {
+          name: 'Fruits',
+          image: Fruit_Icon,
+          description: 'This is a very sweet fruit.',
+          price: '$8.99'
+        }
+      ]
+    }
+  ];
+  
   return (
     <div>
+      {/*Top NavBar*/}
       <div className='navbar'>                                          
         <a href="/MainPage/">
           <img src={OFS_Logo} className='logo'/>
@@ -42,90 +85,69 @@ const MainPage = () => {
           </li>
         </ul>
       </div>
+
+      {/*Category side scroll bars for items in each category*/}
       <div className='categorybar'>
+        {categories.map((category) => (
+          <div key={category.name}>
+            <h1 className='categoryBarHeaders'>{category.name}</h1>
+            <ul>
+              {category.items.map((item) => (
+                <li key={item.name}>
+                  <div className='category-icon' onClick={() => {
+                    setIsModalOpen(true);
+                    setSelectedItem(item);
+                    }}>
+                    <a href='#'>
+                      <img src={item.image} className='Category-Images'></img>
+                      <span className='category-text'>{item.name}</span>
+                      <span className='category-text'>{item.price}</span>
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {isModalOpen && selectedItem && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+          <button className="close-button" onClick={() => {
+            setIsModalOpen(false);
+            setQuantity(1); // Reset the counter
+          }}>Close</button>
+              <div className="modal-body">
+                <img src={selectedItem.image} className="modal-image" />
+                <div className="modal-details">
+                  <h2>{selectedItem.name}</h2>
+                  <span>{selectedItem.price}</span>
+                  <p>{selectedItem.description}</p>
+                </div>
+                <div className="quantity-control">
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                  <span>{quantity}</span>
+                  <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                </div>
+                <button className="add-to-cart-button" onClick={() => {/* Add to cart logic */}}>Add to cart</button>
+              </div>
+            </div>
+        </div>
+      )}
+
+
+      {/*Left side menu bar*/}
+      <div className='menu'>
+        <h1 className='menuText'>Categories</h1>
         <ul>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Vegetables</span>
-                <img src={Vegetable_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='category-icon'>
-              <a href='#'>
-                <span className='category-text'>Fruits</span>
-                <img src={Fruit_Icon} className='Category-Images'></img>
-              </a>
-            </div>
-          </li>
+          <li>Fruits</li>
+          <li>Vegetables</li>
+          <li>Apples</li>
         </ul>
       </div>
+      
+      {/* Vertical scroll through items (Currently not used)
       <div className='categoryscroll'>
         <ul>
           <li>
@@ -166,6 +188,7 @@ const MainPage = () => {
           </li>
         </ul>
       </div>
+      */}
   </div>
   )
 }
