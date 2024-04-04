@@ -42,7 +42,9 @@ function App() {
   return ( 
     <>
       <div>
-        <img src={OFSLogo} onClick={() => window.location.href="/MainPage/"} alt="OFS Logos" className="logo" id="OFSLogo"/>
+        <a href="/MainPage/">
+          <img src={OFSLogo} alt="OFS Logos" className="logo" id="OFSLogo"/>
+        </a>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
           //(email, username, password, address, city, state, zipcode)
@@ -78,7 +80,9 @@ function App() {
         showBackToLogin && (
         <div id="backToLogin">
           <br></br>
-          <button type="button" onClick={() => window.location.href="/login/"}>Login</button>
+          <a href="/login/">
+            <button type="button">Login</button>
+          </a>
         </div>
         ) }
 

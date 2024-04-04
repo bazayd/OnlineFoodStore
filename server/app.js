@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { getNotes, getNote, createNote, createUser, login } from './database.js'
+import { getNotes, getNote, createNote, createUser, login, getUserInformation } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -26,19 +26,46 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(dir, 'dist', 'index.html'));
 });
 
-// -------------------------------------- Misc Api Handlers -----------------------------------
+// -------------------------------------- Info Retrival Api Handlers -----------------------------------
 
 // Return Username of Session Cookie
 app.post("/users/getUser", async (req, res) => {
     if (req.session.authenticated) {
         const userData = req.session.user;
-        res.status(200).send(userData);
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user
+        }
+        res.status(200).send(selectInfo)
+        
     } else {
         res.status(401).send('Unauthorized');
     }
 })
 
-// -------------------------------------- Account Api Handlers -----------------------------------
+app.post("/users/getUserInfo", async (req, res) => {
+    if (req.session.authenticated) {
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            email: fullInfo.email,
+            user: fullInfo.user,
+            usertype: fullInfo.usertype
+        }
+        res.status(200).send(selectInfo)
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+// -------------------------------------- Account Creation Api Handlers -----------------------------------
 
 // User registration backend api handler
 app.post("/users/register", async (req, res) => {
@@ -78,6 +105,17 @@ app.post("/users/login", async (req, res) => {
     res.status(status).type('text').send({ message })  // returns to our user what our database function returned to us. status 201 indicates item created
 })
 
+app.post("/users/signout", async (req, res) => {
+    if(req.session.authenticated){
+        // If authentication is successful 
+        req.session.destroy(); // Destroy the current session
+        res.clearCookie('session-id'); // Clear the session cookie
+        res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+    } else {
+        res.status(401).type('text').send("You are not logged in!");  // returns to our user what our database function returned to us. status 201 indicates item created
+    }
+
+})
 
 
 

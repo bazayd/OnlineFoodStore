@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import './AccountPage.css'
 import ProfilePicture from '../assets/ProfilePic.jpg'
 import OFSLogo from '../assets/OFS Logo.png'
@@ -9,31 +10,97 @@ import cardbackground  from '../assets/cardBackground.png'
 
 
 const AccountPage = () => {
+
+    const [accountName, setAccountName] = useState("User");
+    const [accountEmail, setAccountEmail] = useState("Email");
+
+    // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
+
+    const loadUserData = () => {
+        // create account request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify()
+        }
+
+        // create account request
+        fetch('/users/getUserInfo', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    // We have a session !
+                    // Display user data on page
+                    return response.json();
+
+                } else {
+                    // No session ;(
+                    // Make account button link to login page
+                    window.location.href="/login/"
+                
+                }
+            }
+        ).then( 
+            data => {
+                console.log(data.user)
+                // Input User Data Into Site
+                setAccountName(data.user)
+                setAccountEmail(data.email)
+            }
+        )
+
+        // -------------------- Signout Functionality ----------------------
+
+    }
+    
+    const signOut = () => {
+
+        // create account request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify()
+        }
+    
+        // create account request
+        fetch('/users/signout', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    
+                    window.location.href="/MainPage/"
+        
+                } else {
+        
+                    alert("Looks like you are trying to signout without being logged in?")
+        
+                }
+            }
+        )
+
+    }
+    
     return (
         <div className='page-div'>
-            <a href='#'> {/* Clickin on logo will redirect to main page */}
+            <a href='/MainPage/'> {/* Clickin on logo will redirect to main page */}
                 <img src={OFSLogo} alt="" id='logoIcon'/>
             </a>
             <div className='parentContainer'>
-                <div className='myProfile'>
+                <div className='myProfile' onLoad={loadUserData}>
                     <header>
                         <img src={ProfilePicture} alt="Default profile picture image" />
-                        <h1>My Profile</h1>
+                        <h1 id="user">{accountName}</h1>
                     </header>
-
                     <form action="" method='POST'>
-                        <div id='firstInput'>
-                            <input type="text" id='usernameInput' placeholder='Will Display Username'/>
-                            <br />
-                            <input type="text" id='phoneInput' placeholder='Display Phone Number'/>
+                        <div id='secondInput'>
+                            <input type="text" id="usernameInput" placeholder={accountName}/>
                             <br />
                         </div>
                         <div id='secondInput'>
-                            <input type="text" id='emailInput' placeholder='Display Email'/>
+                            <input type="text" id='emailInput' placeholder={accountEmail}/>
                             <br />
                             <input type="submit" id='save' value="Save"/>
                         </div>
                     </form>
+                    <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
                 </div>
                 <div className='otherSettings'> 
                     <div className='payments'>

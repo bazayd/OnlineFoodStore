@@ -4,6 +4,27 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+export async function getUserInformation(username){
+    // use accounts database
+    const pool = mysql.createPool({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: 'accounts'
+    }).promise()
+
+    console.log("User retrieving information for username: "+username)
+
+    try{
+        const [rows] = await pool.query(`
+        SELECT * FROM users WHERE user=?
+        `, [username])
+        return rows[0] // always returns array, we just grab first item
+    } catch (error){
+        console.log("Error finding user data: "+error)
+    }
+
+}
 
 export async function createUser(email, username, password, address, city, state, zipcode){ // prepared statement using input for query
 
@@ -24,7 +45,7 @@ export async function createUser(email, username, password, address, city, state
         if(checkUsername[0]!=null){
             console.log("Acount with username "+username+" already exists in database.")
             
-            return{status: 409, message: "Account with that username already exists!"} 
+            return{status: 401, message: "Account with that username already exists!"} 
         }
 
     } catch(error) {
