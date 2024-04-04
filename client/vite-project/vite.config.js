@@ -23,7 +23,8 @@ export default defineConfig({
         main: resolve(root, 'index.html'),
         login: resolve(root, 'login', 'index.html'),
         register: resolve(root, 'register', 'index.html'),
-        MainPage: resolve(root, 'MainPage', 'index.html')
+        MainPage: resolve(root, 'MainPage', 'index.html'),
+        AccountPage: resolve(root, 'AccountPage', 'index.html')
       }
     }
 
