@@ -35,8 +35,7 @@ app.post("/inventory/getCategory", async (req, res) => {
     const fullInfo = await getCategory(category)
     
     // catg, label, imag, descr, price, weit, stock
-    res.status(200).send(fullInfo[0])
-    console.log(fullInfo[0])
+    res.status(200).send(fullInfo)
         
 })
 

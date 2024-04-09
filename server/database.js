@@ -13,11 +13,10 @@ const pool = mysql.createPool({
 }).promise()
 
 export async function getCategory(category){
-    console.log("Retrieving inventory category: "+category)
 
     try{
         const [rows] = await pool.query(`
-        SELECT * FROM inventory WHERE catg=?
+        SELECT * FROM inventory WHERE category=?
         `, [category])
         return rows // always returns array, we just grab first item 
     }catch (error){

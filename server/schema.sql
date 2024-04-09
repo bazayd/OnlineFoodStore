@@ -19,19 +19,39 @@ VALUES
 
 CREATE TABLE inventory (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  catg integer NOT NULL,
-  label VARCHAR(225) NOT NULL,
-  imag VARCHAR(225) NOT NULL,
-  descr VARCHAR(225) NOT NULL,
+  category integer NOT NULL,
+  name VARCHAR(225) NOT NULL UNIQUE,
+  image VARCHAR(225) NOT NULL,
+  description VARCHAR(225) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
-  weit integer NOT NULL,
+  weight integer NOT NULL,
   stock integer NOT NULL
 );
 
-INSERT INTO inventory (catg, label, imag, descr, price, weit, stock)
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(1, 'Fuji Apple', 'Apple', 'Yummy Sweet Apple', 2.42, 160, 45);
+(1, 'Apple', 'Apple', 'Yummy Sweet Apple', 2.42, 160, 45);
 
-INSERT INTO inventory (catg, label, imag, descr, price, weit, stock)
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
 (1, 'Orange', 'Orange', 'Slightly Sour Orange', 2.21, 210, 52);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+(1, 'Lemon', 'Lemon', 'Much Similar To The Apple, But Does Not Taste As Good', 1.20, 115, 54);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+(2, 'Lettuce', 'Lettuce', 'Great On Sandwiches', 3.24, 230, 43);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+(2, 'Zucchini', 'Zucchini', 'Dont Ever Purchace A Zucchini', 9999999.99, 999999999, 999999999);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+(3, 'Milk', 'Milk', 'Juice From Cows', 3.95, 310, 26);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+(3, 'Ice Cream', 'Ice Cream', 'Miscellaneous Flavored Frozen Treat', 8.26, 290, 32);

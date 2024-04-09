@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css'
 import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
@@ -10,87 +10,73 @@ const loadImage = (name) => {
   return assetPath+name+'.png'
 }
 
-
-const categories = [
-  {
-    name: 'Fruits',
-    items: {
-      name: 'Vegetables',
-      items: [
-        {
-          name: 'Vegetables',
-          image: "Vegetable Icon",
-          description: 'These are the freshest vegetables ever.',
-          price: '$9.99'
-        },
-        {
-          name: 'Fruits',
-          image: "Fruit Icon",
-          description: 'This is a very sweet fruit.',
-          price: '$8.99'
-        }
-      ]
-    }
-  }
-];
-
 const MainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
+  const [categories, setCategories] = useState([]);
 
-  // Grab Inventory From Database
-
-  const fetchCategory = (catg) => {
-    // create request
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category: catg })
-    }
-
-    // Fetch Fruit
-    const reqest = fetch('/inventory/getCategory', requestOptions).then(response => {
-      if (response.status === 200) {
-          // We got data
-          const data = response.json();
-          // Return data
-          return (data);
-      } else {       
-          console.log("Error retrieving data from backend server!")
-          return {}; // Return an empty object in case of error
+  useEffect (() => {
+    // Grab Inventory From Database
+    const fetchCategory = async (catg) => {
+      
+      // create request
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: catg })
       }
-    })
-  }
 
-  // category's: fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7
-  // Define items here
-  var categories = [
-    {
-      name: 'Fruits',
-      items: fetchCategory(1)
-    }
-  ];
-  /*,
-    {
-      name: 'Vegetables',
-      items: [
-        {
-          name: 'Vegetables',
-          image: "Vegetable Icon",
-          description: 'These are the freshest vegetables ever.',
-          price: '$9.99'
-        },
-        {
-          name: 'Fruits',
-          image: "Fruit Icon",
-          description: 'This is a very sweet fruit.',
-          price: '$8.99'
+      // Fetch Fruit
+      return fetch('/inventory/getCategory', requestOptions).then((response) => {
+        if (response.status === 200) {
+          // We got data
+          return response.json();
+        } else {
+          console.log("Error retrieving data from backend server!")
+          return []; // Return an empty object in case of error
         }
-      ]
-    }*/
+      }).then((data) => {
+        return data
+      })
+          
+    }
+
+    // Function to fetch all categories
+    const fetchAllCategories = async () => {
+      try {
+        // (fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7)
+        const fruits = await fetchCategory(1);
+        const vegetables = await fetchCategory(2);
+        const dairy = await fetchCategory(3);
+        const protein = await fetchCategory(4);
+        const canned = await fetchCategory(5);
+        const beverages = await fetchCategory(6);
+        const deserts = await fetchCategory(7);
+
+        // Update the categories state with the fetched data
+        setCategories([
+          { name: 'Fruits', items: fruits },
+          { name: 'Vegtables', items: vegetables },
+          { name: 'Dairy', items: dairy },
+          { name: 'Protein', items: protein },
+          { name: 'Canned', items: canned },
+          { name: 'Beverages', items: beverages },
+          { name: 'Deserts', items: deserts },
+          
+        ]);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    // Call the function to fetch all categories when the component mounts
+    fetchAllCategories()
+  }, [])
+
   
+
 
   const [accountHref , accountHrefState] = useState("/login/")
 
@@ -184,7 +170,7 @@ const MainPage = () => {
                     <a href='#'>
                       <img src={loadImage(item.image)} className='Category-Images'></img>
                       <span className='category-text'>{item.name}</span>
-                      <span className='category-text'>{item.price}</span>
+                      <span className='category-text'>{'$'+item.price}</span>
                     </a>
                   </div>
                 </li>
@@ -193,6 +179,8 @@ const MainPage = () => {
           </div>
         ))}
       </div>
+      
+     
 
       {isModalOpen && selectedItem && (
         <div className="modal-overlay">
@@ -202,10 +190,10 @@ const MainPage = () => {
             setQuantity(1); // Reset the counter
           }}>Close</button>
               <div className="modal-body">
-                <img src={selectedItem.image} className="modal-image" />
+                <img src={loadImage(selectedItem.image)} className="modal-image" />
                 <div className="modal-details">
                   <h2>{selectedItem.name}</h2>
-                  <span>{selectedItem.price}</span>
+                  <span>{'$'+selectedItem.price}</span>
                   <p>{selectedItem.description}</p>
                 </div>
                 <div className="quantity-control">
