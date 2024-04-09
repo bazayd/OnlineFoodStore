@@ -5,52 +5,91 @@ import Location_Icon from '../assets/Location Icon.png'
 import Profile_Icon from '../assets/Profile Icon.png'
 import Cart_Icon from '../assets/Cart Icon.png'
 
-import Vegetable_Icon from '../assets/Vegetable Icon.png'
-import Fruit_Icon from '../assets/Fruit Icon.png'
-import Apple from '../assets/Apple.jpg'
+const assetPath = '../assets/'
+const loadImage = (name) => {
+  return assetPath+name+'.png'
+}
+
+
+const categories = [
+  {
+    name: 'Fruits',
+    items: {
+      name: 'Vegetables',
+      items: [
+        {
+          name: 'Vegetables',
+          image: "Vegetable Icon",
+          description: 'These are the freshest vegetables ever.',
+          price: '$9.99'
+        },
+        {
+          name: 'Fruits',
+          image: "Fruit Icon",
+          description: 'This is a very sweet fruit.',
+          price: '$8.99'
+        }
+      ]
+    }
+  }
+];
 
 const MainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
+
+  // Grab Inventory From Database
+
+  const fetchCategory = (catg) => {
+    // create request
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: catg })
+    }
+
+    // Fetch Fruit
+    const reqest = fetch('/inventory/getCategory', requestOptions).then(response => {
+      if (response.status === 200) {
+          // We got data
+          const data = response.json();
+          // Return data
+          return (data);
+      } else {       
+          console.log("Error retrieving data from backend server!")
+          return {}; // Return an empty object in case of error
+      }
+    })
+  }
+
+  // category's: fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7
   // Define items here
-  const categories = [
+  var categories = [
     {
       name: 'Fruits',
-      items: [
-        {
-          name: 'Vegetables',
-          image: Vegetable_Icon,
-          description: 'These are the freshest vegetables ever.',
-          price: '$9.99'
-        },
-        {
-          name: 'Fruits',
-          image: Fruit_Icon,
-          description: 'This is a very sweet fruit.',
-          price: '$8.99'
-        }
-      ]
-    },
+      items: fetchCategory(1)
+    }
+  ];
+  /*,
     {
       name: 'Vegetables',
       items: [
         {
           name: 'Vegetables',
-          image: Vegetable_Icon,
+          image: "Vegetable Icon",
           description: 'These are the freshest vegetables ever.',
           price: '$9.99'
         },
         {
           name: 'Fruits',
-          image: Fruit_Icon,
+          image: "Fruit Icon",
           description: 'This is a very sweet fruit.',
           price: '$8.99'
         }
       ]
-    }
-  ];
+    }*/
   
 
   const [accountHref , accountHrefState] = useState("/login/")
@@ -143,7 +182,7 @@ const MainPage = () => {
                     setSelectedItem(item);
                     }}>
                     <a href='#'>
-                      <img src={item.image} className='Category-Images'></img>
+                      <img src={loadImage(item.image)} className='Category-Images'></img>
                       <span className='category-text'>{item.name}</span>
                       <span className='category-text'>{item.price}</span>
                     </a>
@@ -233,6 +272,7 @@ const MainPage = () => {
         </ul>
       </div>
       */}
+      
   </div>
   )
 }

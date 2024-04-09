@@ -41,17 +41,16 @@ const AccountPage = () => {
             }
         ).then( 
             data => {
-                console.log(data.user)
                 // Input User Data Into Site
                 setAccountName(data.user)
                 setAccountEmail(data.email)
             }
         )
 
-        // -------------------- Signout Functionality ----------------------
-
     }
-    
+
+    // -------------------- Signout Functionality ----------------------
+
     const signOut = () => {
 
         // create account request

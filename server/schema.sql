@@ -1,5 +1,5 @@
-CREATE DATABASE accounts;
-use accounts;
+CREATE DATABASE ofsfood;
+use ofsfood;
 
 CREATE TABLE users (
   id integer PRIMARY KEY AUTO_INCREMENT,
@@ -17,20 +17,21 @@ INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
 VALUES 
 ('joe@smith.com', 'joe', 'smith', '111 Average Road', 'Normalton', 'California', '11111', 1);
 
-CREATE DATABASE notes_app;
-USE notes_app;
-
-
-
-CREATE TABLE notes (
+CREATE TABLE inventory (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  title VARCHAR(255) NOT NULL,
-  contents TEXT NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT NOW()
+  catg integer NOT NULL,
+  label VARCHAR(225) NOT NULL,
+  imag VARCHAR(225) NOT NULL,
+  descr VARCHAR(225) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  weit integer NOT NULL,
+  stock integer NOT NULL
 );
 
-INSERT INTO notes (title, contents)
-VALUES 
-('My First Note', 'A note about something'),
-('My Second Note', 'A note about something else');
+INSERT INTO inventory (catg, label, imag, descr, price, weit, stock)
+VALUES
+(1, 'Fuji Apple', 'Apple', 'Yummy Sweet Apple', 2.42, 160, 45);
 
+INSERT INTO inventory (catg, label, imag, descr, price, weit, stock)
+VALUES
+(1, 'Orange', 'Orange', 'Slightly Sour Orange', 2.21, 210, 52);

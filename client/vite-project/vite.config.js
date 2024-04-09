@@ -11,7 +11,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/notes': 'http://localhost:8080',
-      '/users': 'http://localhost:8080'
+      '/users': 'http://localhost:8080',
+      '/inventory': 'http://localhost:8080'
     }
   },
   plugins: [react()],

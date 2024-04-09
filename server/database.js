@@ -4,14 +4,28 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+// use accounts database
+const pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+}).promise()
+
+export async function getCategory(category){
+    console.log("Retrieving inventory category: "+category)
+
+    try{
+        const [rows] = await pool.query(`
+        SELECT * FROM inventory WHERE catg=?
+        `, [category])
+        return rows // always returns array, we just grab first item 
+    }catch (error){
+        console.log("Error retriving category: "+error)
+    }
+}
+
 export async function getUserInformation(username){
-    // use accounts database
-    const pool = mysql.createPool({
-        host: process.env.MYSQL_HOST,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: 'accounts'
-    }).promise()
 
     console.log("User retrieving information for username: "+username)
 
@@ -28,13 +42,7 @@ export async function getUserInformation(username){
 
 export async function createUser(email, username, password, address, city, state, zipcode){ // prepared statement using input for query
 
-    // use accounts database
-    const pool = mysql.createPool({
-        host: process.env.MYSQL_HOST,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: 'accounts'
-    }).promise()
+    
 
     // we need to check if username already exists
     try {
@@ -80,14 +88,6 @@ export async function createUser(email, username, password, address, city, state
 
 
 export async function login(username, password, authed) {
-
-    // use accounts database
-    const pool = mysql.createPool({
-        host: process.env.MYSQL_HOST,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: 'accounts'
-    }).promise()
 
     // check if username exists
     try {
@@ -136,42 +136,4 @@ export async function login(username, password, authed) {
 
 }
 
-
-
-
-
-
-// ------------Notes app methods-----------
-
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: 'notes_app'
-}).promise()
-
-export async function getNotes() { // the const[rows] method just grabs the first item in returned array
-    const [rows] = await pool.query("SELECT * FROM notes")  
-    return rows
-}
-
-export async function getNote(id){ // prepared statement using input for query
-    const [rows] = await pool.query(`
-    SELECT *
-    FROM notes
-    WHERE id = ?
-    `, [id])
-    return rows[0] // always returns array, we just grab first item
-}
-
-export async function createNote(title, content){ // prepared statement using input for query
-    const [result] = await pool.query(`
-    INSERT INTO notes (title, contents)
-    VALUES (?, ?)
-    `, [title, content])
-    // the rest of function just displays added note
-    const id = result.insertId
-    return getNote(id)
-}
-// -------------------------------------------
 
