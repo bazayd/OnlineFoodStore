@@ -154,7 +154,7 @@ const MainPage = () => {
           </li>
         </ul>
       </div>
-
+      <div className='spacer'></div>
       {/*Category side scroll bars for items in each category*/}
       <div className='categorybar'>
         {categories.map((category) => (

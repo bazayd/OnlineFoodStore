@@ -1,0 +1,1 @@
+import{j as e,c as t,R as n}from"./client-CYooLA_G.js";function r(){return e.jsx(e.Fragment,{children:window.location.href="/MainPage/"})}t.createRoot(document.getElementById("root")).render(e.jsx(n.StrictMode,{children:e.jsx(r,{})}));
