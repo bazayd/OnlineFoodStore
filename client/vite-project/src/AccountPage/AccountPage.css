@@ -1,11 +1,11 @@
-* {
+/* * {
     background-color: #ccc;
 
-}
-
-/* .page-div {
-    background-color: #f3f3f3;
 } */
+
+.page-div {
+    background-color: #ccc;
+}
 
 #logoIcon {
     border-radius: 10px;

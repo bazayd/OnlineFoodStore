@@ -1,19 +1,17 @@
 import React from 'react'
 import './AccountPage.css'
 import ProfilePicture from '../assets/ProfilePic.jpg'
-import OFSLogo from '../assets/OFS Logo.png'
 import myProfile from '../assets/myProfile.png'
 import walletLogo from '../assets/walletLogov2.png'
 import bellLogo from '../assets/bellIcon.webp'
 import cardbackground  from '../assets/cardBackground.png'
-
+import Navbar from '../NavBar/NavBar.jsx'
 
 const AccountPage = () => {
     return (
+    <div>
+        <Navbar></Navbar>
         <div className='page-div'>
-            <a href='#'> {/* Clickin on logo will redirect to main page */}
-                <img src={OFSLogo} alt="" id='logoIcon'/>
-            </a>
             <div className='parentContainer'>
                 <div className='myProfile'>
                     <header>
@@ -108,6 +106,7 @@ const AccountPage = () => {
                 </div>
             </div>
         </div>
+    </div>
     )
 }
 
