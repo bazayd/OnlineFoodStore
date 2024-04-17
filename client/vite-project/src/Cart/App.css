@@ -200,17 +200,6 @@ margin: 0;
   transform: translateY(-50%);
 }
 
-/* Your existing CSS styles */
-
-In this example, I assumed the shopping cart is wrapped inside a container <div class="container">. The container is set to position: relative;, which establishes a positioning context for the absolute positioning of the shopping cart. The shopping cart itself is positioned absolutely using position: absolute; and is moved to the right side of the container using right: 0;. The top: 50%; and transform: translateY(-50%); combination is used to vertically center the shopping cart within the container. Adjust the styles as needed to fit your layout.
-
-
-/* Your existing CSS styles */
-
-In this example, I assumed the shopping cart is wrapped inside a container <div class="container">. The container is set to position: relative;, which establishes a positioning context for the absolute positioning of the shopping cart. The shopping cart itself is positioned absolutely using position: absolute; and is moved to the right side of the container using right: 0;. The top: 50%; and transform: translateY(-50%); combination is used to vertically center the shopping cart within the container. Adjust the styles as needed to fit your layout.
-
-
-
 
 .logo{
   min-height: auto;
