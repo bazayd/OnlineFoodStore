@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../NavBar/NavBar.jsx'
 import './App.css'
 import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
@@ -11,9 +12,9 @@ const loadImage = (name) => {
 }
 
 const MainPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [categories, setCategories] = useState([]);
 
@@ -122,91 +123,29 @@ const MainPage = () => {
 
   return (
     <div>
-      {/*Top NavBar*/}
-      <div className='navbar'>                                          
-        <a href="/MainPage/">
-          <img src={OFS_Logo} className='logo'/>
-        </a>
+      <Navbar></Navbar>
+      <div className='categorybar'>
+        <h1 className='categoryBarHeaders'>Categories</h1>
         <ul>
-          <li>
-            <div className='icon-text'>
-              <a href="#">
-                <img src={Location_Icon} className='Location_Icon'/>
-                <span className='text'>Location</span>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='icon-text'>
-              <a id="accountButtonRedirect" href={accountHref} onLoad={loadAccount}>
-                <img src={Profile_Icon} className='Profile_Icon'/>
-                <span id='accountButton' className='text'>Account</span>
-              </a>
-            </div>
-          </li>
-          <li>
-            <div className='icon-text'>
-              <a href="#">
-                <img src={Cart_Icon} className='Cart_Icon'/>
-                <span className='text'>Cart</span>
-              </a>
-            </div>
-          </li>
+          {categories.map((category) => (
+              <li key={category.name}>
+                <div 
+                  className={`category-icon ${selectedCategory === category ? 'selected' : 'unselected'}`} 
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setSelectedItems(category.items);
+                  }}
+                >
+                  <a href='#'>
+                    <img src={category.image} className='Category-Images'></img>
+                    <span className='category-text'>{category.name}</span>
+                  </a>
+                </div>
+              </li>
+            )
+          )}
         </ul>
       </div>
-      <div className='spacer'></div>
-      {/*Category side scroll bars for items in each category*/}
-      <div className='categorybar'>
-        {categories.map((category) => (
-          <div key={category.name}>
-            <h1 className='categoryBarHeaders'>{category.name}</h1>
-            <ul>
-              {category.items.map((item) => (
-                <li key={item.name}>
-                  <div className='category-icon' onClick={() => {
-                    setIsModalOpen(true);
-                    setSelectedItem(item);
-                    }}>
-                    <a href='#'>
-                      <img src={loadImage(item.image)} className='Category-Images'></img>
-                      <span className='category-text'>{item.name}</span>
-                      <span className='category-text'>{'$'+item.price}</span>
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      
-     
-
-      {isModalOpen && selectedItem && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-          <button className="close-button" onClick={() => {
-            setIsModalOpen(false);
-            setQuantity(1); // Reset the counter
-          }}>Close</button>
-              <div className="modal-body">
-                <img src={loadImage(selectedItem.image)} className="modal-image" />
-                <div className="modal-details">
-                  <h2>{selectedItem.name}</h2>
-                  <span>{'$'+selectedItem.price}</span>
-                  <p>{selectedItem.description}</p>
-                </div>
-                <div className="quantity-control">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                  <span>{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)}>+</button>
-                </div>
-                <button className="add-to-cart-button" onClick={() => {/* Add to cart logic */}}>Add to cart</button>
-              </div>
-            </div>
-        </div>
-      )}
-
 
       {/*Left side menu bar*/}
       <div className='menu'>
@@ -218,49 +157,29 @@ const MainPage = () => {
         </ul>
       </div>
       
-      {/* Vertical scroll through items (Currently not used)
+      {/* Vertical scroll through items */}
       <div className='categoryscroll'>
         <ul>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
-          <li>
-            <div className='categoryscroll-sections'>
-              <img src={Apple} className='categoryscroll-images'></img>
-              <span className='categoryscroll-text'>Apple</span>
-            </div>
-          </li>
+          {selectedItems.map((item) => (
+            <li key={item.name}>
+              <div className='categoryscroll-sections'>
+                <img src={loadImage(item.image)} className='categoryscroll-images'></img>
+                <span className='categoryscroll-text'>Name: {item.name}</span>
+                <span className='categoryscroll-text'>Description: {item.description}</span>
+                <span className='categoryscroll-text'>Price: {item.price}</span>
+                <span className='categoryscroll-text'>Weight: {item.weight}</span>
+
+                <div className="quantity-control">
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                  <span>{quantity}</span>
+                  <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                </div>
+                <button className="add-to-cart-button" onClick={() => {/* Add to cart logic*/}}>Add to cart</button>
+              </div>
+            </li>
+          ))}
         </ul>
-      </div>
-      */}
-      
+      </div>    
   </div>
   )
 }
