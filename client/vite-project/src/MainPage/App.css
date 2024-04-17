@@ -1,97 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
 
-/*Below is for the navbar */
-
-.navbar{
-    z-index: 100;
-    position: fixed;
-    top: -1px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: black;
-
-}
-
-h1, h2, h3, h4 {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.logo{
-    min-height: auto;
-    width: 165px;
-    cursor: pointer;
-    margin-left: 25px;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 4px;
-    transition: transform 0.3s ease;
-}
-
-.logo:hover{
-    transform: scale(1.15);
-}
-
-.navbar ul{
-    list-style: none;
-}
-.navbar ul li{
-    cursor: pointer;
-    display: inline-block;
-}
-.Location_Icon{
-    min-height: auto;
-    width: 50px;
-    margin: 0px 10px;
-}
-.Profile_Icon{
-    min-height: auto;
-    width: 50px;
-    margin: 0px 10px;
-}
-.Cart_Icon{
-    min-height: auto;
-    width: 50px;
-    margin: 0px 10px;
-}
-.text{
-    color: white;
-    /* font-family: "ADLaM Display", system-ui; */
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 25px;
-    margin-right: 15px;
-    margin-left: 5px;
-    text-align: center;
-    font-weight: bolder;
-}
-
-.icon-text a{
-    display: flex;
-    align-items: center; 
-    text-decoration: none;
-    transition: transform 0.3s ease;
-}
-
-
-.icon-text a:hover {
-    transform: scale(1.2); /* Scale up the image on hover */
-}
-
-/* Spacer for static task bar and categories bar */
-.spacer {
-    margin-top: 100px;
-
-}
-
 /*Below is for the category selection bar (categorybar) */
 .categorybar ul {
     overflow-x: auto;
     white-space: nowrap;
     list-style: none;
     padding: 0;
-    margin-left: 175px;
-    margin-bottom: 35px;
+    margin-left: 170px;
 }
 
 .categorybar ul::-webkit-scrollbar {
@@ -103,7 +18,18 @@ h1, h2, h3, h4 {
     display: inline-block;
 }
 
-.category-icon {
+.category-icon.selected {
+    flex-direction: column;
+    height: 175px;
+    width: 200px;
+    border: 4px solid blue;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px;
+    transition: transform 0.3s ease;
+}
+
+.category-icon.unselected{
     flex-direction: column;
     height: 175px;
     width: 200px;
@@ -148,17 +74,104 @@ h1, h2, h3, h4 {
     margin-top: 15px;
 }
 
+/*Below is for the scrolling through indiviual items (categoryscroll) */
+
+.categoryscroll{
+    overflow-x: auto;
+    white-space: nowrap;
+    list-style: none;
+    padding: 0;
+    margin-left: 175px;
+}
+
+.categoryscroll ul::-webkit-scrollbar {
+    display: none; 
+}
+
+.categoryscroll-sections {
+    display: flex;
+    align-items: flex-start;
+    height: 150px;
+    width: 85vw;
+    border: 2px solid #000;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    margin: 10px auto;
+    padding: 20px;
+}
+
+.categoryscroll-images{
+    object-fit: contain;
+    height: 100px;
+    width: 100px;
+    margin-right: 40px;
+}
+
+.categoryscroll-text{
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
+
+.add-to-cart-button {
+    font-size: 20px;
+    padding: 5px;
+    text-align: right;
+}
+
+.quantity-control{
+    font-size: 25px;
+}
+
+.quantity-control button{
+    font-size: 25px;
+    padding: 2px;
+}
+
+/*Left Menu Bar*/
+
+.menu {
+    position: fixed;
+    left: 0;
+    top: 80px;
+    bottom: 0;
+    width: 175px;
+    background-color: black;
+    padding: 1em;
+    overflow: auto;
+}
+
+.menu ul{
+    list-style-type: none;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.menu li{
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 17px;
+    padding-top: 5px;
+}
+
+.menuText{
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 24px;
+}
+
+/*(UNUSED) CSS for Popups
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
   
 .modal-content {
     display: flex;
@@ -210,75 +223,4 @@ h1, h2, h3, h4 {
     font-size: 25px;
     padding: 2px;
 }
-
-/*Below is for the scrolling through indiviual items (categoryscroll) **UNUSED**
-
-.categoryscroll{
-    overflow-x: auto;
-    white-space: nowrap;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.categoryscroll ul::-webkit-scrollbar {
-    display: none; 
-}
-
-.categoryscroll-sections {
-    display: flex;
-    align-items: flex-start;
-    height: 150px;
-    width: 95vw;
-    border: 2px solid #000;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-    margin: 10px auto;
-    padding: 20px;
-}
-
-.categoryscroll-images{
-    object-fit: contain;
-    height: 100px;
-    width: 100px;
-    margin-right: 40px;
-}
-
-.categoryscroll-text{
-    color: black;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bolder;
-}
 */
-
-/*Left Menu Bar*/
-
-.menu {
-    position: fixed;
-    left: 0;
-    top: 80px;
-    bottom: 0;
-    width: 175px;
-    background-color: black;
-    padding: 1em;
-    overflow: auto;
-}
-
-.menu ul{
-    list-style-type: none;
-    padding-left: 10px;
-    padding-top: 5px;
-}
-
-.menu li{
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 17px;
-    padding-top: 5px;
-}
-
-.menuText{
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 24px;
-}

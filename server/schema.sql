@@ -17,9 +17,43 @@ INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
 VALUES 
 ('joe@smith.com', 'joe', 'smith', '111 Average Road', 'Normalton', 'California', '11111', 1);
 
+CREATE TABLE category (
+  id integer PRIMARY KEY AUTO_INCREMENT,
+  category VARCHAR NOT NULL UNIQUE,
+  image VARCHAR(225) NOT NULL
+);
+
+INSERT INTO category (category, image)
+VALUES
+('Fruits', 'Fruits');
+
+INSERT INTO category (category, image)
+VALUES
+('Vegetables', 'Vegetables');
+
+INSERT INTO category (category, image)
+VALUES
+('Dairy', 'Fruits');
+
+INSERT INTO category (category, image)
+VALUES
+('Fruits', 'Fruits');
+
+INSERT INTO category (category, image)
+VALUES
+('Fruits', 'Fruits');
+
+INSERT INTO category (category, image)
+VALUES
+('Fruits', 'Fruits');
+
+INSERT INTO category (category, image)
+VALUES
+('Fruits', 'Fruits');
+
 CREATE TABLE inventory (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  category integer NOT NULL,
+  category VARCHAR NOT NULL,
   name VARCHAR(225) NOT NULL UNIQUE,
   image VARCHAR(225) NOT NULL,
   description VARCHAR(225) NOT NULL,
@@ -30,100 +64,100 @@ CREATE TABLE inventory (
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(1, 'Apple', 'Apple', 'Yummy Sweet Apple', 2.42, 160, 45);
+('Fruits', 'Apple', 'Apple', 'Yummy Sweet Apple', 2.42, 160, 45);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(1, 'Orange', 'Orange', 'Slightly Sour Orange', 2.21, 210, 52);
+('Fruits', 'Orange', 'Orange', 'Slightly Sour Orange', 2.21, 210, 52);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(1, 'Lemon', 'Lemon', 'Much Similar To The Apple, But Does Not Taste As Good', 1.20, 115, 54);
+('Fruits', 'Lemon', 'Lemon', 'Much Similar To The Apple, But Does Not Taste As Good', 1.20, 115, 54);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(1, 'Grapes', 'Grapes', 'Make some juice', 1.20, 115, 54);
+('Fruits', 'Grapes', 'Grapes', 'Make some juice', 1.20, 115, 54);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(2, 'Lettuce', 'Lettuce', 'Great On Sandwiches', 3.24, 230, 43);
+('Vegetables', 'Lettuce', 'Lettuce', 'Great On Sandwiches', 3.24, 230, 43);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(2, 'Zucchini', 'Zucchini', 'Dont Ever Purchace A Zucchini', 9999999.99, 999999999, 999999999);
+('Vegetables', 'Zucchini', 'Zucchini', 'Dont Ever Purchace A Zucchini', 9999999.99, 999999999, 999999999);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(2, 'Bell Pepper', 'Bell Pepper', 'Mix this in a Salad', 9999999.99, 999999999, 999999999);
+('Vegetables', 'Bell Pepper', 'Bell Pepper', 'Mix this in a Salad', 9999999.99, 999999999, 999999999);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(2, 'Carrot', 'Carrot', 'Show you Cutlery skills today', 9999999.99, 999999999, 999999999);
+('Vegetables', 'Carrot', 'Carrot', 'Show you Cutlery skills today', 9999999.99, 999999999, 999999999);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(3, 'Milk', 'Milk', 'Healthy 2% Fat Milk', 3.95, 310, 26);
+('Dairy', 'Milk', 'Milk', 'Healthy 2% Fat Milk', 3.95, 310, 26);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(3, 'Mozerella', 'Mozerella Cheese', 'Healthy Fat', 8.26, 300, 32);
+('Dairy', 'Mozerella', 'Mozerella Cheese', 'Healthy Fat', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(3, 'Yogurt', 'Yogurt', 'Good Diet Food', 8.26, 300, 32);
+('Dairy', 'Yogurt', 'Yogurt', 'Good Diet Food', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(3, 'Butter', 'Butter', 'Bring taste to life', 8.26, 300, 32);
-
-
-INSERT INTO inventory (category, name, image, description, price, weight, stock)
-VALUES
-(5, 'Pineapple', 'Pineapple', 'Get the best flavor here', 8.26, 300, 32);
-
-INSERT INTO inventory (category, name, image, description, price, weight, stock)
-VALUES
-(5, 'Pumpkin', 'Pumpkin', 'Make the best pastries', 8.26, 300, 32);
-
-INSERT INTO inventory (category, name, image, description, price, weight, stock)
-VALUES
-(5, 'Canned Beans', 'Canned Beans', 'Dive into the freshest gravy', 8.26, 300, 32);
-
-INSERT INTO inventory (category, name, image, description, price, weight, stock)
-VALUES
-(5, 'Sliced Beets', 'Sliced Beets', 'Fresh cuts for the Salad coming up', 8.26, 300, 32);
-
+('Dairy', 'Butter', 'Butter', 'Bring taste to life', 8.26, 300, 32);
 
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(6, 'Fanta', 'Fanta', 'Take away the heat with Fanta', 8.26, 300, 32);
+('Canned', 'Pineapple', 'Pineapple', 'Get the best flavor here', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(6, 'Sprite', 'Sprite', 'Get the best drink with your lunch', 8.26, 300, 32);
+('Canned', 'Pumpkin', 'Pumpkin', 'Make the best pastries', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(6, 'Gatorade', 'Gatorade', 'Dive into the freshest gravy', 8.26, 300, 32);
+('Canned', 'Canned Beans', 'Canned Beans', 'Dive into the freshest gravy', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(6, 'Red Wine', 'Red Wine', 'Candlelight dinner here we go', 8.26, 300, 32);
+('Canned', 'Sliced Beets', 'Sliced Beets', 'Fresh cuts for the Salad coming up', 8.26, 300, 32);
+
+
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+('Beverages', 'Fanta', 'Fanta', 'Take away the heat with Fanta', 8.26, 300, 32);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+('Beverages', 'Sprite', 'Sprite', 'Get the best drink with your lunch', 8.26, 300, 32);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+('Beverages', 'Gatorade', 'Gatorade', 'Dive into the freshest gravy', 8.26, 300, 32);
+
+INSERT INTO inventory (category, name, image, description, price, weight, stock)
+VALUES
+('Beverages', 'Red Wine', 'Red Wine', 'Candlelight dinner here we go', 8.26, 300, 32);
 
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(7, 'Ice Cream', 'Ice Cream', 'Miscellaneous Flavored Frozen Treat', 8.26, 290, 32);
+('Deserts', 'Ice Cream', 'Ice Cream', 'Miscellaneous Flavored Frozen Treat', 8.26, 290, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(7, 'Brownies', 'Brownies', 'Soft and crafted to melt your mouth', 8.26, 290, 32);
+('Deserts', 'Brownies', 'Brownies', 'Soft and crafted to melt your mouth', 8.26, 290, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(7, 'Muffins', 'Muffins', 'Take some on the go', 8.26, 290, 32);
+('Deserts', 'Muffins', 'Muffins', 'Take some on the go', 8.26, 290, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-(7, 'Oreos', 'Oreos', 'A light snack for the sweetest', 8.26, 290, 32);
+('Deserts', 'Oreos', 'Oreos', 'A light snack for the sweetest', 8.26, 290, 32);
