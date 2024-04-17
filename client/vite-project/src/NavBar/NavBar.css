@@ -11,6 +11,8 @@
     z-index: 100;
     position: fixed;
     top: -1px;
+    min-width: 1050px;
+    max-height: 100px;
 }
 
 h1, h2, h3, h4 {
@@ -75,4 +77,30 @@ h1, h2, h3, h4 {
 
 .icon-text a:hover {
     transform: scale(1.2); /* Scale up the image on hover */
+}
+
+.searchbox{
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    flex-grow: 1;
+    justify-content: flex-start;
+}
+
+.searchbox input{
+    padding: 6px;
+    border: 0;
+    outline: 0;
+    color: black;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    border-radius: 7px;
+    flex-grow: 1;
+}
+
+.Search_Icon{
+    min-height: auto;
+    width: 50px;
+    margin: 0px 10px;
 }
