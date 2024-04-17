@@ -46,6 +46,9 @@ const MainPage = () => {
 
     // Function to fetch all categories
     const fetchAllCategories = async () => {
+
+      // get url parameters
+
       try {
         // (fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7)
         const fruits = await fetchCategory(1);
