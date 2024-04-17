@@ -50,7 +50,6 @@ const NavBar = () => {
   
     }
 
-
   return(
     <div>
       <nav className='navbar'>                                          
@@ -58,8 +57,10 @@ const NavBar = () => {
           <img src={OFS_Logo} className='logo'/>
         </a>
         <div className='searchbox'>
-          <img src={Search_Icon} className='Search_Icon'/>
-          <input type="text" placeholder='Search'/>
+          <img type="submit" src={Search_Icon} className='Search_Icon' />
+          <form method="get">
+            <input type="text" id="search" name="s" placeholder="Search" />
+          </form>
         </div>
         <ul>
           <li>

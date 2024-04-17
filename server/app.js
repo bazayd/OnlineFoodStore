@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getCategory } from './database.js'
+import { createUser, login, getUserInformation, getCategory, listCategory } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -33,6 +33,15 @@ app.post("/inventory/getCategory", async (req, res) => {
     const { category } = req.body    // sets details to parameters from post request body
 
     const fullInfo = await getCategory(category)
+    
+    // catg, label, imag, descr, price, weit, stock
+    res.status(200).send(fullInfo)
+        
+})
+
+app.post("/inventory/listCategory", async (req, res) => {
+
+    const fullInfo = await listCategory()
     
     // catg, label, imag, descr, price, weit, stock
     res.status(200).send(fullInfo)

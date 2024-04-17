@@ -19,7 +19,7 @@ VALUES
 
 CREATE TABLE category (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  category VARCHAR NOT NULL UNIQUE,
+  category VARCHAR(225) NOT NULL UNIQUE,
   image VARCHAR(225) NOT NULL
 );
 
@@ -33,23 +33,23 @@ VALUES
 
 INSERT INTO category (category, image)
 VALUES
-('Dairy', 'Fruits');
+('Dairy', 'Dairy');
 
 INSERT INTO category (category, image)
 VALUES
-('Fruits', 'Fruits');
+('Protein', 'Protein');
 
 INSERT INTO category (category, image)
 VALUES
-('Fruits', 'Fruits');
+('Canned', 'Canned');
 
 INSERT INTO category (category, image)
 VALUES
-('Fruits', 'Fruits');
+('Beverages', 'Beverages');
 
 INSERT INTO category (category, image)
 VALUES
-('Fruits', 'Fruits');
+('Deserts', 'Deserts');
 
 CREATE TABLE inventory (
   id integer PRIMARY KEY AUTO_INCREMENT,

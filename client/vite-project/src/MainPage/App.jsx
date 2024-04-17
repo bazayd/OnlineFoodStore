@@ -44,11 +44,57 @@ const MainPage = () => {
           
     }
 
+    const listCategory = async () => {
+      // create request
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify()
+      }
+
+      // Fetch Fruit
+      return fetch('/inventory/listCategory', requestOptions).then((response) => {
+        if (response.status === 200) {
+          // We got data
+          return response.json();
+        } else {
+          console.log("Error retrieving data from backend server!")
+          return []; // Return an empty object in case of error
+        }
+      }).then((data) => {
+        return data
+      })
+
+    }    
+
+
+
     // Function to fetch all categories
     const fetchAllCategories = async () => {
 
       // get url parameters
 
+      // get all categories
+      try {
+        const databaseCategories = await listCategory();
+        console.log(databaseCategories)
+
+        const categoryArray = []
+
+        for (let i = 0; i < databaseCategories.length; i++) {
+
+          categoryArray.push({ name: databaseCategories[i].category, image: databaseCategories[i].image, items: null})
+          
+        }
+        
+        setCategories(
+          categoryArray
+        )
+
+      } catch (error) {
+        console.error("Error listing categories: ", error)
+      }
+      /*
       try {
         // (fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7)
         const fruits = await fetchCategory(1);
@@ -71,9 +117,11 @@ const MainPage = () => {
           
         ]);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching categories: ", error);
       }
+      */
     };
+    
 
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
