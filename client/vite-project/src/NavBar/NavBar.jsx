@@ -4,6 +4,7 @@ import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
 import Profile_Icon from '../assets/Profile Icon.png'
 import Cart_Icon from '../assets/Cart Icon.png'
+import Search_Icon from '../assets/WhiteSearchIcon.png'
 
 const NavBar = () => {
 
@@ -56,6 +57,10 @@ const NavBar = () => {
         <a href="/MainPage/">
           <img src={OFS_Logo} className='logo'/>
         </a>
+        <div className='searchbox'>
+          <img src={Search_Icon} className='Search_Icon'/>
+          <input type="text" placeholder='Search'/>
+        </div>
         <ul>
           <li>
             <div className='icon-text'>
