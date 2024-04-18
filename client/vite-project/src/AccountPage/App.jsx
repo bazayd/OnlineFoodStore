@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './AccountPage.css'
 import ProfilePicture from '../assets/ProfilePic.jpg'
 import OFSLogo from '../assets/OFS Logo.png'
@@ -10,10 +10,22 @@ import cardbackground  from '../assets/cardBackground.png'
 
 
 const AccountPage = () => {
-
+  
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedButton, setSelectedButton] = useState(null);
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
 
+
+    const openModal = (buttonType) => {
+        setIsModalOpen(true);
+        setSelectedButton(buttonType)
+    }
+    
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedButton(null);
+    }
     // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
 
     const loadUserData = () => {
@@ -76,6 +88,8 @@ const AccountPage = () => {
         )
 
     }
+
+
     
     return (
         <div className='page-div'>
@@ -102,22 +116,70 @@ const AccountPage = () => {
                     <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
                 </div>
                 <div className='otherSettings'> 
-                    <div className='payments'>
+                    <div className='locations'>
                         <header>
-                            <h1>Payment Methods</h1>
+                            <h1>Location</h1>
                         </header>
                         <div className='cards'>
-                            <div className='card-one'>
-                                <div className='card-info'>
-                                    <p>CardHolder Name</p>
+                            <div className='location-one'>
+                                <div className='location-info'>
+                                    <p>Name</p>
+                                    <p>Street</p>
+                                    <p>City, State</p>
+                                    <p>Zip Code</p>
                                 </div>
-                                <button className='editBtn'>Edit</button>
+                                <div className='locationBtns'>
+                                    <button className='selectBtn'>Select</button>
+                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                </div>
+                                {/* Opens pop up for editing location */}
+                                {isModalOpen && (
+                                    
+                                    <div className="modal-overlay">
+                                        <div className="modal-content">
+                                            <div className="modal-body">
+                                                {/* Display content based on the button clicked */}
+                                                {selectedButton === 'editButton' && (
+                                                    <form className='location-form'>
+                                                            {/* <label htmlFor="street"></label> */}
+                                                            <input type="text" name="street" id="street" placeholder='Street'/>
+                                                            {/* <label htmlFor="city"></label> */}
+                                                            <input type="text" name="city" id="city" placeholder='City'/>
+                                                            {/* <label htmlFor="state"></label> */}
+                                                            <input type="text" name="state" id="state" placeholder='State'/>
+                                                            {/* <label htmlFor="zip"></label> */}
+                                                            <input type="text" name="zip" id="zip" placeholder='Zip Code'/>
+                                                    </form>
+                                                )}
+                                                <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            <div className='card-two'>
-                                <div className='card-info'>
-                                    <p>CardHolder Name</p>
+                            <div className='location-two'>
+                                <div className='location-info'>
+                                    <p>Name</p>
+                                    <p>Street</p>
+                                    <p>City, State</p>
+                                    <p>Zip Code</p>
                                 </div>
-                                <button className='editBtn'>Edit</button>
+                                <div className='locationBtns'>
+                                    <button className='selectBtn'>Select</button>
+                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                </div>
+                            </div>
+                            <div className='location-three'>
+                                <div className='location-info'>
+                                    <p>Name</p>
+                                    <p>Street</p>
+                                    <p>City, State</p>
+                                    <p>Zip Code</p>
+                                </div>
+                                <div className='locationBtns'>
+                                    <button className='selectBtn'>Select</button>
+                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
