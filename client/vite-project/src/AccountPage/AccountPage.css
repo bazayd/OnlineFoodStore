@@ -105,6 +105,8 @@ header img {
     background-color: #ccc;
     border: none;
     border-radius: 5px;
+    background-color:rgb(0, 0, 0);
+    color:#fff;
 }
 
 
@@ -123,13 +125,13 @@ header img {
 } */
 
 .otherSettings,
-.payments {
+.locations {
     display: grid;
 }
 
 
 
-.payments, .orderHistory {
+.locations, .orderHistory {
     border: solid 1px;
     border-radius: 10px;
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
@@ -142,7 +144,7 @@ header img {
     cursor: pointer;
 }
 
-.payments:hover,
+.locations:hover,
  .orderHistory:hover {
     transform: translateY(-15px);
 }
@@ -153,19 +155,20 @@ header img {
     background-color: #fff;
 }
 
-.card-one,
-.card-two{
+.location-one,
+.location-two,
+.location-three{
     display: flex;
     gap: 100px;
     justify-content: space-around;
     background-color:#fff;
 }
 
-.card-info {
+.location-info {
     background-color: #fff;
 }
 
-.card-info p{
+.location-info p{
     text-overflow: nowrap;
     font-family: 'Courier New', Courier, monospace;
     margin: 5px 5px;
@@ -173,22 +176,104 @@ header img {
 
 }
 
+.locationBtns {
+    background-color: #fff;
+    display: grid;
+    border: none;
+}
+
+.selectBtn {
+    max-height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: opacity 0.3s ease-in-out;
+    background-color:rgb(0, 0, 0);
+    color:#fff;
+    border: none;
+    border-radius: 5px ;
+    /* transform: translate(0px, 15px); */
+}
+
+
 .editBtn {
     max-height: 30px;
     padding-left: 20px;
     padding-right: 20px;
     transition: opacity 0.3s ease-in-out;
+    background-color:rgb(0, 0, 0);
+    color:#fff;
+    /* transform: translate(0px, 15px); */
 
 }
 
 
-.editBtn:hover {    
+
+.editBtn:hover,
+.selectBtn:hover {    
     opacity: 30%;
 }
 
-.editBtn:active {
+.editBtn:active,
+.selectBtn:active {
     opacity: 80%;
 }
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.modal-content {
+    display: grid;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    width: 70%;
+    height: 70%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+    margin-right: 20px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 20px 20px;
+    background-color: #fff;
+    transition: transform 250ms;
+    cursor: pointer;
+
+}
+
+
+.modal-body {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+.location-form {
+    background-color: #fff;
+}
+
+
+.location-form input {
+    margin: 10px;
+    text-align: center;
+
+}
+
+
 
 .orders {
     display: flex;
