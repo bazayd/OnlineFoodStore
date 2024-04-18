@@ -12,15 +12,28 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-export async function getCategory(category){
+export async function getItems(category, search){
 
-    try{
-        const [rows] = await pool.query(`
-        SELECT * FROM inventory WHERE category=?
-        `, [category])
-        return rows
-    }catch (error){
-        console.log("Error retriving category: "+error)
+    if(category.length<2){
+        console.log("Searching only matching: "+search)
+        try{
+            const [rows] = await pool.query(`
+            SELECT * FROM inventory WHERE name LIKE ?
+            `, [`${search}%`])
+            return rows
+        }catch (error){
+            console.log("Error retriving category: "+error)
+        }
+    } else {
+        console.log("Searching matching: "+search+" and category: "+category)
+        try{
+            const [rows] = await pool.query(`
+            SELECT * FROM inventory WHERE category=? AND name LIKE ?
+            `, [category, `${search}%`])
+            return rows
+        }catch (error){
+            console.log("Error retriving category: "+error)
+        }
     }
 }
 

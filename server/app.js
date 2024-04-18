@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getCategory, listCategory } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -28,11 +28,11 @@ app.get('*', (req, res) => {
 
 // -------------------------------------- Inventory Info Retrival Api Handlers -----------------------------------
 
-app.post("/inventory/getCategory", async (req, res) => {
+app.post("/inventory/getItems", async (req, res) => {
     
-    const { category } = req.body    // sets details to parameters from post request body
+    const { category, search } = req.body    // sets details to parameters from post request body
 
-    const fullInfo = await getCategory(category)
+    const fullInfo = await getItems(category, search)
     
     // catg, label, imag, descr, price, weit, stock
     res.status(200).send(fullInfo)

@@ -23,26 +23,17 @@ const MainPage = () => {
 
   useEffect (() => {
     // Grab Inventory From Database
-    const fetchCategory = async (catg) => {
+    const fetchItems = async (catg, sear) => {
       
       // create request
       const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category: catg })
+          body: JSON.stringify({ category: catg, search: sear })
       }
-
-      let params = new URLSearchParams(document.location.search);
-      if(params.get("c") != null) {
-        let categ = params.get("c"); // gets selected category
-      } else {
-        let categ = "Fruits"; // nothing selected
-      }
-      
-      let search = params.get("s");  // is the number 18
 
       // Fetch Fruit
-      return fetch('/inventory/getCategory', requestOptions).then((response) => {
+      return fetch('/inventory/getItems', requestOptions).then((response) => {
         if (response.status === 200) {
           // We got data
           return response.json();
@@ -55,6 +46,24 @@ const MainPage = () => {
       })
           
     }
+
+    const fetchCurrentItems = async () => {
+      // get url parameters if they exist
+      let params = new URLSearchParams(document.location.search);
+      let catg = ""
+      let sear = ""
+      if(params.get("c")!=null) {
+        catg = params.get("c")
+      }
+      if(params.get("s")!=null) {
+        sear = params.get("s")
+      }
+
+      const currentItems = await fetchItems(catg, sear)
+      console.log(currentItems)
+      setSelectedItems(currentItems)
+    }
+
 
     const listCategory = async () => {
       // create request
@@ -84,8 +93,6 @@ const MainPage = () => {
     // Function to fetch all categories
     const fetchAllCategories = async () => {
 
-      // get url parameters
-
       // get all categories
       try {
         const databaseCategories = await listCategory();
@@ -106,35 +113,10 @@ const MainPage = () => {
       } catch (error) {
         console.error("Error listing categories: ", error)
       }
-      /*
-      try {
-        // (fruit 1, vegetable 2, dairy 3, protein 4, canned 5, beverages 6, deserts 7)
-        const fruits = await fetchCategory(1);
-        const vegetables = await fetchCategory(2);
-        const dairy = await fetchCategory(3);
-        const protein = await fetchCategory(4);
-        const canned = await fetchCategory(5);
-        const beverages = await fetchCategory(6);
-        const deserts = await fetchCategory(7);
-
-        // Update the categories state with the fetched data
-        setCategories([
-          { name: 'Fruits', items: fruits },
-          { name: 'Vegtables', items: vegetables },
-          { name: 'Dairy', items: dairy },
-          { name: 'Protein', items: protein },
-          { name: 'Canned', items: canned },
-          { name: 'Beverages', items: beverages },
-          { name: 'Deserts', items: deserts },
-          
-        ]);
-      } catch (error) {
-        console.error("Error fetching categories: ", error);
-      }
-      */
     };
     
 
+    fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
   }, [])
@@ -156,7 +138,6 @@ const MainPage = () => {
                   className={`category-icon ${selectedCategory === category ? 'selected' : 'unselected'}`} 
                   onClick={() => {
                     //setSelectedCategory(category);
-                    //setSelectedItems(category.items);
                   }}
                 >
                   <form method="get">

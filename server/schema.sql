@@ -53,7 +53,7 @@ VALUES
 
 CREATE TABLE inventory (
   id integer PRIMARY KEY AUTO_INCREMENT,
-  category VARCHAR NOT NULL,
+  category VARCHAR(225) NOT NULL,
   name VARCHAR(225) NOT NULL UNIQUE,
   image VARCHAR(225) NOT NULL,
   description VARCHAR(225) NOT NULL,
@@ -121,11 +121,11 @@ VALUES
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-('Canned', 'Canned Beans', 'Canned Beans', 'Dive into the freshest gravy', 8.26, 300, 32);
+('Canned', 'Beans', 'Canned Beans', 'Dive into the freshest gravy', 8.26, 300, 32);
 
 INSERT INTO inventory (category, name, image, description, price, weight, stock)
 VALUES
-('Canned', 'Sliced Beets', 'Sliced Beets', 'Fresh cuts for the Salad coming up', 8.26, 300, 32);
+('Canned', 'Beets', 'Sliced Beets', 'Fresh cuts for the Salad coming up', 8.26, 300, 32);
 
 
 
