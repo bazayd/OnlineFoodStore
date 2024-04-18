@@ -12,11 +12,14 @@ const loadImage = (name) => {
 }
 
 const MainPage = () => {
-  const [selectedItems, setSelectedItems] = useState([]);
+  
   const [quantity, setQuantity] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [categories, setCategories] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([
+    { image: 'orange', name: 'Apple', description: 'Yummy Sweet Apple', price: 2.42, weight: 160, stock: 45},
+  ]);
 
   useEffect (() => {
     // Grab Inventory From Database
@@ -28,6 +31,15 @@ const MainPage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ category: catg })
       }
+
+      let params = new URLSearchParams(document.location.search);
+      if(params.get("c") != null) {
+        let categ = params.get("c"); // gets selected category
+      } else {
+        let categ = "Fruits"; // nothing selected
+      }
+      
+      let search = params.get("s");  // is the number 18
 
       // Fetch Fruit
       return fetch('/inventory/getCategory', requestOptions).then((response) => {
@@ -83,7 +95,7 @@ const MainPage = () => {
 
         for (let i = 0; i < databaseCategories.length; i++) {
 
-          categoryArray.push({ name: databaseCategories[i].category, image: databaseCategories[i].image, items: null})
+          categoryArray.push({ name: databaseCategories[i].category, image: databaseCategories[i].image})
           
         }
         
@@ -143,14 +155,22 @@ const MainPage = () => {
                 <div 
                   className={`category-icon ${selectedCategory === category ? 'selected' : 'unselected'}`} 
                   onClick={() => {
-                    setSelectedCategory(category);
-                    setSelectedItems(category.items);
+                    //setSelectedCategory(category);
+                    //setSelectedItems(category.items);
                   }}
                 >
-                  <a href='#'>
-                    <img src={category.image} className='Category-Images'></img>
-                    <span className='category-text'>{category.name}</span>
-                  </a>
+                  <form method="get">
+                    <label>
+                      <div style={{ textAlign: 'center' }}>
+                        <img src={loadImage(category.image)} id="submitButton" style={{ cursor: 'pointer' }} />
+                        <input type="submit" id="submitButton" name="c" value={category.name} style={{ display: 'none' }}/>
+                        
+                      </div>
+                      <div style={{ textAlign: 'center' }} className='category-text'>{category.name} </div>
+                    </label>
+                    
+                  </form>
+                
                 </div>
               </li>
             )
