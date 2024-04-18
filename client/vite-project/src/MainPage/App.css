@@ -10,7 +10,34 @@
 }
 
 .categorybar ul::-webkit-scrollbar {
-    display: none; 
+    width: 10px; /* Width of the scrollbar */
+    height: 10px; /* Height of the scrollbar */
+}
+
+/* Track */
+.categorybar ul::-webkit-scrollbar-track {
+    background-color: rgb(255, 255, 255); /* Background color of the scrollbar track */
+}
+
+/* Handle */
+.categorybar ul::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0); /* Color of the scrollbar handle */
+    border-radius: 5px; /* Rounded corners of the scrollbar handle */
+}
+
+/* Handle on hover */
+.categorybar ul::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(95, 95, 95); /* Color of the scrollbar handle on hover */
+}
+
+/* Corner */
+.categorybar ul::-webkit-scrollbar-corner {
+    background-color: transparent; /* Background color of the scrollbar corner */
+}
+
+/* Resize */
+.categorybar ul::-webkit-scrollbar-thumb:active {
+    background-color: rgb(37, 37, 37); /* Color of the scrollbar handle when dragging */
 }
 
 .categorybar ul li{
