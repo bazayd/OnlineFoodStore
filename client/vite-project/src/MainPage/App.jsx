@@ -18,9 +18,36 @@ const MainPage = () => {
 
   const [categories, setCategories] = useState([]);
   const [selectedItems, setSelectedItems] = useState([
-    { image: 'orange', name: 'Apple', description: 'Yummy Sweet Apple', price: 2.42, weight: 160, stock: 45},
+    { image: 'orange', name: 'Orange', description: 'Yummy Sweet Apple', price: 2.42, weight: 160, stock: 45},
+    { image: 'Apple', name: 'Apple', description: 'Yummy Sweet Apple', price: 1.20, weight: 160, stock: 45},
+    { image: 'Apple', name: 'Apple', description: 'Yummy Sweet Apple', price: 5.20, weight: 160, stock: 45},
   ]);
 
+
+  //sort stuff
+  // use selectedItems and method setSelectedItems to sort by that
+  const handleChange = (type) => {
+    //sort by price
+    const pastItems = selectedItems;
+    let sortPriceAsec = () => pastItems.sort((foodItem1,foodItem2)=>{
+      return foodItem1.price - foodItem2.price; //swap to go descending
+  })
+  sortPriceAsec();
+    //sort this selection sort
+    //setSelectedItems(pastItems) to display
+    if (type === 1) {
+      console.log("------Sorting Debug------");
+      console.log(pastItems)
+      setSelectedItems(pastItems);      
+    } 
+    //sort A-Z
+    else if (type === 2) {
+    //sort Z-A 
+    } else if (type === 3) {
+      // Call the function for option 3
+    }
+    //sort by weight
+  };
   useEffect (() => {
     // Grab Inventory From Database
     const fetchItems = async (catg, sear) => {
@@ -161,12 +188,13 @@ const MainPage = () => {
 
       {/*Left side menu bar*/}
       <div className='menu'>
-        <h1 className='menuText'>Categories</h1>
+        <h1 className='menuText'>Sort</h1>
         <ul>
-          <li>Fruits</li>
+          <li onClick={() => handleChange(1)}>By Price</li>
           <li>Vegetables</li>
           <li>Apples</li>
         </ul>
+
       </div>
       
       {/* Vertical scroll through items */}
