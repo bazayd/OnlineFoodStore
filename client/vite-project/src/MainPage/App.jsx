@@ -60,7 +60,7 @@ const MainPage = () => {
       }
 
       const currentItems = await fetchItems(catg, sear)
-      console.log(currentItems)
+      //console.log(currentItems)
       setSelectedItems(currentItems)
     }
 
@@ -96,7 +96,7 @@ const MainPage = () => {
       // get all categories
       try {
         const databaseCategories = await listCategory();
-        console.log(databaseCategories)
+        //console.log(databaseCategories)
 
         const categoryArray = []
 

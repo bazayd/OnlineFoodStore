@@ -1,3 +1,12 @@
+.body {
+  margin: 0;
+  position: absolute;
+  top: 37%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 form {
   padding: 20px;
   margin: 5px;

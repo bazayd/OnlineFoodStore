@@ -40,9 +40,9 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="body">
         <a href="/MainPage/">
-          <img href="/MainPage/" src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
+          <img src={OFSLogo} alt="OFS Logos" id="OFSLogo"/>
         </a>
         <form onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission

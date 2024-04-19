@@ -41,7 +41,7 @@ function App() {
 
   return ( 
     <>
-      <div>
+      <div className="body">
         <a href="/MainPage/">
           <img src={OFSLogo} alt="OFS Logos" className="logo" id="OFSLogo"/>
         </a>
