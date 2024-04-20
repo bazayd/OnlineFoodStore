@@ -12,8 +12,7 @@ const loadImage = (name) => {
 }
 
 const MainPage = () => {
-  
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [categories, setCategories] = useState([]);
@@ -154,11 +153,18 @@ const MainPage = () => {
     fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
-  }, []) 
+  }, [])
 
+  
+
+
+ 
+  
   return (
     <div>
+      {/* NavBar Import */}
       <Navbar></Navbar>
+      {/* Horizontal category scroll bar */}
       <div className='categorybar'>
         <h1 className='categoryBarHeaders'>Categories</h1>
         <ul>
@@ -202,27 +208,66 @@ const MainPage = () => {
       {/* Vertical scroll through items */}
       <div className='categoryscroll'>
         <ul>
-          { selectedItems.map((item) => (
+          {selectedItems.map((item, index) => {
+            const totalPrice = item.price * (quantity[index] || 0);
+            const totalWeight = item.weight * (quantity[index] || 0);
+            
+            let displayTotalPrice = totalPrice.toFixed(2);
+            let displayTotalWeight = totalWeight.toFixed(2);
+          return (
             <li key={item.name}>
               <div className='categoryscroll-sections'>
-                <img src={loadImage(item.image)} className='categoryscroll-images'></img>
-                <span className='categoryscroll-text'>Name: {item.name}</span>
-                <span className='categoryscroll-text'>Description: {item.description}</span>
-                <span className='categoryscroll-text'>Price: {item.price}</span>
-                <span className='categoryscroll-text'>Weight: {item.weight}</span>
+                <ul className='categoryscroll-content'>
+                  <li>
+                    <img src={loadImage(item.image)} className='categoryscroll-images'></img>
+                  </li>
+                  <li className='categoryscroll-name'>
+                    <span className='categoryscroll-title'>Name</span>
+                    <span className='categoryscroll-text'>{item.name}</span>
+                  </li>
+                  <li className='categoryscroll-description'>
+                    <span className='categoryscroll-title'>Description</span>
+                    <span className='categoryscroll-text'>{item.description}</span>
+                  </li>
+                  <li className='categoryscroll-price'>
+                    <span className='categoryscroll-title'>Price</span>
+                    <span className='categoryscroll-text'>{item.price}</span>
+                  </li>
+                  <li className='categoryscroll-weight'>
+                    <span className='categoryscroll-title'>Weight</span>
+                    <span className='categoryscroll-text'>{item.weight}</span>
+                  </li>
+                  <li className='categoryscroll-totalprice'>
+                    <span className='categoryscroll-title'>Total Price</span>
+                    <span className='categoryscroll-text'>{displayTotalPrice}</span>
+                  </li>
+                  <li className='categoryscroll-totalweight'>
+                    <span className='categoryscroll-title'>Total Weight</span>
+                    <span className='categoryscroll-text'>{displayTotalWeight}</span>
+                  </li>
+                </ul>
 
                 <div className="quantity-control">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                  <span>{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                  <button onClick={() => {
+                    let newQuantity = [...quantity];
+                    newQuantity[index] = Math.max(0, (quantity[index] || 0) - 1);
+                    setQuantity(newQuantity);
+                  }}>-</button>
+                  <span>{quantity[index] || 0}</span>
+                  <button onClick={() => {
+                    let newQuantity = [...quantity];
+                    newQuantity[index] = (quantity[index] || 0) + 1;
+                    setQuantity(newQuantity);
+                  }}>+</button>
                 </div>
                 <button className="add-to-cart-button" onClick={() => {/* Add to cart logic*/}}>Add to cart</button>
               </div>
             </li>
-          ))}
+          );
+          })}
         </ul>
       </div>
-  </div>
+    </div>
   )
 
 }

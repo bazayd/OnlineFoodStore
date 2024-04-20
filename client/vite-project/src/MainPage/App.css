@@ -111,48 +111,103 @@
     margin-left: 175px;
 }
 
+.categoryscroll ul{
+    list-style: none;
+}
+
 .categoryscroll ul::-webkit-scrollbar {
     display: none; 
 }
 
 .categoryscroll-sections {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     height: 150px;
-    width: 85vw;
+    width: 1350px;
     border: 2px solid #000;
     border-radius: 15px;
-    transition: transform 0.3s ease;
     margin: 10px auto;
     padding: 20px;
+}
+
+.categoryscroll-content{
+    display: inline-flex;
+}
+
+.categoryscroll-content li{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    flex: 0 0 auto;
+    width: 125px;
 }
 
 .categoryscroll-images{
     object-fit: contain;
     height: 100px;
     width: 100px;
-    margin-right: 40px;
+    margin-right: 20px;
+}
+
+.categoryscroll-title, .categoryscroll-text{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.categoryscroll-title{
+    color: black;
+    font-weight: 900;
+    font-size: 18px;
+    margin-bottom: 3px;
 }
 
 .categoryscroll-text{
-    color: black;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bolder;
+    color: grey;
+    font-weight: normal;
+}
+
+.categoryscroll-text, .categoryscroll-title {
+    word-wrap: break-word;
+}
+
+.categoryscroll-name, .categoryscroll-description, .categoryscroll-price, .categoryscroll-weight, .categoryscroll-totalprice, .categoryscroll-totalweight{
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    overflow-y: auto;
+    height: 120px;
+}
+
+.categoryscroll-name{
+    width: 100px;
+}
+
+.categoryscroll-description{
+    min-width: 250px;
+}
+
+.categoryscroll-price, .categoryscroll-weight{
+    min-width: 100px;
+}
+
+.categoryscroll-totalprice, .categoryscroll-totalweight{
+    min-width: 150px;
 }
 
 .add-to-cart-button {
     font-size: 20px;
     padding: 5px;
-    text-align: right;
 }
 
 .quantity-control{
     font-size: 25px;
+    margin: 10px;
 }
 
 .quantity-control button{
     font-size: 25px;
     padding: 2px;
+    margin: 10px;
 }
 
 /*Left Menu Bar*/
