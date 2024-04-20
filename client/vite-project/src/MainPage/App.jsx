@@ -17,38 +17,44 @@ const MainPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [categories, setCategories] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([
-    { image: 'orange', name: 'Orange', description: 'Yummy Sweet Apple', price: 2.42, weight: 160, stock: 45},
-    { image: 'Apple', name: 'Apple', description: 'Yummy Sweet Apple', price: 1.20, weight: 160, stock: 45},
-    { image: 'Apple', name: 'Apple', description: 'Yummy Sweet Apple', price: 5.20, weight: 160, stock: 45},
-  ]);
-
+  const [selectedItems, setSelectedItems] = useState([]);
 
   //sort stuff
   // use selectedItems and method setSelectedItems to sort by that
-  const handleChange = (type) => {
-    //sort by price
-    const pastItems = selectedItems;
-    let sortPriceAsec = () => pastItems.sort((foodItem1,foodItem2)=>{
-      return foodItem1.price - foodItem2.price; //swap to go descending
-  })
-  sortPriceAsec();
+  const handleSort = (type) => {
+
+    let toSort = [...selectedItems]
+
     //sort this selection sort
-    //setSelectedItems(pastItems) to display
     if (type === 1) {
-      console.log("------Sorting Debug------");
-      console.log(pastItems)
-      setSelectedItems(pastItems);      
-    } 
-    //sort A-Z
-    else if (type === 2) {
-    //sort Z-A 
+      // Sort by price
+      toSort.sort((foodItem1,foodItem2)=>{
+        return foodItem1.price - foodItem2.price; //swap to go descending
+      })
+    } else if (type === 2) {
+      //sort by weight
+      toSort.sort((foodItem1,foodItem2)=>{
+        return foodItem1.weight - foodItem2.weight; //swap to go descending
+      })
     } else if (type === 3) {
-      // Call the function for option 3
-    }
-    //sort by weight
+      //sort A-Z
+      toSort.sort((foodItem1,foodItem2)=>{
+        return foodItem1.name.localeCompare(foodItem2.name); //swap to go descending
+      })
+    } else if (type === 4) {
+      //sort Z-A
+      toSort.sort((foodItem1,foodItem2)=>{
+        return foodItem2.name.localeCompare(foodItem1.name); //swap to go descending
+      })
+    } 
+
+    // Change the current selected Items
+    setSelectedItems(toSort);
+    
   };
+
   useEffect (() => {
+
     // Grab Inventory From Database
     const fetchItems = async (catg, sear) => {
       
@@ -87,8 +93,10 @@ const MainPage = () => {
       }
 
       const currentItems = await fetchItems(catg, sear)
-      console.log(currentItems)
+      //console.log(currentItems)
+      
       setSelectedItems(currentItems)
+      
     }
 
 
@@ -123,7 +131,7 @@ const MainPage = () => {
       // get all categories
       try {
         const databaseCategories = await listCategory();
-        console.log(databaseCategories)
+        //console.log(databaseCategories)
 
         const categoryArray = []
 
@@ -146,12 +154,7 @@ const MainPage = () => {
     fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
-  }, [])
-
-  
-
-
- 
+  }, []) 
 
   return (
     <div>
@@ -188,19 +191,18 @@ const MainPage = () => {
 
       {/*Left side menu bar*/}
       <div className='menu'>
-        <h1 className='menuText'>Sort</h1>
+        <h1 className='menuText'>Sort By:</h1>
         <ul>
-          <li onClick={() => handleChange(1)}>By Price</li>
-          <li>Vegetables</li>
-          <li>Apples</li>
+          <li onClick={() => handleSort(1)}>Price</li>
+          <li onClick={() => handleSort(2)}>Weight</li>
+          <li onClick={() => handleSort(3)}>A-Z</li>
+          <li onClick={() => handleSort(4)}>Z-A</li>
         </ul>
-
       </div>
-      
       {/* Vertical scroll through items */}
       <div className='categoryscroll'>
         <ul>
-          {selectedItems.map((item) => (
+          { selectedItems.map((item) => (
             <li key={item.name}>
               <div className='categoryscroll-sections'>
                 <img src={loadImage(item.image)} className='categoryscroll-images'></img>
@@ -219,10 +221,13 @@ const MainPage = () => {
             </li>
           ))}
         </ul>
-      </div>    
+      </div>
   </div>
   )
+
 }
+
+
 
 
 export default MainPage
