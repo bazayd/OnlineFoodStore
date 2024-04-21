@@ -26,6 +26,36 @@ const AccountPage = () => {
         setIsModalOpen(false);
         setSelectedButton(null);
     }
+    
+    let previouslySelectedLocation = null;
+
+
+    function selectLocation(location, event) {
+
+
+        console.log("Selected button clicked, location selected.")
+        const specifiedLocation = document.getElementsByClassName(location);
+
+        if (previouslySelectedLocation) {
+            previouslySelectedLocation.style.border = "none";
+        }
+            
+
+        for (var i = 0; i < specifiedLocation.length; i++) {
+            console.log(specifiedLocation[i]);
+            specifiedLocation[i].style.border = "3px solid #ccc";
+            specifiedLocation[i].style.borderRadius = "10px";
+        }
+
+        const clickedElement = event.target.closest('.locationBtns').parentNode;
+        clickedElement.style.border = "3px solid #ccc";
+        clickedElement.style.borderRadius = "10px";
+
+        previouslySelectedLocation = clickedElement;
+    }
+
+
+
     // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
 
     const loadUserData = () => {
@@ -129,7 +159,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-one', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                                 {/* Opens pop up for editing location */}
@@ -151,8 +181,8 @@ const AccountPage = () => {
                                                             <input type="text" name="zip" id="zip" placeholder='Zip Code'/>
                                                     </form>
                                                 )}
-                                                <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
                                             </div>
+                                            <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
                                         </div>
                                     </div>
                                 )}
@@ -165,7 +195,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-two', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
@@ -177,7 +207,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-three', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
