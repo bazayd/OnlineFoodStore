@@ -25,8 +25,23 @@ const AccountPage = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedButton(null);
+
     }
     
+    window.addEventListener('load', () => {
+        const selectedLocation = localStorage.getItem('selectedLocation');
+        if (selectedLocation) {
+            const element = document.querySelector(`.${selectedLocation}`);
+            const selectBtn = element.querySelector('.selectBtn');
+            if (element) {
+                element.style.border = "3px solid #ccc";
+                element.style.borderRadius = "10px";
+                selectBtn.style.display = "none";
+            }
+        }
+    });
+
+
     let previouslySelectedLocation = null;
 
 
@@ -35,10 +50,19 @@ const AccountPage = () => {
 
         console.log("Selected button clicked, location selected.")
         const specifiedLocation = document.getElementsByClassName(location);
+        
 
-        if (previouslySelectedLocation) {
-            previouslySelectedLocation.style.border = "none";
-        }
+        const allLocations = document.querySelectorAll('.locationBtns');
+        allLocations.forEach(locationBtn => {
+            locationBtn.parentNode.style.border = "none";
+            locationBtn.querySelector('.selectBtn').style.display = "block";
+        });
+
+
+
+        // if (previouslySelectedLocation) {
+        //     previouslySelectedLocation.querySelector('.selectBtn').style.display = "block";
+        // }
             
 
         for (var i = 0; i < specifiedLocation.length; i++) {
@@ -50,8 +74,14 @@ const AccountPage = () => {
         const clickedElement = event.target.closest('.locationBtns').parentNode;
         clickedElement.style.border = "3px solid #ccc";
         clickedElement.style.borderRadius = "10px";
+        clickedElement.querySelector('.selectBtn').style.display = "none";
+
 
         previouslySelectedLocation = clickedElement;
+
+
+
+        localStorage.setItem('selectedLocation', location);
     }
 
 
