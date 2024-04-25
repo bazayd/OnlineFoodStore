@@ -85,6 +85,7 @@ const NavBar = () => {
                 <img src={Cart_Icon} className='Cart_Icon'/>
                 <span className='text'>Cart</span>
               </a>
+              {/* Create some type of counter that shows the number of items in the cart, use classname="Cart_Counter" for rotation */}
             </div>
           </li>
         </ul>

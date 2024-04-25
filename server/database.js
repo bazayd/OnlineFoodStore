@@ -12,10 +12,50 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+export async function addToCart(user, item, quantity){
+
+    if(user!=null && item!=null && quantity!=null && quantity>0){
+        console.log("User ID: "+user+" added "+quantity+" Item ID: "+item+"'s to their cart!")
+
+        const [result] = await pool.query(`
+        INSERT INTO cart ( user, id, quantity)
+        VALUES (?, ?, ?)
+        `, [user, item, quantity]);
+
+        return result;
+    }
+
+}
+
+export async function getCart(user){
+
+    console.log("User ID: "+user+" is retrieving their cart!")
+
+    // rows is every item with its int indentifier
+    const [rows] = await pool.query(`
+    SELECT * FROM cart WHERE user=?
+    `, [user])
+
+    // for every int item return its actual data and save that in the place of the previous int identifier
+    for (let i=0; i <rows.length; i++) {
+        const [item] = await pool.query(`
+        SELECT * FROM inventory WHERE id=?
+        `, [rows[i].id])
+
+        const itemData = item[0]
+        itemData["quantity"] = rows[i].quantity
+
+        rows[i] = itemData
+    }
+
+    return rows
+
+}
+
 export async function getItems(category, search){
 
     if(category.length<2){
-        console.log("Searching only matching: "+search)
+        //console.log("Searching only matching: "+search)
         try{
             const [rows] = await pool.query(`
             SELECT * FROM inventory WHERE name LIKE ?

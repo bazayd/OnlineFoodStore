@@ -16,6 +16,7 @@ const AccountPage = () => {
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
 
+    const [cart, setCart] = useState([]);
 
     const openModal = (buttonType) => {
         setIsModalOpen(true);

@@ -18,6 +18,37 @@ const MainPage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  
+  const addToCart = (inputItem, inputQuantity) => {
+    // create account request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item: inputItem, quantity: inputQuantity})
+    }
+
+    fetch('/users/addToCart', requestOptions).then(
+      response => {
+        if (response.status==200){
+          
+          //
+
+        } else {
+        
+          //
+
+        }
+      }
+    ).then(
+      data => {
+
+        // 
+        
+      }
+    )
+  }
+  
+
   //sort stuff
   // use selectedItems and method setSelectedItems to sort by that
   const handleSort = (type) => {
@@ -209,11 +240,11 @@ const MainPage = () => {
       <div className='categoryscroll'>
         <ul>
           {selectedItems.map((item, index) => {
-            const totalPrice = item.price * (quantity[index] || 0);
-            const totalWeight = item.weight * (quantity[index] || 0);
+            const totalPrice = item.price * (quantity[index] || 1);
+            const totalWeight = item.weight * (quantity[index] || 1);
             
             let displayTotalPrice = totalPrice.toFixed(2);
-            let displayTotalWeight = totalWeight.toFixed(2);
+            let displayTotalWeight = totalWeight;
           return (
             <li key={item.name}>
               <div className='categoryscroll-sections'>
@@ -231,36 +262,36 @@ const MainPage = () => {
                   </li>
                   <li className='categoryscroll-price'>
                     <span className='categoryscroll-title'>Price</span>
-                    <span className='categoryscroll-text'>{item.price}</span>
+                    <span className='categoryscroll-text'>${item.price}</span>
                   </li>
                   <li className='categoryscroll-weight'>
                     <span className='categoryscroll-title'>Weight</span>
-                    <span className='categoryscroll-text'>{item.weight}</span>
+                    <span className='categoryscroll-text'>{item.weight}g</span>
                   </li>
                   <li className='categoryscroll-totalprice'>
                     <span className='categoryscroll-title'>Total Price</span>
-                    <span className='categoryscroll-text'>{displayTotalPrice}</span>
+                    <span className='categoryscroll-text'>${displayTotalPrice}</span>
                   </li>
                   <li className='categoryscroll-totalweight'>
                     <span className='categoryscroll-title'>Total Weight</span>
-                    <span className='categoryscroll-text'>{displayTotalWeight}</span>
+                    <span className='categoryscroll-text'>{displayTotalWeight}g</span>
                   </li>
                 </ul>
 
                 <div className="quantity-control">
                   <button onClick={() => {
                     let newQuantity = [...quantity];
-                    newQuantity[index] = Math.max(0, (quantity[index] || 0) - 1);
+                    newQuantity[index] = Math.max(1, (quantity[index] || 1) - 1);
                     setQuantity(newQuantity);
                   }}>-</button>
-                  <span>{quantity[index] || 0}</span>
+                  <span>{quantity[index] || 1}</span>
                   <button onClick={() => {
                     let newQuantity = [...quantity];
-                    newQuantity[index] = (quantity[index] || 0) + 1;
+                    newQuantity[index] = (quantity[index] || 1) + 1;
                     setQuantity(newQuantity);
                   }}>+</button>
                 </div>
-                <button className="add-to-cart-button" onClick={() => {/* Add to cart logic*/}}>Add to cart</button>
+                <button className="add-to-cart-button" onClick={() => {addToCart(item.id, quantity[index])}}>Add to cart</button>
               </div>
             </li>
           );

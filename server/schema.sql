@@ -17,6 +17,16 @@ INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
 VALUES 
 ('joe@smith.com', 'joe', 'smith', '111 Average Road', 'Normalton', 'California', '11111', 1);
 
+CREATE TABLE cart (
+  user integer NOT NULL,
+  id integer NOT NULL,
+  quantity integer NOT NULl
+);
+
+INSERT INTO cart (user, id, quantity)
+VALUES 
+(2, 5, 7);
+
 CREATE TABLE category (
   id integer PRIMARY KEY AUTO_INCREMENT,
   category VARCHAR(225) NOT NULL UNIQUE,

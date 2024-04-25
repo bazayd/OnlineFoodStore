@@ -9,9 +9,65 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 import './App.css'
 
-
+const assetPath = '../assets/'
+const loadImage = (name) => {
+  return assetPath+name+'.png'
+}
 
 function App() {
+
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [totalWeight, setTotalWeight] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+
+  const [cart, setCart] = useState([{"id":49,"category":"Protein","name":"Chicken Breast","image":"Apple","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":15},
+  {"id":49,"category":"Protein","name":"Goat Meat","image":"Orange","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":52},
+  {"id":49,"category":"Protein","name":"Beef","image":"Chicken Breast","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":23},])
+
+  // Grab Inventory From Database
+  const fetchCart = async () => {
+
+    // create request
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify()
+    }
+
+    // Fetch Fruit
+    return fetch('/users/getCart', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return []; // Return an empty object in case of error
+      }
+    }).then((data) => {
+      console.log(data)
+      setCart(data)
+
+      // Find total price weight and item count
+      let tP = 0
+      let tW = 0
+      let tC = 0
+      for(let i = 0; i < data.length; i++){
+        tP += (data[i].price) * (data[i].quantity)
+        tW += (data[i].weight) * (data[i].quantity)
+        tC += (data[i].quantity)
+      }
+      setTotalPrice(tP)
+      setTotalWeight(tW)
+      setTotalCount(tC)
+    })
+        
+  }
+
+  useEffect (() => {
+
+    fetchCart()
+
+  }, [])
   
   return (
     <>
@@ -68,14 +124,39 @@ function App() {
         <div className="container">
           <div className="shopping-cart">
             <h2>Your Shopping Cart</h2>
-            <ul id="cart-items">
-              {/* List items here */}
-            </ul>
-            <p id="total">Total: $45</p>
+            <b><p id="orderTotals">Total Order:</p></b>
+            <p id="totalPrice">Price: ${totalPrice.toFixed(2)}</p>
+            <p id="totalWeight">Wight: {totalWeight}g</p>
+            <p id="totalCount">Items: #{totalCount}</p>
             <button id="checkout-btn">Checkout</button>
+            <b><p id="orderTotals">Cart Items:</p></b>
+            <ul id="cart-items">
+              {cart.map((item) => {
+
+                return (
+                  <li key={item.name}>
+                    <div className='categoryscroll-sections'>
+                      <ul className='categoryscroll-content'>
+                        <li className='categoryscroll-name'>
+                          <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
+                        </li>
+                        <li className='categoryscroll-price'>
+                          <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
+                        </li>
+                        <li className='categoryscroll-weight'>
+                          <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                )
+
+              })}
+            </ul>
+            
           </div>
         </div>
-
+      
       </div>
     </>
   )
