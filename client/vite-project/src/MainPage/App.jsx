@@ -291,7 +291,7 @@ const MainPage = () => {
                     setQuantity(newQuantity);
                   }}>+</button>
                 </div>
-                <button className="add-to-cart-button" onClick={() => {addToCart(item.id, quantity[index])}}>Add to cart</button>
+                <button className="add-to-cart-button" onClick={() => {addToCart(item.id, Math.max(1, (quantity[index] || 1)))}}>Add to cart</button>
               </div>
             </li>
           );
