@@ -25,7 +25,67 @@ const AccountPage = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedButton(null);
+
     }
+    
+    window.addEventListener('load', () => {
+        const selectedLocation = localStorage.getItem('selectedLocation');
+        if (selectedLocation) {
+            const element = document.querySelector(`.${selectedLocation}`);
+            const selectBtn = element.querySelector('.selectBtn');
+            if (element) {
+                element.style.border = "3px solid #ccc";
+                element.style.borderRadius = "10px";
+                selectBtn.style.display = "none";
+            }
+        }
+    });
+
+
+    let previouslySelectedLocation = null;
+
+
+    function selectLocation(location, event) {
+
+
+        console.log("Selected button clicked, location selected.")
+        const specifiedLocation = document.getElementsByClassName(location);
+        
+
+        const allLocations = document.querySelectorAll('.locationBtns');
+        allLocations.forEach(locationBtn => {
+            locationBtn.parentNode.style.border = "none";
+            locationBtn.querySelector('.selectBtn').style.display = "block";
+        });
+
+
+
+        // if (previouslySelectedLocation) {
+        //     previouslySelectedLocation.querySelector('.selectBtn').style.display = "block";
+        // }
+            
+
+        for (var i = 0; i < specifiedLocation.length; i++) {
+            console.log(specifiedLocation[i]);
+            specifiedLocation[i].style.border = "3px solid #ccc";
+            specifiedLocation[i].style.borderRadius = "10px";
+        }
+
+        const clickedElement = event.target.closest('.locationBtns').parentNode;
+        clickedElement.style.border = "3px solid #ccc";
+        clickedElement.style.borderRadius = "10px";
+        clickedElement.querySelector('.selectBtn').style.display = "none";
+
+
+        previouslySelectedLocation = clickedElement;
+
+
+
+        localStorage.setItem('selectedLocation', location);
+    }
+
+
+
     // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
 
     const loadUserData = () => {
@@ -129,7 +189,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-one', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                                 {/* Opens pop up for editing location */}
@@ -151,8 +211,8 @@ const AccountPage = () => {
                                                             <input type="text" name="zip" id="zip" placeholder='Zip Code'/>
                                                     </form>
                                                 )}
-                                                <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
                                             </div>
+                                            <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
                                         </div>
                                     </div>
                                 )}
@@ -165,7 +225,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-two', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
@@ -177,7 +237,7 @@ const AccountPage = () => {
                                     <p>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn'>Select</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-three', event)}}>Select</button>
                                     <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
