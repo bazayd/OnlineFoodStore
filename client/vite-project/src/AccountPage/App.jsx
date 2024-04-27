@@ -17,9 +17,13 @@ const AccountPage = () => {
     const [accountEmail, setAccountEmail] = useState("Email");
 
 
-    const openModal = (buttonType) => {
+    let currentLocation;
+
+    const openModal = (buttonType, location) => {
         setIsModalOpen(true);
         setSelectedButton(buttonType)
+        currentLocation = location;
+        console.log("Current location: ", currentLocation);
     }
     
     const closeModal = () => {
@@ -84,6 +88,30 @@ const AccountPage = () => {
         localStorage.setItem('selectedLocation', location);
     }
 
+    
+
+    function saveEdit() {
+        
+        // Specific location being accessed (Ex: location 1, location2, location3, etc..)
+        // const editBtn = document.querySelector('.editBtn');
+        // const editParentDiv = editBtn.parentNode.parentNode.className;
+        // console.log("Edit button location: " + editParentDiv);
+
+
+        // Accessing paragraph tags for specific location to be changed by input
+        console.log("Current pop up location: " , currentLocation);
+        let locationParagraphs = document.querySelectorAll("." +currentLocation + ' .location-info p');
+        let locationFormInputs = document.querySelectorAll("." + currentLocation + " .location-form input");
+
+        locationParagraphs.forEach(paragraph => {
+            locationFormInputs.forEach(input => {
+                if (paragraph.id == input.id) {
+                    paragraph.textContent = input.value;
+                }
+            });
+        });
+
+    }
 
 
     // ------------------- LOAD ALL USER INFORMATION TO THE CLIENT FROM SESSION COOKIE ------------------------------
@@ -183,17 +211,17 @@ const AccountPage = () => {
                         <div className='cards'>
                             <div className='location-one'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p id='street'>Street</p>
+                                    <p id='city'>City</p>
+                                    <p id='state'>State</p>
+                                    <p id='zip'>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
                                     <button className='selectBtn' onClick={(event) => {selectLocation('location-one', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='editBtn' onClick={() => {openModal('editButton', 'location-one')}}>Edit</button>
                                 </div>
-                                {/* Opens pop up for editing location */}
-                                {isModalOpen && (
+                            {/* Opens pop up for editing location */}
+                            {isModalOpen && (
                                     
                                     <div className="modal-overlay">
                                         <div className="modal-content">
@@ -212,35 +240,36 @@ const AccountPage = () => {
                                                     </form>
                                                 )}
                                             </div>
-                                            <button className='save-location-btn' onClick={() => {closeModal()}}>Save</button>
+                                            <button className='save-location-btn' onClick={() => {closeModal(); saveEdit();}}>Save</button>
                                         </div>
                                     </div>
-                                )}
+                            )}
                             </div>
                             <div className='location-two'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p id='street'>Street</p>
+                                    <p id='city'>City</p>
+                                    <p id='state'>State</p>
+                                    <p id='zip'>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
                                     <button className='selectBtn' onClick={(event) => {selectLocation('location-two', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='editBtn' onClick={() => {openModal('editButton', 'location-two')}}>Edit</button>
                                 </div>
                             </div>
                             <div className='location-three'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p id='street'>Street</p>
+                                    <p id='city'>City</p>
+                                    <p id='state'>State</p>
+                                    <p id='zip'>Zip Code</p>
                                 </div>
                                 <div className='locationBtns'>
                                     <button className='selectBtn' onClick={(event) => {selectLocation('location-three', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='editBtn' onClick={() => {openModal('editButton', 'location-three'); }}>Edit</button>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div className='orderHistory'>
