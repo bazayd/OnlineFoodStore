@@ -205,10 +205,15 @@ const MainPage = () => {
           <li onClick={() => handleSort(4)}>Z-A</li>
         </ul>
 
-        <div className='adminPanel'>
-            <button>Admin Btn 1</button>
-            <button>Admin Btn 2</button>
-            <button>Admin Btn 2</button>
+        <div className='adminContainer'>
+            <div className='adminPanel'>
+              <form className='adminForm' action="">
+                <input type="text" placeholder='Item' id='stock-item'/>
+              </form>
+              <button>Add Stock</button>
+              <button>Sub Stock</button>
+              <button>Remove Item</button>
+            </div>
         </div>
       </div>
       {/* Vertical scroll through items */}
