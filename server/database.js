@@ -27,6 +27,22 @@ export async function addToCart(user, item, quantity){
 
 }
 
+export async function updateAddress(buttonNumber, street, city, state, zip, usersID){
+
+    
+        console.log("User ID: "+user+" added "+quantity+" Item ID: "+item+"'s to their cart!")
+
+        const [result] = await pool.query(`
+        UPDATE locations 
+        SET street = ?, city = ?, stte = ?, zipc = ?
+        WHERE useresID = ?, id=?
+        VALUES (?, ?, ?, ?, ?, ?)
+        `, [street, city, state, zip, usersID, buttonNumber]);
+
+        return result;
+
+}
+
 export async function getCart(user){
 
     console.log("User ID: "+user+" is retrieving their cart!")
@@ -132,9 +148,9 @@ export async function createUser(email, username, password, address, city, state
     // Username avaible! Enter user into database
     try {
         const [result] = await pool.query(`
-        INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `, [email, username, password, address, city, state, zipcode, 1])
+        INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype, selectedAddress)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [email, username, password, address, city, state, zipcode, 1, 1])
 
         console.log("User was created! Username: " + username +" Password: "+password)
 

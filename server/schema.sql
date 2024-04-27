@@ -10,7 +10,17 @@ CREATE TABLE users (
   city VARCHAR(255) NOT NULL,
   stte VARCHAR(255) NOT NULL,
   zipc VARCHAR(255) NOT NULL,
-  usertype integer NOT NULL
+  usertype integer NOT NULL,
+  selectedAddress integer NOT NULL
+);
+
+CREATE TABLE locations (
+  usersID integer NOT NULL,
+  id integer NOT NULL,
+  street VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  stte VARCHAR(255) NOT NULL,
+  zipc VARCHAR(255) NOT NULL
 );
 
 INSERT INTO users (email, user, pass, addr, city, stte, zipc, usertype)

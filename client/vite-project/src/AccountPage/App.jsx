@@ -122,6 +122,31 @@ const AccountPage = () => {
 
     }
 
+    //--------------------- Address Requests ----------------------
+    const updateAddress = (input_buttonNumber, input_street, input_city, input_state, input_zip) => {
+
+        // create account request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ buttonNumber: input_buttonNumber, street: input_street, city: input_city, state: input_state, zip:input_zip})
+        }
+    
+        fetch('/users/location/set', requestOptions).then(
+          response => {
+            if (response.status==200){
+              
+            } else {
+
+            }
+          }
+        ).then(
+          data => {
+
+          }
+        )
+      }
+
     // -------------------- Signout Functionality ----------------------
 
     const signOut = () => {
