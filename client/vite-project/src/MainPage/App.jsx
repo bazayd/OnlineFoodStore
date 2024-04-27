@@ -204,6 +204,12 @@ const MainPage = () => {
           <li onClick={() => handleSort(3)}>A-Z</li>
           <li onClick={() => handleSort(4)}>Z-A</li>
         </ul>
+
+        <div className='adminPanel'>
+            <button>Admin Btn 1</button>
+            <button>Admin Btn 2</button>
+            <button>Admin Btn 2</button>
+        </div>
       </div>
       {/* Vertical scroll through items */}
       <div className='categoryscroll'>
