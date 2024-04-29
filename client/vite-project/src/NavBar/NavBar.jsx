@@ -5,10 +5,14 @@ import Location_Icon from '../assets/Location Icon.png'
 import Profile_Icon from '../assets/Profile Icon.png'
 import Cart_Icon from '../assets/Cart Icon.png'
 import Search_Icon from '../assets/WhiteSearchIcon.png'
+import CartRotateIcon from '../assets/CartRotateIcon.png'
 
-const NavBar = () => {
+const NavBar = ({totalItems}) => {
+
+    console.log("Nav bar has: "+totalItems+" total items")
 
     const [accountHref , accountHrefState] = useState("/login/")
+    const [cartPage , cartPageState] = useState("/login/")
 
     // Method to display account button as username if logged in
     const loadAccount = () => {
@@ -27,6 +31,7 @@ const NavBar = () => {
             // We have a session !
             // Make account button link to the account page
             accountHrefState("/AccountPage/")
+            cartPageState("/Cart/")
             // Resolve promise and return username
             return response.json().then(data => data.user);
             
@@ -35,6 +40,7 @@ const NavBar = () => {
             // No session ;(
             // Make account button link to login page
             accountHrefState("/login/")
+            cartPageState("/login/")
             return "Account"
             
           }
@@ -81,8 +87,22 @@ const NavBar = () => {
           </li>
           <li>
             <div className='icon-text'>
-              <a href="/Cart/">
-                <img src={Cart_Icon} className='Cart_Icon'/>
+              <a href={cartPage}>
+                { // In react you have to use this method to dynamically show objects
+                (totalItems>0) ? (
+                  <span>
+                    <div className = "head-text inCartImageAndText">
+                      <div className = "head-image">
+                        <img src={Cart_Icon} className='Cart_Icon'/>
+                      </div>
+                      <div className='inCart'>
+                        {totalItems}
+                      </div>
+                    </div>
+                  </span>
+                ) : (
+                  <img src={Cart_Icon} className='Cart_Icon'/>
+                ) }
                 <span className='text'>Cart</span>
               </a>
               {/* Create some type of counter that shows the number of items in the cart, use classname="Cart_Counter" for rotation */}

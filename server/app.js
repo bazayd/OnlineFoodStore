@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -26,7 +26,60 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(dir, 'dist', 'index.html'));
 });
 
+// -------------------------------------- Orders Api Handlers -----------------------------------
+
+app.post("/users/orders", async (req, res) =>{
+    if (req.session.authenticated) {
+
+        const { card, name, experation, cvc } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id
+        }
+        
+        console.log("User "+selectInfo.user+" is processing an order!")
+
+        const { status, message } = await handleOrder( selectInfo.id, card, name, experation, cvc )
+
+        res.status(status).send(message )
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
 // -------------------------------------- Cart Api Handlers -----------------------------------
+
+app.post("/users/removeFromCart", async (req, res) => {
+
+    if (req.session.authenticated) {
+
+        const { item } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id
+        }
+        
+        const response = await removeFromCart(selectInfo.id, item )
+
+        res.status(200).send(response)
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
 
 app.post("/users/addToCart", async (req, res) => {
 

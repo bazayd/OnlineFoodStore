@@ -12,6 +12,85 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+export async function handleOrder( userId, card, name, experation, cvc ){
+
+    try{
+        // Find the next largest orderNum
+
+        const [findOrderNum] = await pool.query(`
+        SELECT MAX(orderNum) AS greatest_number
+        FROM orders;
+        `);
+        let prevOrderNum = findOrderNum[0].greatest_number
+        let currentOrderNum = 1
+        if(prevOrderNum!=null){
+            currentOrderNum = prevOrderNum+1;
+        }
+
+        // Get selected location
+        /*  sydocode UPDATE WITH RISHI STUFF
+        const [locationSelected] = await pool.query(`
+        SELECT locationNum FROM userLocations WHERE userID=?
+        VALUES (?)
+        `), [userID];
+        let locationNum = locationSelected[0]
+
+        const [locationInfo] = await pool.query(`
+        SELECT * FROM userLocationInfo WHERE userID=? , selectedLocation=?
+        VALUES (?, ?)
+        `), [userID , locationNum];
+
+        let street = locationInfo.street
+        let city = locationInfo.city
+        let state = locationInfo.state
+        let zip = locationInfo.state
+        */
+
+        let street = "street"
+        let city = "city"
+        let state = "state"
+        let zip = 95773
+        
+        // ADD to orders with currentOrderNum and 
+        const [insertOrder] = await pool.query(`
+        INSERT INTO orders ( orderNum, user, card, name, experation, cvc, street, city, state, zip)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        `, [ currentOrderNum, userId, card, name, experation, cvc, street, city, state, zip ]);
+
+        // ADD cart to orderItems
+        const [insertItems] = await pool.query(`
+        INSERT INTO orderItems ( orderNum, user, id, quantity)
+        SELECT ?, user, id, quantity
+        FROM cart
+        WHERE user=?
+        `, [ currentOrderNum, userId])
+
+        return {status: 200, message: "Successfully Completed Your Order!"} 
+
+    } catch (error) {
+        return {status: 500, message: "Sorry we encountered a backend error ;("} 
+    }
+
+}
+
+export async function removeFromCart(user, item){
+    try {
+        if(user!=null && item!=null){
+            console.log("User ID: "+user+" removed Item ID: "+item+" from their cart!")
+
+            const [result] = await pool.query(`
+            REMOVE FROM cart
+            WHERE user = ?, id = ?
+            VALUES (?, ?)
+            `, [user, item]);
+
+            return {status: 200, message: "Successfully removed item from cart"};
+        }
+    } catch (error) {
+        return {status: 500, message: "Sorry we encountered a backend error ;("};
+    }
+}
+
 export async function addToCart(user, item, quantity){
 
     if(user!=null && item!=null && quantity!=null && quantity>0){
@@ -22,7 +101,7 @@ export async function addToCart(user, item, quantity){
         VALUES (?, ?, ?)
         `, [user, item, quantity]);
 
-        return result;
+        return[result];
     }
 
 }

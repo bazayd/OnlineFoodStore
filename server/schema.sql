@@ -23,9 +23,26 @@ CREATE TABLE cart (
   quantity integer NOT NULl
 );
 
-INSERT INTO cart (user, id, quantity)
-VALUES 
-(2, 5, 7);
+CREATE TABLE orderItems (
+  orderNum integer NOT NULL,
+  user integer NOT NULL,
+  id integer NOT NULL,
+  quantity integer NOT NULl
+);
+
+CREATE TABLE orders (
+  orderNum integer NOT NULL,
+  user integer NOT NULL,
+  card integer NOT NULL,
+  name VARCHAR(225) NOT NULL,
+  experation integer NOT NULL,
+  cvc integer NOT NULL,
+  street VARCHAR(225) NOT NULL,
+  city VARCHAR(225) NOT NULL,
+  state VARCHAR(225) NOT NULL,
+  zip integer NOT NULL,
+  date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
 
 CREATE TABLE category (
   id integer PRIMARY KEY AUTO_INCREMENT,

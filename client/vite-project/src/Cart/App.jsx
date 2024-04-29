@@ -9,20 +9,37 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 import './App.css'
 
-const assetPath = '../assets/'
-const loadImage = (name) => {
-  return assetPath+name+'.png'
-}
-
 function App() {
 
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalWeight, setTotalWeight] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
 
-  const [cart, setCart] = useState([{"id":49,"category":"Protein","name":"Chicken Breast","image":"Apple","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":15},
-  {"id":49,"category":"Protein","name":"Goat Meat","image":"Orange","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":52},
-  {"id":49,"category":"Protein","name":"Beef","image":"Chicken Breast","description":"Lean and versatile","price":"6.50","weight":400,"stock":28,"quantity":23},])
+  const [cart, setCart] = useState([])
+
+  const checkout = async ( card, name, experation, cvc ) => {
+
+    // create request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ card: card, name: name, experation: experation, cvc: cvc })
+    }
+    return fetch('/users/orders', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return []; // Return an empty object in case of error
+      }
+    }).then((data) => {
+      
+
+
+    })
+
+  }
 
   // Grab Inventory From Database
   const fetchCart = async () => {
@@ -44,7 +61,7 @@ function App() {
         return []; // Return an empty object in case of error
       }
     }).then((data) => {
-      console.log(data)
+      
       setCart(data)
 
       // Find total price weight and item count
@@ -128,7 +145,7 @@ function App() {
             <p id="totalPrice">Price: ${totalPrice.toFixed(2)}</p>
             <p id="totalWeight">Wight: {totalWeight}g</p>
             <p id="totalCount">Items: #{totalCount}</p>
-            <button id="checkout-btn">Checkout</button>
+            <button id="checkout-btn" onClick={() => checkout( 12345678, "Joe Dave", 41, 403 )}>Checkout</button>
             <b><p id="orderTotals">Cart Items:</p></b>
             <ul id="cart-items">
               {cart.map((item) => {
