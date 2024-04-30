@@ -13,6 +13,8 @@ const NavBar = ({totalItems}) => {
 
     const [accountHref , accountHrefState] = useState("/login/")
     const [cartPage , cartPageState] = useState("/login/")
+    const [location , setLocation] = useState("Location")
+
 
     // Method to display account button as username if logged in
     const loadAccount = () => {
@@ -56,6 +58,34 @@ const NavBar = ({totalItems}) => {
   
     }
 
+      // Grab selected address
+
+  const getSelectedAddress = async (catg, sear) => {
+
+    // create request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ })
+    }
+    // Fetch selected address
+    return fetch('/users/location/getSingle', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return null; // Return an empty object in case of error
+      }
+    }).then((data) => {
+      console.log(data)
+      if(data!=null){
+        setLocation(data.street+", "+data.city+", "+data.stte+", "+data.zipc)
+      }
+    })
+
+  }
+
   return(
     <div>
       <nav className='navbar'>                                          
@@ -70,10 +100,10 @@ const NavBar = ({totalItems}) => {
         </div>
         <ul>
           <li>
-            <div className='icon-text'>
-              <a href="#">
+            <div className='icon-text-location'>
+              <a href={accountHref} onLoad={getSelectedAddress}>
                 <img src={Location_Icon} className='Location_Icon'/>
-                <span className='text'>Location</span>
+                <span className='text'>{location}</span>
               </a>
             </div>
           </li>

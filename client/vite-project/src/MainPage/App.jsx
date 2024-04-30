@@ -256,7 +256,6 @@ const MainPage = () => {
       }
     };
     
-
     fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
