@@ -15,6 +15,7 @@ const AccountPage = () => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
+    const [orders, setOrders] = useState([])
 
     const [address, setAddress] = useState([[],[],[]]);
 
@@ -365,49 +366,28 @@ const AccountPage = () => {
                             <h1>Order History</h1>
                         </header>
                         <div className='orders'>
-                            <table>
-                                <tr>
+                            <table id="cart-items">
+                                <thead>
+                                    <tr>
+                                    <th>Order Number</th>
+                                    <th>Order Location</th>
+                                    <th>Total Price</th>
+                                    <th>Item Count</th>
                                     <th>Date</th>
-                                    <th>Order</th>
-                                    <th>Price</th>
-                                </tr>
-                                <tr>
-                                    <td>1/1/2024</td>
-                                    <td>Apples 5x, Pears 10x
-                                    </td>
-                                    <td>$10.99</td>
-                                </tr>
-                                <tr>
-                                    <td>1/9/2024</td>
-                                    <td>Apples 10x, Mango 10x
-                                    </td>
-                                    <td>$17.99</td>
-                                </tr>
-                                <tr>
-                                    <td>1/22/2024</td>
-                                    <td>Rice Bag 2x, Peppers 12x
-                                    </td>
-                                    <td>$17.99</td>
-                                </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {orders.map((order) => (
+                                    <tr key={order.name}>
+                                        <td>{order.number}</td>
+                                        <td>{order.location}</td>
+                                        <td>{order.price}g</td>
+                                        <td>{order.count}</td>
+                                        <td>{order.datePurchased}</td>
+                                    </tr>
+                                    ))}
+                                </tbody>
                             </table>
-                            {/* <div className='date'>
-                                <h3>Date</h3>
-                                <div className='item'>
-                                    
-                                </div>
-                            </div>
-                            <div className='order-info'>
-                                <h3>Order</h3>
-                                <div className='item'>
-
-                                </div>
-                            </div>
-                            <div className='price'>
-                                <h3>Price</h3>
-                                <div className='item'>
-
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
