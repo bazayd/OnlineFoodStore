@@ -318,11 +318,28 @@ header img {
     border: 1px solid;
     border-radius: 5px;
     text-align: center;
-    row-gap: 50px;
+    row-gap: 40px;
     background-color: #fff;
 }
 
 .orders table th {
+    padding: 12px;
+    border-bottom: 1px solid;
+}
+
+.orders table th:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.orders table th:nth-child(even) {
+    background-color: #d1cece;
+}
+
+.orders table th:nth-child(odd) {
+    background-color: rgb(239, 239, 239);
+}
+
+/* .orders table th {
     background-color: #fff;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bolder;
@@ -351,7 +368,7 @@ header img {
 
 .orders table tr:nth-child(odd) {
     background-color: #ccc;
-}
+} */
 
 
 
