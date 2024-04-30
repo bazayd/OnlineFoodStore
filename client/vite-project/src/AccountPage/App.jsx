@@ -16,6 +16,8 @@ const AccountPage = () => {
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
 
+    const [address, setAddress] = useState([[],[],[]]);
+
     const [cart, setCart] = useState([]);
 
     const openModal = (buttonType) => {
@@ -24,8 +26,16 @@ const AccountPage = () => {
     }
     
     const closeModal = () => {
-        updateAddress(2, "new street", "new c", "new s", "new z");
-        selectedAddress(3);
+        
+        if(selectedButton===1){
+            updateAddress(selectedButton, document.getElementById("street1").value, document.getElementById("city1").value, document.getElementById("state1").value, document.getElementById("zip1").value);
+        } else if(selectedButton===2){
+            updateAddress(selectedButton, document.getElementById("street2").value, document.getElementById("city2").value, document.getElementById("state2").value, document.getElementById("zip2").value);
+        } else if(selectedButton===3){
+            updateAddress(selectedButton, document.getElementById("street3").value, document.getElementById("city3").value, document.getElementById("state3").value, document.getElementById("zip3").value);
+        }
+        
+
         setIsModalOpen(false);
         setSelectedButton(null);
 
@@ -48,8 +58,9 @@ const AccountPage = () => {
     let previouslySelectedLocation = null;
 
 
-    function selectLocation(location, event) {
+    function selectLocation(location, event, num) {
 
+        selectedAddress(num);
 
         console.log("Selected button clicked, location selected.")
         const specifiedLocation = document.getElementsByClassName(location);
@@ -144,7 +155,9 @@ const AccountPage = () => {
             return null; // Return an empty object in case of error
           }
         }).then((data) => {
-          console.log(data)
+            setSelectedButton(data.id)
+            setAddress(data)
+            console.log(data)
           
         })
     
@@ -193,7 +206,7 @@ const AccountPage = () => {
           }
         ).then(
           data => {
-
+            getAllAddresses();
           }
         )
       }
@@ -226,7 +239,10 @@ const AccountPage = () => {
 
     }
 
-
+    useEffect(() => {
+        loadUserData()
+        getAllAddresses()
+    }, [])
     
     return (
         <div className='page-div'>
@@ -234,7 +250,7 @@ const AccountPage = () => {
                 <img src={OFSLogo} alt="" id='logoIcon'/>
             </a>
             <div className='parentContainer'>
-                <div className='myProfile' onLoad={loadUserData}>
+                <div className='myProfile'>
                     <header>
                         <img src={ProfilePicture} alt="Default profile picture image" />
                         <h1 id="user">{accountName}</h1>
@@ -253,21 +269,21 @@ const AccountPage = () => {
                     <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
                 </div>
                 <div className='otherSettings'> 
-                    <div className='locations' onLoad={getAllAddresses()}>
+                    <div className='locations'>
                         <header>
                             <h1>Location</h1>
                         </header>
                         <div className='cards'>
                             <div className='location-one'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p>Address 1:</p>
+                                    <p>{address[0].street}</p>
+                                    <p>{address[0].city}, {address[0].stte}</p>
+                                    <p>{address[0].zipc}</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-one', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-one', event, 1)}}>Select</button>
+                                    <button onClick={ () => {openModal(1)}} className='editBtn'>Edit</button>
                                 </div>
                                 {/* Opens pop up for editing location */}
                                 {isModalOpen && (
@@ -276,16 +292,40 @@ const AccountPage = () => {
                                         <div className="modal-content">
                                             <div className="modal-body">
                                                 {/* Display content based on the button clicked */}
-                                                {selectedButton === 'editButton' && (
+                                                {selectedButton === 1 && (
                                                     <form className='location-form'>
                                                             {/* <label htmlFor="street"></label> */}
-                                                            <input type="text" name="street" id="street" placeholder='Street'/>
+                                                            <input type="text" name="street" id="street1" defaultValue={address[0].street}/>
                                                             {/* <label htmlFor="city"></label> */}
-                                                            <input type="text" name="city" id="city" placeholder='City'/>
+                                                            <input type="text" name="city" id="city1" defaultValue={address[0].city}/>
                                                             {/* <label htmlFor="state"></label> */}
-                                                            <input type="text" name="state" id="state" placeholder='State'/>
+                                                            <input type="text" name="state" id="state1" defaultValue={address[0].stte}/>
                                                             {/* <label htmlFor="zip"></label> */}
-                                                            <input type="text" name="zip" id="zip" placeholder='Zip Code'/>
+                                                            <input type="text" name="zip" id="zip1" defaultValue={address[0].zipc}/>
+                                                    </form>
+                                                )}
+                                                {selectedButton === 2 && (
+                                                    <form className='location-form'>
+                                                            {/* <label htmlFor="street"></label> */}
+                                                            <input type="text" name="street" id="street2" defaultValue={address[1].street}/>
+                                                            {/* <label htmlFor="city"></label> */}
+                                                            <input type="text" name="city" id="city2" defaultValue={address[1].city}/>
+                                                            {/* <label htmlFor="state"></label> */}
+                                                            <input type="text" name="state" id="state2" defaultValue={address[1].stte}/>
+                                                            {/* <label htmlFor="zip"></label> */}
+                                                            <input type="text" name="zip" id="zip2" defaultValue={address[1].zipc}/>
+                                                    </form>
+                                                )}
+                                                {selectedButton === 3 && (
+                                                    <form className='location-form'>
+                                                            {/* <label htmlFor="street"></label> */}
+                                                            <input type="text" name="street" id="street3" defaultValue={address[2].street}/>
+                                                            {/* <label htmlFor="city"></label> */}
+                                                            <input type="text" name="city" id="city3" defaultValue={address[2].city}/>
+                                                            {/* <label htmlFor="state"></label> */}
+                                                            <input type="text" name="state" id="state3" defaultValue={address[2].stte}/>
+                                                            {/* <label htmlFor="zip"></label> */}
+                                                            <input type="text" name="zip" id="zip3" defaultValue={address[2].zipc}/>
                                                     </form>
                                                 )}
                                             </div>
@@ -296,26 +336,26 @@ const AccountPage = () => {
                             </div>
                             <div className='location-two'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p>Address 2:</p>
+                                    <p>{address[1].street}</p>
+                                    <p>{address[1].city}, {address[1].stte}</p>
+                                    <p>{address[1].zipc}</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-two', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-two', event, 2)}}>Select</button>
+                                    <button onClick={ () => {openModal(2)}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
                             <div className='location-three'>
                                 <div className='location-info'>
-                                    <p>Name</p>
-                                    <p>Street</p>
-                                    <p>City, State</p>
-                                    <p>Zip Code</p>
+                                    <p>Address 3:</p>
+                                    <p>{address[2].street}</p>
+                                    <p>{address[2].city}, {address[2].stte}</p>
+                                    <p>{address[2].zipc}</p>
                                 </div>
                                 <div className='locationBtns'>
-                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-three', event)}}>Select</button>
-                                    <button onClick={ () => {openModal('editButton')}} className='editBtn'>Edit</button>
+                                    <button className='selectBtn' onClick={(event) => {selectLocation('location-three', event, 3)}}>Select</button>
+                                    <button onClick={ () => {openModal(3)}} className='editBtn'>Edit</button>
                                 </div>
                             </div>
                         </div>

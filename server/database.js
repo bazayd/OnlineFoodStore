@@ -109,26 +109,31 @@ export async function updateSelected(buttonNumber, usersID){
 
 export async function getCart(user){
 
-    console.log("User ID: "+user+" is retrieving their cart!")
+    try {
+        console.log("User ID: "+user+" is retrieving their cart!")
 
-    // rows is every item with its int indentifier
-    const [rows] = await pool.query(`
-    SELECT * FROM cart WHERE user=?
-    `, [user])
+        // rows is every item with its int indentifier
+        const [rows] = await pool.query(`
+        SELECT * FROM cart WHERE user=?
+        `, [user])
 
-    // for every int item return its actual data and save that in the place of the previous int identifier
-    for (let i=0; i <rows.length; i++) {
-        const [item] = await pool.query(`
-        SELECT * FROM inventory WHERE id=?
-        `, [rows[i].id])
+        // for every int item return its actual data and save that in the place of the previous int identifier
+        for (let i=0; i <rows.length; i++) {
+            const [item] = await pool.query(`
+            SELECT * FROM inventory WHERE id=?
+            `, [rows[i].id])
 
-        const itemData = item[0]
-        itemData["quantity"] = rows[i].quantity
+            const itemData = item[0]
+            itemData["quantity"] = rows[i].quantity
 
-        rows[i] = itemData
+            rows[i] = itemData
+        }
+
+        return rows
+    } catch(error) {
+        console.log("Error getting user's cart: "+error)
+        return "Error getting cart"
     }
-
-    return rows
 
 }
 
