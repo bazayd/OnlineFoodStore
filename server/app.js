@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected, getAllOrders } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -33,6 +33,36 @@ app.post("/users/orders", async (req, res) =>{
 
         const { card, name, experation, cvc } = req.body    // sets details to parameters from post request body
 
+        if(card.length>10, name.length>1, experation.length>1, cvc.length>1) {
+            const userData = req.session.user;
+            const userName = userData.username;
+
+            const fullInfo = await getUserInformation(userName)
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            console.log("User "+selectInfo.user+" is processing an order!")
+
+            const { status, message } = await handleOrder( selectInfo.id, card, name, experation, cvc )
+
+            res.status(status).send(message )
+        } else {
+            res.status(200).send("Please Enter Correct Card Details!");
+        }
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+app.post("/users/orders/getAll", async (req, res) =>{
+    if (req.session.authenticated) {
+
+        const {  } = req.body    // sets details to parameters from post request body
+
         const userData = req.session.user;
         const userName = userData.username;
 
@@ -43,11 +73,11 @@ app.post("/users/orders", async (req, res) =>{
             id: fullInfo.id
         }
         
-        console.log("User "+selectInfo.user+" is processing an order!")
+        console.log("User "+selectInfo.user+" retrieving thier order history!")
 
-        const { status, message } = await handleOrder( selectInfo.id, card, name, experation, cvc )
+        const { status, message } = await getAllOrders( selectInfo.id )
 
-        res.status(status).send(message )
+        res.status(status).send(message)
         
     } else {
         res.status(401).send('Unauthorized');

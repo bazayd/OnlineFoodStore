@@ -12,6 +12,23 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+export async function getAllOrders( userId ) {
+    try {
+        // grab all orders items from orderItems table
+        const [itemOrders] = await pool.query(`
+        SELECT orderNum, street, city, state, zip, totalPrice, totalCount, date  FROM orders 
+        WHERE user=?
+        `, [userId]);
+
+        return { status: 200, message: itemOrders}
+
+    } catch (error) {
+        console.log("Error retrieving user: "+userId+"'s order. Error: "+error)
+        return { status: 500, message: []}
+
+    }
+} 
+
 export async function handleOrder( userId, card, name, experation, cvc ){
 
     try{
@@ -28,34 +45,51 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         }
 
         // Get selected location
-        /*  sydocode UPDATE WITH RISHI STUFF
+        
         const [locationSelected] = await pool.query(`
-        SELECT locationNum FROM userLocations WHERE userID=?
-        VALUES (?)
-        `), [userID];
-        let locationNum = locationSelected[0]
+        SELECT selectedAddress FROM users WHERE id=?
+        `, [userId]);
+        let locationNum = locationSelected[0].selectedAddress
 
-        const [locationInfo] = await pool.query(`
-        SELECT * FROM userLocationInfo WHERE userID=? , selectedLocation=?
-        VALUES (?, ?)
-        `), [userID , locationNum];
+        const [locationInfoArray] = await pool.query(`
+        SELECT * FROM locations WHERE usersID=? AND id=?
+        `, [userId , locationNum]);
+
+        let locationInfo = locationInfoArray[0]
 
         let street = locationInfo.street
         let city = locationInfo.city
-        let state = locationInfo.state
-        let zip = locationInfo.state
-        */
+        let state = locationInfo.stte
+        let zip = locationInfo.zipc
 
-        let street = "street"
-        let city = "city"
-        let state = "state"
-        let zip = 95773
-        
+        // Find totalPrice
+        const [cart] = await pool.query(`
+        SELECT * FROM cart
+        WHERE user = ?
+        `, [userId])
+        let totalPrice = 0;
+        let totalCount = 0;
+        for(let i = 0 ; i <cart.length ; i++){
+            const [item] = await pool.query(`
+            SELECT * FROM inventory
+            WHERE id = ?
+            `, [cart[i].id])
+            totalPrice = totalPrice+((item[0].price)*(cart[i].quantity))
+            totalCount = totalCount+(cart[i].quantity)
+        }
+
+        // If no items selected dont complete order
+        if (totalCount<1){
+            return {status: 200, message: "You Must Have An Item In Your Cart To Complete An Order!"} 
+        }
+
+        console.log("Creating Order: User: "+userId+" currentOrderNumber: "+currentOrderNum+" card: "+card+" name: "+name+" experation: "+experation+" cvc: "+cvc+" street: "+street+" city: "+city+" state: "+state+" zip: "+zip )
+
         // ADD to orders with currentOrderNum and 
         const [insertOrder] = await pool.query(`
-        INSERT INTO orders ( orderNum, user, card, name, experation, cvc, street, city, state, zip)
-        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-        `, [ currentOrderNum, userId, card, name, experation, cvc, street, city, state, zip ]);
+        INSERT INTO orders ( orderNum, user, totalPrice, totalCount, card, name, experation, cvc, street, city, state, zip)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        `, [ currentOrderNum, userId, totalPrice, totalCount, card, name, experation, cvc, street, city, state, zip ]);
 
         // ADD cart to orderItems
         const [insertItems] = await pool.query(`
@@ -65,9 +99,15 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         WHERE user=?
         `, [ currentOrderNum, userId])
 
+        // Delete current Cart
+        const [deleteCart] = await pool.query(`
+        DELETE FROM Cart WHERE user=?
+        `, [ userId])
+
         return {status: 200, message: "Successfully Completed Your Order!"} 
 
     } catch (error) {
+        console.log("Error processing order: "+error)
         return {status: 500, message: "Sorry we encountered a backend error ;("} 
     }
 

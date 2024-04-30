@@ -35,14 +35,16 @@ CREATE TABLE orderItems (
 CREATE TABLE orders (
   orderNum integer NOT NULL,
   user integer NOT NULL,
-  card integer NOT NULL,
+  totalPrice integer NOT NULL,
+  totalCount integer NOT NULL,
+  card VARCHAR(225) NOT NULL,
   name VARCHAR(225) NOT NULL,
-  experation integer NOT NULL,
-  cvc integer NOT NULL,
+  experation VARCHAR(225) NOT NULL,
+  cvc VARCHAR(225) NOT NULL,
   street VARCHAR(225) NOT NULL,
   city VARCHAR(225) NOT NULL,
   state VARCHAR(225) NOT NULL,
-  zip integer NOT NULL,
+  zip VARCHAR(225) NOT NULL,
   date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

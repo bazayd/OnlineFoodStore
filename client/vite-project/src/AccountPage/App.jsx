@@ -240,7 +240,33 @@ const AccountPage = () => {
 
     }
 
+    const loadAllOrders= async (catg, sear) => {
+
+        // create request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ })
+        }
+        // Fetch selected address
+        return fetch('/users/orders/getAll', requestOptions).then((response) => {
+          if (response.status === 200) {
+            // We got data
+            return response.json();
+          } else {
+            console.log("Error retrieving data from backend server!")
+            return null; // Return an empty object in case of error
+          }
+        }).then((data) => {
+            setOrders(data)
+            console.log(data)
+          
+        })
+    
+    }
+
     useEffect(() => {
+        loadAllOrders()
         loadUserData()
         getAllAddresses()
     }, [])
@@ -379,11 +405,11 @@ const AccountPage = () => {
                                 <tbody>
                                     {orders.map((order) => (
                                     <tr key={order.name}>
-                                        <td>{order.number}</td>
-                                        <td>{order.location}</td>
-                                        <td>{order.price}g</td>
-                                        <td>{order.count}</td>
-                                        <td>{order.datePurchased}</td>
+                                        <td>{order.orderNum}</td>
+                                        <td>{order.street+", "+order.city+", "+order.state+" "+order.zip}</td>
+                                        <td>${order.totalPrice}</td>
+                                        <td>#{order.totalCount}</td>
+                                        <td>{order.date}</td>
                                     </tr>
                                     ))}
                                 </tbody>

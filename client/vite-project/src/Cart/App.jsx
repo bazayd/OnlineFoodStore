@@ -17,8 +17,13 @@ function App() {
 
   const [cart, setCart] = useState([])
 
-  const checkout = async ( card, name, experation, cvc ) => {
+  const checkout = async ( ) => {
 
+    let card = document.getElementById("cc-1").value+""+document.getElementById("cc-2").value+""+document.getElementById("cc-3").value+""+document.getElementById("cc-4").value
+    let name = document.getElementById("name").value
+    let experation = document.getElementById("exp-m").value+"/"+document.getElementById("exp-y").value
+    let cvc = document.getElementById("cvc").value
+   
     // create request
     const requestOptions = {
       method: 'POST',
@@ -28,14 +33,14 @@ function App() {
     return fetch('/users/orders', requestOptions).then((response) => {
       if (response.status === 200) {
         // We got data
-        return response.json();
+        return response.text();
       } else {
         console.log("Error retrieving data from backend server!")
         return []; // Return an empty object in case of error
       }
     }).then((data) => {
-      
-
+      console.log(data)
+      document.getElementById("checkoutMessage").innerText = data
 
     })
 
@@ -102,12 +107,12 @@ function App() {
             </div>
             <fieldset className="form-group">
               <legend>Card Number</legend>
-              <label htmlFor="cc-1">Card Number</label>
+              <label htmlFor="cc">Card Number</label>
               <div className="cc-inputs">
                 <input type="tel" maxLength="4" aria-label='Credit Card First 4 Digits' name="cc-1" id="cc-1" required pattern="[0-9]{4}"/>
-                <input type="tel" maxLength="4" aria-label='Credit Card Second 4 Digits' name="cc-2" required pattern="[0-9]{4}"/>
-                <input type="tel" maxLength="4" aria-label='Credit Card Third 4 Digits' name="cc-3" required pattern="[0-9]{4}"/>
-                <input type="tel" maxLength="4" aria-label='Credit Card Fourth 4 Digits' name="cc-4" required pattern="[0-9]{4}"/>
+                <input type="tel" maxLength="4" aria-label='Credit Card Second 4 Digits' name="cc-2" id="cc-2"  required pattern="[0-9]{4}"/>
+                <input type="tel" maxLength="4" aria-label='Credit Card Third 4 Digits' name="cc-3" id="cc-3"  required pattern="[0-9]{4}"/>
+                <input type="tel" maxLength="4" aria-label='Credit Card Fourth 4 Digits' name="cc-4" id="cc-4"  required pattern="[0-9]{4}"/>
               </div>
             </fieldset>
             <div className="input-row">
@@ -117,13 +122,28 @@ function App() {
               </div>
               <fieldset className="form-group">
                 <legend>Expiration</legend>
-                <label htmlFor="expiration-month">EXPIRATION</label>
+                <label htmlFor="exp-m">EXPIRATION</label>
                 <div className="hori">
-                  <select id="expiration-month" aria-label="Expiration Month" required>
-                    {/* Options here */}
+                  <select id="exp-m" aria-label="Expiration Month" required>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
                   </select>
-                  <select id="expiration-year" aria-label="Expiration Year" required>
-                    {/* Options here */}
+                  <select id="exp-y" aria-label="Expiration Year" required>
+                    <option>2025</option>
+                    <option>2026</option>
+                    <option>2028</option>
+                    <option>2029</option>
+                    <option>2030</option>
                   </select>
                 </div>
               </fieldset>
@@ -137,7 +157,6 @@ function App() {
             </div>
           </div>
         </form>
-
         <div className="container">
           <div className="shopping-cart">
             <h2>Your Shopping Cart</h2>
@@ -145,7 +164,8 @@ function App() {
             <p id="totalPrice">Price: ${totalPrice.toFixed(2)}</p>
             <p id="totalWeight">Wight: {totalWeight}g</p>
             <p id="totalCount">Items: #{totalCount}</p>
-            <button id="checkout-btn" onClick={() => checkout( 12345678, "Joe Dave", 41, 403 )}>Checkout</button>
+            <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>
+            <div id="checkoutMessage"></div>
             <b><p id="orderTotals">Cart Items:</p></b>
             <ul id="cart-items">
               {cart.map((item) => {
