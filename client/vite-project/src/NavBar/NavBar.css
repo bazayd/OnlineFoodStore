@@ -91,6 +91,12 @@ h1, h2, h3, h4 {
     transition: transform 0.3s ease;
 }
 
+.icon-text-location a{
+    display: flex;
+    align-items: center; 
+    text-decoration: none;
+}
+
 
 .icon-text a:hover {
     transform: scale(1.2); /* Scale up the image on hover */

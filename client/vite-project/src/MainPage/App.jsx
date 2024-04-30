@@ -85,6 +85,8 @@ const MainPage = () => {
 
   useEffect (() => {
 
+    
+
     // Grab Inventory From Database
     const fetchItems = async (catg, sear) => {
       
@@ -180,7 +182,6 @@ const MainPage = () => {
       }
     };
     
-
     fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()

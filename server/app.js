@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, updateAddress } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, updateAddress, getAddress, getAllAddress, updateSelected } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -27,6 +27,32 @@ app.get('*', (req, res) => {
 });
 
 // -------------------------------------- Location Api Handlers -----------------------------------
+
+app.post("/users/location/setSelected", async (req, res) => {
+
+    if (req.session.authenticated) {
+
+        const { buttonNumber } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id
+        }
+        
+        const response = await updateSelected(buttonNumber, selectInfo.id)
+
+        res.status(200).send(response)
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
 app.post("/users/location/set", async (req, res) => {
 
     if (req.session.authenticated) {
@@ -51,6 +77,57 @@ app.post("/users/location/set", async (req, res) => {
         res.status(401).send('Unauthorized');
     }
 })
+
+app.post("/users/location/getSingle", async (req, res) => {
+
+    if (req.session.authenticated) {
+
+        const { } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id
+        }
+        
+        const response = await getAddress(selectInfo.id)
+
+        res.status(200).send(response)
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+app.post("/users/location/getAll", async (req, res) => {
+
+    if (req.session.authenticated) {
+
+        const { } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id
+        }
+        
+        const response = await getAllAddress(selectInfo.id)
+
+        res.status(200).send(response)
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
 // -------------------------------------- Cart Api Handlers -----------------------------------
 
 app.post("/users/addToCart", async (req, res) => {

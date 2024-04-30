@@ -24,6 +24,8 @@ const AccountPage = () => {
     }
     
     const closeModal = () => {
+        updateAddress(2, "new street", "new c", "new s", "new z");
+        selectedAddress(3);
         setIsModalOpen(false);
         setSelectedButton(null);
 
@@ -123,6 +125,55 @@ const AccountPage = () => {
     }
 
     //--------------------- Address Requests ----------------------
+
+    const getAllAddresses= async (catg, sear) => {
+
+        // create request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ })
+        }
+        // Fetch selected address
+        return fetch('/users/location/getAll', requestOptions).then((response) => {
+          if (response.status === 200) {
+            // We got data
+            return response.json();
+          } else {
+            console.log("Error retrieving data from backend server!")
+            return null; // Return an empty object in case of error
+          }
+        }).then((data) => {
+          console.log(data)
+          
+        })
+    
+    }
+
+    const selectedAddress = (input_buttonNumber) => {
+
+        // create account request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ buttonNumber: input_buttonNumber})
+        }
+    
+        fetch('/users/location/setSelected', requestOptions).then(
+          response => {
+            if (response.status==200){
+              
+            } else {
+
+            }
+          }
+        ).then(
+          data => {
+
+          }
+        )
+      }
+
     const updateAddress = (input_buttonNumber, input_street, input_city, input_state, input_zip) => {
 
         // create account request
@@ -202,7 +253,7 @@ const AccountPage = () => {
                     <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
                 </div>
                 <div className='otherSettings'> 
-                    <div className='locations'>
+                    <div className='locations' onLoad={getAllAddresses()}>
                         <header>
                             <h1>Location</h1>
                         </header>
