@@ -14,6 +14,8 @@ const loadImage = (name) => {
   return assetPath+name+'.png'
 }
 
+
+
 function App() {
 
   const [totalPrice, setTotalPrice] = useState(0)
@@ -98,18 +100,34 @@ function App() {
                 <label htmlFor="name">Name</label>
                 <input type="text" id="name" required/>
               </div>
-              <fieldset className="form-group">
-                <legend>Expiration</legend>
-                <label htmlFor="expiration-month">EXPIRATION</label>
-                <div className="hori">
-                  <select id="expiration-month" aria-label="Expiration Month" required>
-                    {/* Options here */}
-                  </select>
-                  <select id="expiration-year" aria-label="Expiration Year" required>
-                    {/* Options here */}
-                  </select>
-                </div>
-              </fieldset>
+              <fieldset class="form-group">
+          <legend>Expiration</legend>
+          <label for="expiration-month">Expiration</label>
+          <div class="horizontal-input-stack">
+            <select id="expiration-month" aria-label="Expiration Month" required>
+              <option>01</option>
+              <option>02</option>
+              <option>03</option>
+              <option>04</option>
+              <option>05</option>
+              <option>06</option>
+              <option>07</option>
+              <option>08</option>
+              <option>09</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>
+            <select id="expiration-year" aria-label="Expiration Year" required data-expiration-year>
+              <option>2025</option>
+              <option>2026</option>
+              <option>2028</option>
+              <option>2029</option>
+              <option>2030</option>
+              
+            </select>
+          </div>
+        </fieldset>
             </div>
           </div>
           <div className="back">
