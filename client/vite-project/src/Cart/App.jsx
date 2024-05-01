@@ -9,6 +9,13 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 import './App.css'
 
+const assetPath = '../assets/'
+const loadImage = (name) => {
+  return assetPath+name+'.png'
+}
+
+
+
 function App() {
 
   const [totalPrice, setTotalPrice] = useState(0)

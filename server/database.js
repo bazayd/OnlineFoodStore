@@ -16,10 +16,11 @@ export async function getAllOrders( userId ) {
     try {
         // grab all orders items from orderItems table
         const [itemOrders] = await pool.query(`
-        SELECT orderNum, street, city, state, zip, totalPrice, totalCount, date  FROM orders 
+        SELECT orderNum, street, city, state, zip, totalPrice, totalCount, DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') AS date  FROM orders 
         WHERE user=?
         `, [userId]);
 
+        console.log(itemOrders)
         return { status: 200, message: itemOrders}
 
     } catch (error) {
