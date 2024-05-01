@@ -13,7 +13,36 @@ const assetPath = '../assets/'
 const loadImage = (name) => {
   return assetPath+name+'.png'
 }
+var addressData = {
+  street: "123 Main St",
+  city: "Cityville",
+  state: "State",
+  zip: "12345"
+};
 
+function displayAddress() {
+  var addressBox = document.getElementById("addressBox");
+  var addressElement = document.getElementById("address");
+
+  var addressString = addressData.street + "<br>" +
+                      addressData.city + ", " +
+                      addressData.state + " " +
+                      addressData.zip;
+
+  addressElement.innerHTML = addressString;
+}
+
+function changeAddress() {
+  <a href="../AccountPage/"><changeAddressBtn/></a>
+  window.location.href = "../AccountPage/";
+}
+
+window.onload = function() {
+  displayAddress();
+  
+  var changeAddressBtn = document.getElementById("changeAddressBtn");
+  changeAddressBtn.addEventListener("click", changeAddress);
+};
 
 
 function App() {
@@ -104,8 +133,16 @@ function App() {
         <a href="MainPage.jsx"><img src={OFS_Logo} className="logo" alt="OFS Logo"/></a>
       </div>
 
+
+<script src="script.js"></script>
+
       <div className="body">
 
+      <div class="address-box" id="addressBox">
+    <h2>Shipping Address</h2>
+    <p id="address"></p>
+    <button id="changeAddressBtn">Change Address</button>
+</div>
         <form className="credit-card">
           <div className="front">
             <div className="card-data-row">
@@ -165,41 +202,41 @@ function App() {
           </div>
         </form>
         <div className="container">
-          <div className="shopping-cart">
-            <h2>Your Shopping Cart</h2>
-            <b><p id="orderTotals">Total Order:</p></b>
-            <p id="totalPrice">Price: ${totalPrice.toFixed(2)} + 5.00 Shipping</p>
-            <p id="totalWeight">Wight: {totalWeight}g</p>
-            <p id="totalCount">Items: #{totalCount}</p>
-            <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>
+  <div className="shopping-cart">
+    <h2>Your Shopping Cart</h2>
+    <b><p id="orderTotals">Total Order:</p></b>
+    <p id="totalPrice">Price: ${totalPrice.toFixed(2)} + 5.00 Shipping</p>
+    <p id="totalWeight">Wight: {totalWeight}g</p>
+    <p id="totalCount">Items: #{totalCount}</p>
+    <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>
             <div id="checkoutMessage"></div>
-            <b><p id="orderTotals">Cart Items:</p></b>
-            <ul id="cart-items">
-              {cart.map((item) => {
-
-                return (
-                  <li key={item.name}>
-                    <div className='categoryscroll-sections'>
-                      <ul className='categoryscroll-content'>
-                        <li className='categoryscroll-name'>
-                          <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
-                        </li>
-                        <li className='categoryscroll-price'>
-                          <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
-                        </li>
-                        <li className='categoryscroll-weight'>
-                          <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
-                        </li>
-                      </ul>
-                    </div>
+    <b><p id="orderTotals">Cart Items:</p></b>
+    <div id="cart-items-container" className="cart-items-container">
+      <ul id="cart-items" className="cart-items">
+        {cart.map((item) => {
+          return (
+            <li key={item.name}>
+              <div className='categoryscroll-sections'>
+                <ul className='categoryscroll-content'>
+                  <li className='categoryscroll-name'>
+                    <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
                   </li>
-                )
+                  <li className='categoryscroll-price'>
+                    <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
+                  </li>
+                  <li className='categoryscroll-weight'>
+                    <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+</div>
 
-              })}
-            </ul>
-            
-          </div>
-        </div>
       
       </div>
     </>
