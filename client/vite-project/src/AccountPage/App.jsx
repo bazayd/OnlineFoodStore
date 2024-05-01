@@ -437,7 +437,7 @@ const AccountPage = () => {
                                 </thead>
                                 <tbody>
                                     {orders.map((order) => (
-                                    <tr key={order.name}>
+                                    <tr key={order.orderNum}>
                                         <td>{order.orderNum}</td>
                                         <td>{order.street+", "+order.city+", "+order.state+" "+order.zip}</td>
                                         <td>${order.totalPrice}</td>

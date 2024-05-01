@@ -83,7 +83,7 @@ export async function handleOrder( userId, card, name, experation, cvc ){
 
         // If no items selected dont complete order
         if (totalCount<1){
-            return {status: 200, message: "You Must Have An Item In Your Cart To Complete An Order!"} 
+            return {status: 500, message: "You Must Have An Item In Your Cart To Complete An Order!"} 
         }
 
         if (totalWeight>9071){  // assignment says that if the item is less than 20 pounds (9071 grams) dont have to pay 5 dollar shipping

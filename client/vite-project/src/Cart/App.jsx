@@ -13,39 +13,49 @@ const assetPath = '../assets/'
 const loadImage = (name) => {
   return assetPath+name+'.png'
 }
-var addressData = {
-  street: "123 Main St",
-  city: "Cityville",
-  state: "State",
-  zip: "12345"
-};
-
-function displayAddress() {
-  var addressBox = document.getElementById("addressBox");
-  var addressElement = document.getElementById("address");
-
-  var addressString = addressData.street + "<br>" +
-                      addressData.city + ", " +
-                      addressData.state + " " +
-                      addressData.zip;
-
-  addressElement.innerHTML = addressString;
-}
-
-function changeAddress() {
-  <a href="../AccountPage/"><changeAddressBtn/></a>
-  window.location.href = "../AccountPage/";
-}
-
-window.onload = function() {
-  displayAddress();
-  
-  var changeAddressBtn = document.getElementById("changeAddressBtn");
-  changeAddressBtn.addEventListener("click", changeAddress);
-};
 
 
 function App() {
+
+  const [addressData, setAddressData] = useState({
+    street: "User Street",
+    city: "User City",
+    state: "User State",
+    zip: "User Zip"
+  });
+
+  const getSelectedAddress = async (catg, sear) => {
+  
+    // create request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ })
+    }
+    // Fetch selected address
+    return fetch('/users/location/getSingle', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return null; // Return an empty object in case of error
+      }
+    }).then((data) => {
+      console.log(data)
+      setAddressData({street: data.street, city: data.city, state: data.stte, zip: data.zipc})
+      var addressElement = document.getElementById("address");
+    
+      var addressString = data.street + "<br>" +
+                          data.city + ", " +
+                          data.stte + " " +
+                          data.zipc;
+    
+      addressElement.innerHTML = addressString;
+  
+    })
+  
+  }
 
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalWeight, setTotalWeight] = useState(0)
@@ -69,15 +79,20 @@ function App() {
     return fetch('/users/orders', requestOptions).then((response) => {
       if (response.status === 200) {
         // We got data
-        return response.text();
+        return response.text().then((data) =>{
+          console.log(data)
+          alert(data)
+          window.location.href="/MainPage/"
+        })
+      } else if (response.status === 500){
+        return response.text().then((data) =>{
+          console.log(data)
+          alert(data)
+        })
       } else {
         console.log("Error retrieving data from backend server!")
         return []; // Return an empty object in case of error
       }
-    }).then((data) => {
-      console.log(data)
-      document.getElementById("checkoutMessage").innerText = data
-
     })
 
   }
@@ -123,6 +138,7 @@ function App() {
 
   useEffect (() => {
 
+    getSelectedAddress()
     fetchCart()
 
   }, [])
@@ -132,17 +148,15 @@ function App() {
       <div className="top">
         <a href="MainPage.jsx"><img src={OFS_Logo} className="logo" alt="OFS Logo"/></a>
       </div>
-
-
-<script src="script.js"></script>
-
+  
+      <script src="script.js"></script>
+  
       <div className="body">
-
-      <div class="address-box" id="addressBox">
-    <h2>Shipping Address</h2>
-    <p id="address"></p>
-    <button id="changeAddressBtn">Change Address</button>
-</div>
+        <div className="address-box" id="addressBox">
+          <h2>Shipping Address</h2>
+          <p id="address"></p>
+          <button id="changeAddressBtn" onClick={()=> window.location.href="/AccountPage/"}>Change Address</button>
+        </div>
         <form className="credit-card">
           <div className="front">
             <div className="card-data-row">
@@ -202,42 +216,42 @@ function App() {
           </div>
         </form>
         <div className="container">
-  <div className="shopping-cart">
-    <h2>Your Shopping Cart</h2>
-    <b><p id="orderTotals">Total Order:</p></b>
-    <p id="totalPrice">Price: ${totalPrice.toFixed(2)} + 5.00 Shipping</p>
-    <p id="totalWeight">Wight: {totalWeight}g</p>
-    <p id="totalCount">Items: #{totalCount}</p>
-    <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>
+          <div className="shopping-cart">
+            <h2>Your Shopping Cart</h2>
+            <b><p id="orderTotals">Total Order:</p></b>
+            <p id="totalPrice">Price: ${totalPrice.toFixed(2)}</p>
+            <p id="totalWeight">Wight: {totalWeight}g</p>
+            <p id="totalCount">Items: #{totalCount}</p>
+            <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>
             <div id="checkoutMessage"></div>
-    <b><p id="orderTotals">Cart Items:</p></b>
-    <div id="cart-items-container" className="cart-items-container">
-      <ul id="cart-items" className="cart-items">
-        {cart.map((item) => {
-          return (
-            <li key={item.name}>
-              <div className='categoryscroll-sections'>
-                <ul className='categoryscroll-content'>
-                  <li className='categoryscroll-name'>
-                    <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
+          </div>
+        </div>
+        
+        <div className="cartcontainer">
+          <b><p id="orderTotals">Cart Items:</p></b>
+          <div id="cart-items-container" className="cart-items-container">
+            <ul id="cart-items" className="cart-items">
+              {cart.map((item) => {
+                return (
+                  <li key={item.name}>
+                    <div className='categoryscroll-sections'>
+                      <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
+                      <ul className='categoryscroll-content'>
+                        <li className='categoryscroll-price'>
+                          <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
+                        </li>
+                        <li className='categoryscroll-weight'>
+                          <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
+                        </li>
+                      </ul>
+                    </div>
                   </li>
-                  <li className='categoryscroll-price'>
-                    <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
-                  </li>
-                  <li className='categoryscroll-weight'>
-                    <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  </div>
-</div>
-
-      
+                )
+              })}
+            </ul>
+          </div>
+        </div>
+        
       </div>
     </>
   )

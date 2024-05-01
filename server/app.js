@@ -50,7 +50,7 @@ app.post("/users/orders", async (req, res) =>{
 
             res.status(status).send(message )
         } else {
-            res.status(200).send("Please Enter Correct Card Details!");
+            res.status(500).send("Please Enter Correct Card Details!");
         }
         
     } else {
