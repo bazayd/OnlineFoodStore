@@ -40,7 +40,7 @@
   border: 1px solid hsl(200, 80%, 10%);
   border-radius: .5rem;
   width: 325px;
-  height: 150px;
+  height: 175px;
   padding: .75rem 1rem;
 padding-bottom: 1.25rem;
 }
@@ -59,7 +59,7 @@ padding-bottom: 1.25rem;
   border:1px solid hsl(200, 80%, 10%);
   border-radius: .5rem;
   width: 325px;
-  height: 150px;
+  height: 160px;
   padding: .75rem 1rem;
   padding-bottom: 2rem;
 
@@ -106,7 +106,8 @@ margin: 0;
 
 .hori{
   display: flex;
-  gap:.5rem;
+  gap:1rem;
+  
 
 }
 

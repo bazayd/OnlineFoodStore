@@ -5,6 +5,7 @@ import OFS_Logo from '../assets/OFS Logo.png'
 import Location_Icon from '../assets/Location Icon.png'
 import Profile_Icon from '../assets/Profile Icon.png'
 import Cart_Icon from '../assets/Cart Icon.png'
+import NavBar from '../NavBar/NavBar.jsx';
 
 const assetPath = '../assets/'
 const loadImage = (name) => {
@@ -17,6 +18,110 @@ const MainPage = () => {
 
   const [categories, setCategories] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  const [totalItems, setTotalItems] = useState(0)
+
+  // Grab Inventory From Database
+  const fetchCartNum = async () => {
+
+    // create request
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify()
+    }
+
+    // Fetch Fruit
+    return fetch('/users/getCart', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        
+        return []; // Return an empty object in case of error
+      }
+    }).then((data) => {
+
+      // set total order number
+      setTotalItems(data.length)
+      
+    })
+        
+  }
+
+  const loadAccount = () => {
+  
+    // create account request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify()
+    }
+
+    // create account request
+    fetch('/users/getUser', requestOptions).then(
+      response => {
+        if (response.status==200){
+          // We have a session !
+          
+          setLoggedIn(true)
+          
+
+        } else {
+          // No session ;(
+         
+          setLoggedIn(false)
+          
+        }
+      }
+    ).then(
+      data => {
+
+        
+        
+      }
+    )
+
+  }
+
+  
+  const addToCart = (inputItem, inputQuantity) => {
+
+    if(!loggedIn){
+      window.location.href="/login/"
+    }
+
+    // create account request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item: inputItem, quantity: inputQuantity})
+    }
+
+    fetch('/users/addToCart', requestOptions).then(
+      response => {
+        if (response.status==200){
+          
+          // refresh navbar
+          fetchCartNum()
+
+        } else {
+        
+          //
+
+        }
+      }
+    ).then(
+      data => {
+
+        // 
+        
+      }
+    )
+  }
+  
 
   //sort stuff
   // use selectedItems and method setSelectedItems to sort by that
@@ -53,6 +158,8 @@ const MainPage = () => {
   };
 
   useEffect (() => {
+
+    loadAccount()
 
     // Grab Inventory From Database
     const fetchItems = async (catg, sear) => {
@@ -149,10 +256,10 @@ const MainPage = () => {
       }
     };
     
-
     fetchCurrentItems()
     // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
+    fetchCartNum()
   }, [])
 
   
@@ -163,7 +270,7 @@ const MainPage = () => {
   return (
     <div>
       {/* NavBar Import */}
-      <Navbar></Navbar>
+      <Navbar totalItems={totalItems} />
       {/* Horizontal category scroll bar */}
       <div className='categorybar'>
         <h1 className='categoryBarHeaders'>Categories</h1>
@@ -209,11 +316,11 @@ const MainPage = () => {
       <div className='categoryscroll'>
         <ul>
           {selectedItems.map((item, index) => {
-            const totalPrice = item.price * (quantity[index] || 0);
-            const totalWeight = item.weight * (quantity[index] || 0);
+            const totalPrice = item.price * (quantity[index] || 1);
+            const totalWeight = item.weight * (quantity[index] || 1);
             
             let displayTotalPrice = totalPrice.toFixed(2);
-            let displayTotalWeight = totalWeight.toFixed(2);
+            let displayTotalWeight = totalWeight;
           return (
             <li key={item.name}>
               <div className='categoryscroll-sections'>
@@ -228,39 +335,40 @@ const MainPage = () => {
                   <li className='categoryscroll-description'>
                     <span className='categoryscroll-title'>Description</span>
                     <span className='categoryscroll-text'>{item.description}</span>
+                    <span className='categoryscroll-text'>{item.stock} In Stock</span>
                   </li>
                   <li className='categoryscroll-price'>
                     <span className='categoryscroll-title'>Price</span>
-                    <span className='categoryscroll-text'>{item.price}</span>
+                    <span className='categoryscroll-text'>${item.price}</span>
                   </li>
                   <li className='categoryscroll-weight'>
                     <span className='categoryscroll-title'>Weight</span>
-                    <span className='categoryscroll-text'>{item.weight}</span>
+                    <span className='categoryscroll-text'>{item.weight}g</span>
                   </li>
                   <li className='categoryscroll-totalprice'>
                     <span className='categoryscroll-title'>Total Price</span>
-                    <span className='categoryscroll-text'>{displayTotalPrice}</span>
+                    <span className='categoryscroll-text'>${displayTotalPrice}</span>
                   </li>
                   <li className='categoryscroll-totalweight'>
                     <span className='categoryscroll-title'>Total Weight</span>
-                    <span className='categoryscroll-text'>{displayTotalWeight}</span>
+                    <span className='categoryscroll-text'>{displayTotalWeight}g</span>
                   </li>
                 </ul>
 
                 <div className="quantity-control">
                   <button onClick={() => {
                     let newQuantity = [...quantity];
-                    newQuantity[index] = Math.max(0, (quantity[index] || 0) - 1);
+                    newQuantity[index] = Math.max(1, (quantity[index] || 1) - 1);
                     setQuantity(newQuantity);
                   }}>-</button>
-                  <span>{quantity[index] || 0}</span>
+                  <span>{quantity[index] || 1}</span>
                   <button onClick={() => {
                     let newQuantity = [...quantity];
-                    newQuantity[index] = (quantity[index] || 0) + 1;
+                    newQuantity[index] = (quantity[index] || 1) + 1;
                     setQuantity(newQuantity);
                   }}>+</button>
                 </div>
-                <button className="add-to-cart-button" onClick={() => {/* Add to cart logic*/}}>Add to cart</button>
+                <button className="add-to-cart-button" onClick={() => {addToCart(item.id, Math.max(1, (quantity[index] || 1)))}}>Add to cart</button>
               </div>
             </li>
           );
