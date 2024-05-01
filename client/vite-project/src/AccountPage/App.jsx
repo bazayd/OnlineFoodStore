@@ -19,8 +19,6 @@ const AccountPage = () => {
 
     const [address, setAddress] = useState([[],[],[]]);
 
-    const [cart, setCart] = useState([]);
-
     const openModal = (buttonType) => {
         setIsModalOpen(true);
         setSelectedButton(buttonType)
@@ -138,6 +136,39 @@ const AccountPage = () => {
 
     //--------------------- Address Requests ----------------------
 
+    const getSelectedAddress = async (catg, sear) => {
+
+        // create request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ })
+        }
+        // Fetch selected address
+        return fetch('/users/location/getSingle', requestOptions).then((response) => {
+          if (response.status === 200) {
+            // We got data
+            return response.json();
+          } else {
+            console.log("Error retrieving data from backend server!")
+            return null; // Return an empty object in case of error
+          }
+        }).then((data) => {
+            
+            let button = data.id
+            if(button===1){
+                localStorage.setItem('selectedLocation', 'location-one')
+            } else if(button===2){
+                localStorage.setItem('selectedLocation', 'location-two');
+            } else if(button===3){
+                localStorage.setItem('selectedLocation', 'location-three');
+            }
+          
+        })
+        
+    
+    }
+        
     const getAllAddresses= async (catg, sear) => {
 
         // create request
@@ -156,11 +187,12 @@ const AccountPage = () => {
             return null; // Return an empty object in case of error
           }
         }).then((data) => {
-            setSelectedButton(data.id)
+            
             setAddress(data)
-            console.log(data)
+            //console.log(data)
           
         })
+        
     
     }
 
@@ -259,7 +291,7 @@ const AccountPage = () => {
           }
         }).then((data) => {
             setOrders(data)
-            console.log(data)
+            //console.log(data)
           
         })
     
@@ -269,6 +301,7 @@ const AccountPage = () => {
         loadAllOrders()
         loadUserData()
         getAllAddresses()
+        getSelectedAddress()
     }, [])
     
     return (
