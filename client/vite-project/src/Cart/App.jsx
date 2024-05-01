@@ -161,7 +161,7 @@ function App() {
           <div className="shopping-cart">
             <h2>Your Shopping Cart</h2>
             <b><p id="orderTotals">Total Order:</p></b>
-            <p id="totalPrice">Price: ${totalPrice.toFixed(2)}</p>
+            <p id="totalPrice">Price: ${totalPrice.toFixed(2)} + 5.00 Shipping</p>
             <p id="totalWeight">Wight: {totalWeight}g</p>
             <p id="totalCount">Items: #{totalCount}</p>
             <button id="checkout-btn" onClick={() => checkout()}>Checkout</button>

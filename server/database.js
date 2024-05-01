@@ -67,8 +67,9 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         SELECT * FROM cart
         WHERE user = ?
         `, [userId])
-        let totalPrice = 0;
+        let totalPrice = 0.00;
         let totalCount = 0;
+        let totalWeight = 0;
         for(let i = 0 ; i <cart.length ; i++){
             const [item] = await pool.query(`
             SELECT * FROM inventory
@@ -76,11 +77,16 @@ export async function handleOrder( userId, card, name, experation, cvc ){
             `, [cart[i].id])
             totalPrice = totalPrice+((item[0].price)*(cart[i].quantity))
             totalCount = totalCount+(cart[i].quantity)
+            totalWeight = totalWeight+((item[0].weight)*(cart[i].quantity))
         }
 
         // If no items selected dont complete order
         if (totalCount<1){
             return {status: 200, message: "You Must Have An Item In Your Cart To Complete An Order!"} 
+        }
+
+        if (totalWeight>9071){  // assignment says that if the item is less than 20 pounds (9071 grams) dont have to pay 5 dollar shipping
+            totalPrice=totalPrice+5.00;
         }
 
         console.log("Creating Order: User: "+userId+" currentOrderNumber: "+currentOrderNum+" card: "+card+" name: "+name+" experation: "+experation+" cvc: "+cvc+" street: "+street+" city: "+city+" state: "+state+" zip: "+zip )
@@ -104,7 +110,13 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         DELETE FROM Cart WHERE user=?
         `, [ userId])
 
-        return {status: 200, message: "Successfully Completed Your Order!"} 
+        console.log(totalWeight)
+        if (totalWeight>9071){
+            return {status: 200, message: "Successfully Completed Your Order!"} 
+        } else {
+            return {status: 200, message: "Successfully Completed Your Order! No Shipping Fee! Order Is Under 9071 Grams."} 
+        }
+        
 
     } catch (error) {
         console.log("Error processing order: "+error)
