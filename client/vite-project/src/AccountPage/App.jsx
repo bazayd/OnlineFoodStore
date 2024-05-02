@@ -317,10 +317,6 @@ const AccountPage = () => {
                     </header>
                     <form action="" method='POST'>
                         <div id='secondInput'>
-                            <input type="text" id="usernameInput" placeholder={accountName}/>
-                            <br />
-                        </div>
-                        <div id='secondInput'>
                             <input type="text" id='emailInput' placeholder={accountEmail}/>
                             <br />
                             <input type="submit" id='save' value="Save"/>

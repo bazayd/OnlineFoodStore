@@ -17,15 +17,12 @@
 
 .body{
   width: 1000px;
-  
-
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -10%);
-
-    
+  display: grid;
     
 }
 
@@ -33,6 +30,8 @@
   color: white;
   font-family: Arial;
   position: relative;
+  bottom: -40px;
+  left: -30px;
 }
 
 .front{
@@ -215,7 +214,8 @@ margin: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 115%;
-  right: 31%;
+  left:  45%;
+
   transform: translateY(-90%);
 
 }
@@ -229,7 +229,7 @@ margin: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 50%;
-  right: 0;
+  left: 80%;
   transform: translateY(-90%);
 }
 
@@ -262,6 +262,7 @@ margin: 0;
   margin: 20px auto;
   border: 2px solid #ccc; 
   position: absolute;
+  left: 0px;
   top: 10%;
   transform: translateY(-130%);
 
