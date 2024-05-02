@@ -24,7 +24,11 @@
     gap: 200px;
 }
 
-.myProfile {
+.profile-admin-div {
+    display: grid;
+}
+
+.myProfile, .user-data {
     display: grid;
     padding: 80px 80px;
     border: solid 1px;
@@ -39,7 +43,9 @@
     cursor: pointer;
 }
 
-.myProfile:hover {
+
+
+.myProfile:hover, .user-data:hover {
     transform: translateY(-15px);
 }
 
@@ -64,6 +70,8 @@ header img {
     margin-bottom: 15px;
     border-radius: 50%;
 }
+
+
 
 
 #firstInput {
@@ -313,7 +321,7 @@ header img {
     background-color: #fff;
 }
 
-.orders table{
+.orders table, .user-data table{
     width: 100%;
     border: 1px solid;
     border-radius: 5px;
@@ -322,22 +330,29 @@ header img {
     background-color: #fff;
 }
 
-.orders table th {
+.orders table th , .user-data table th{
     padding: 12px;
-    border-bottom: 1px solid;
+    border-radius: 4px;
 }
 
-.orders table th:not(:last-child) {
-    border-right: 1px solid black;
-}
 
 .orders table th:nth-child(even) {
     background-color: #d1cece;
 }
 
+.user-data table th:nth-child(even) {
+    background-color: #d1cece;
+}
+
+
 .orders table th:nth-child(odd) {
     background-color: rgb(239, 239, 239);
 }
+
+.user-data table th:nth-child(odd) {
+    background-color: rgb(239, 239, 239);
+}
+
 
 /* .orders table th {
     background-color: #fff;

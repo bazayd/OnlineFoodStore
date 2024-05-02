@@ -16,6 +16,7 @@ const AccountPage = () => {
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
     const [orders, setOrders] = useState([])
+    const [users, setUsers] = useState([]);
 
     const [address, setAddress] = useState([[],[],[]]);
 
@@ -310,19 +311,52 @@ const AccountPage = () => {
                 <img src={OFSLogo} alt="" id='logoIcon'/>
             </a>
             <div className='parentContainer'>
-                <div className='myProfile'>
-                    <header>
-                        <img src={ProfilePicture} alt="Default profile picture image" />
-                        <h1 id="user">{accountName}</h1>
-                    </header>
-                    <form action="" method='POST'>
-                        <div id='secondInput'>
-                            <input type="text" id='emailInput' placeholder={accountEmail}/>
-                            <br />
-                            <input type="submit" id='save' value="Save"/>
-                        </div>
-                    </form>
-                    <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
+                <div className='profile-admin-div'>
+                    <div className='myProfile'>
+                        <header>
+                            <img src={ProfilePicture} alt="Default profile picture image" />
+                            <h1 id="user">{accountName}</h1>
+                        </header>
+                        <form action="" method='POST'>
+                            <div id='secondInput'>
+                                <input type="text" id='emailInput' placeholder={accountEmail}/>
+                                <br />
+                                <input type="submit" id='save' value="Save"/>
+                            </div>
+                        </form>
+                        <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
+                    </div>
+                    <div className='user-data'>
+                        <header>
+                            <h1>Users</h1>
+                        </header>
+                        <table id="user-table">
+                                <thead>
+                                    <tr>
+                                    <th>User ID</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                    <th>User Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {users.map((user) => (
+                                    <tr key={user}>
+                                        <td>{user.id}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.password}</td>
+                                        <td>{user.address}</td>
+                                        <td>{user.actions}</td>
+                                        <td>{user.type}</td>
+                                    </tr>
+                                    ))}
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className='otherSettings'> 
                     <div className='locations'>

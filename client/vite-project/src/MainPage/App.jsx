@@ -188,7 +188,7 @@ const MainPage = () => {
       })
           
     }
-fr56
+
     const fetchCurrentItems = async () => {
       // get url parameters if they exist
       let params = new URLSearchParams(document.location.search);
