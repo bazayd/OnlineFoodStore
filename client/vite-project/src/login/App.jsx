@@ -20,20 +20,20 @@ function App() {
       response => {
         if (response.status==200){
           
-          return response.json()
+          return response.json().then(data => {
+            // display the message returned by backend
+            document.getElementById("loginBackendResponse").textContent = data.message
+            window.location.href="/MainPage/"
+          })
 
         } else {
 
-          return response.json()
+          return response.json().then(data => {
+            // display the message returned by backend
+            document.getElementById("loginBackendResponse").textContent = data.message
+          })
 
         }
-      }
-    ).then(
-      data => {
-
-        // display the message returned by backend
-        document.getElementById("loginBackendResponse").textContent = data.message
-        
       }
     )
   }
