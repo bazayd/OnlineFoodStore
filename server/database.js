@@ -132,14 +132,15 @@ export async function removeFromCart(user, item){
             console.log("User ID: "+user+" removed Item ID: "+item+" from their cart!")
 
             const [result] = await pool.query(`
-            REMOVE FROM cart
-            WHERE user = ?, id = ?
-            VALUES (?, ?)
+            DELETE FROM cart
+            WHERE user = ? AND id = ?
+            LIMIT 1
             `, [user, item]);
 
             return {status: 200, message: "Successfully removed item from cart"};
         }
     } catch (error) {
+        console.log("Error removing item from users cart: "+error)
         return {status: 500, message: "Sorry we encountered a backend error ;("};
     }
 }

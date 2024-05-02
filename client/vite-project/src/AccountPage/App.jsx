@@ -61,7 +61,7 @@ const AccountPage = () => {
 
         selectedAddress(num);
 
-        console.log("Selected button clicked, location selected.")
+        //console.log("Selected button clicked, location selected.")
         const specifiedLocation = document.getElementsByClassName(location);
         
 
@@ -79,7 +79,7 @@ const AccountPage = () => {
             
 
         for (var i = 0; i < specifiedLocation.length; i++) {
-            console.log(specifiedLocation[i]);
+            //console.log(specifiedLocation[i]);
             specifiedLocation[i].style.border = "3px solid #ccc";
             specifiedLocation[i].style.borderRadius = "10px";
         }

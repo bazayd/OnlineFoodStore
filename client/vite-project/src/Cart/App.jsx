@@ -42,7 +42,7 @@ function App() {
         return null; // Return an empty object in case of error
       }
     }).then((data) => {
-      console.log(data)
+      //console.log(data)
       setAddressData({street: data.street, city: data.city, state: data.stte, zip: data.zipc})
       var addressElement = document.getElementById("address");
     
@@ -134,6 +134,32 @@ function App() {
       setTotalCount(tC)
     })
         
+  }
+
+  const removeCartItem = async (itemId) => {
+
+    // create request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item: itemId})
+    }
+
+    fetch('/users/removeFromCart', requestOptions).then(
+      response => {
+        if (response.status==200){
+          return
+        } else {
+          return
+        }
+      }
+    ).then(
+      data => {
+        fetchCart()
+      }
+    )
+    
+
   }
 
   useEffect (() => {
@@ -231,11 +257,11 @@ function App() {
           <b><p id="orderTotals">Cart Items:</p></b>
           <div id="cart-items-container" className="cart-items-container">
             <ul id="cart-items" className="cart-items">
-              {cart.map((item) => {
+              {cart.map((item, index) => {
                 return (
-                  <li key={item.name}>
+                  <li key={`${item.id}-${index}`}>
                     <div className='categoryscroll-sections'>
-                      <span className='categoryscroll-text'>{item.name} x {item.quantity}</span>
+                      <span className='categoryscroll-text'><b>{item.name} x {item.quantity}</b></span>
                       <ul className='categoryscroll-content'>
                         <li className='categoryscroll-price'>
                           <span className='categoryscroll-text'>${(item.price*item.quantity).toFixed(2)}</span>
@@ -243,6 +269,8 @@ function App() {
                         <li className='categoryscroll-weight'>
                           <span className='categoryscroll-text'>{(item.weight*item.quantity)}g</span>
                         </li>
+                        <span className='categoryscroll-text' onClick={() => removeCartItem(item.id)}><ins>Remove</ins></span>
+                       
                       </ul>
                     </div>
                   </li>
