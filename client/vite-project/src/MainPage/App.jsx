@@ -23,6 +23,9 @@ const MainPage = () => {
 
   const [totalItems, setTotalItems] = useState(0)
 
+  const [adminItem, setAdmin] = useState([])
+
+
   // Grab Inventory From Database
   const fetchCartNum = async () => {
 
@@ -185,7 +188,7 @@ const MainPage = () => {
       })
           
     }
-
+fr56
     const fetchCurrentItems = async () => {
       // get url parameters if they exist
       let params = new URLSearchParams(document.location.search);
