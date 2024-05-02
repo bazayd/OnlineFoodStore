@@ -10,7 +10,7 @@ import cardbackground  from '../assets/cardBackground.png'
 
 
 const AccountPage = () => {
-  
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
     const [accountName, setAccountName] = useState("User");

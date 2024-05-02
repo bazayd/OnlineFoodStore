@@ -311,6 +311,23 @@ const MainPage = () => {
           <li onClick={() => handleSort(3)}>A-Z</li>
           <li onClick={() => handleSort(4)}>Z-A</li>
         </ul>
+
+        <div className='adminContainer'>
+            <div className='adminPanel'>
+              <form className='adminForm' action="">
+                <input type="text" placeholder='Item Name' id='item-name'/>
+                <input type="text"  placeholder='Category' id='item-category'/>
+                <input type="text" placeholder='Description' id='item-desc'/>
+                <input type="text" placeholder='Price' id="item-price" />
+                <input type="text" placeholder='Weight' id='item-weight'/>
+                <input type="text" placeholder='Image' id='item-image' />
+                
+              </form>
+              <button className='addStock'>Add Stock</button>
+              <button className='subStock'>Sub Stock</button>
+              <button className='removeStock'>Remove Item</button>
+            </div>
+        </div>
       </div>
       {/* Vertical scroll through items */}
       <div className='categoryscroll'>
