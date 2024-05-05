@@ -24,7 +24,7 @@ function App() {
     zip: "User Zip"
   });
 
-  const getSelectedAddress = async (catg, sear) => {
+  const getSelectedAddress = async () => {
   
     // create request
     const requestOptions = {

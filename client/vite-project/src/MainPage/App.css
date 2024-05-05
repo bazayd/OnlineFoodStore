@@ -248,7 +248,14 @@
 
 .adminPanel {
     position: absolute;
-    bottom: -520px;
+    bottom: -370px;
+    left: 25px;
+    display: grid;
+}
+
+.adminPanel2 {
+    position: absolute;
+    bottom: -590px;
     left: 25px;
     display: grid;
 }
@@ -270,7 +277,27 @@
     text-align: center;
 }
 
+.adminPanel2 button {
+    white-space: nowrap;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    width: 100px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    transition: opacity 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
 
+.adminPanel2 button:hover {
+    background-color: #c7c7c7;
+    opacity: 50%;
+}
+
+.adminPanel2 button:active {
+    opacity: 80%;
+    background-color: #494242;
+}
 
 .adminPanel button {
     white-space: nowrap;

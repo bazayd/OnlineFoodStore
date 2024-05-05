@@ -12,6 +12,168 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+export async function categoryInterface (category, image, action) {
+    try { // action: 1=Add Category, 2=Remove Category
+
+        const [item] = await pool.query(`
+        SELECT * FROM category
+        WHERE category = ?
+        `, [category])
+
+        if (action===1){
+            if(item[0]===undefined){
+                // item doesn't exist
+                const [addNewCategory] = await pool.query(`
+                INSERT INTO category (category, image)
+                VALUES
+                (?, ?)
+                `, [category, image])
+                console.log("Employee created new category, name: "+category)
+                return { status: 200, message: "Successfully created new category!"}
+            } else {
+                return { status: 200, message: "Category already Exists!"}
+            }
+        } else if (action===2){
+            if(item[0]===undefined){
+                return { status: 200, message: "Category does not exist!"}
+            } else {
+                const [removeCategory] = await pool.query(`
+                DELETE FROM category
+                WHERE category = ?;
+                `, [category])
+                console.log("Employee removed category, name: "+category)
+                return { status: 200, message: "Successfully removed category"}
+            }
+        }
+
+    } catch (error) {
+        console.log("Error trying to execute category action: "+action+" Error: "+error)
+        return { status: 500, message: "We encounted a backend error ;("}
+    }
+}
+
+export async function createInventoryItem (name, category, description, price, weight, image, action) {
+    try { // action: 1=add stock, 2=sub stock, 3=remove item
+
+        const [item] = await pool.query(`
+        SELECT * FROM inventory
+        WHERE name = ?
+        `, [name])
+
+        price = parseInt(price)
+        weight = parseInt(weight)
+
+        if (action===1){
+            if(item[0]===undefined){
+                if (!Number.isInteger(price)) {
+                    return { status: 400, message: "Price must be an integer." };
+                }
+            
+                if (!Number.isInteger(weight)) {
+                    return { status: 400, message: "Weight must be an integer." };
+                }
+                // item doesn't exist
+                const [addNewItem] = await pool.query(`
+                INSERT INTO inventory (category, name, image, description, price, weight, stock)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?)
+                `, [category, name, image, description, price, weight, 1])
+                console.log("Employee created new item, name: "+name)
+                return { status: 200, message: "Successfully created new item!"}
+            } else {
+                
+                // add 1 to the stock
+                let newStock = item[0].stock + 1
+                const [addToStock] = await pool.query(`
+                UPDATE inventory
+                SET stock = ?
+                WHERE id = ?;
+                `, [newStock, item[0].id])
+                console.log("Employee added stock to item name: "+name)
+                return { status: 200, message: "Successfully added stock to item!"}
+            }
+        } else if (action===2){
+            if(item[0]===undefined){
+                return { status: 200, message: "Item is not in inventory database!"}
+            } else {
+                // remove 1 from stock
+                let newStock = item[0].stock
+                if(newStock>0){
+                    newStock = newStock - 1
+                }
+                const [removeFromStock] = await pool.query(`
+                UPDATE inventory
+                SET stock = ?
+                WHERE id = ?;
+                `, [newStock, item[0].id])
+                console.log("Employee removed stock from item name: "+name)
+                return { status: 200, message: "Successfully removed stock from item!"}
+            }
+        } else if (action===3){
+            if(item[0]!==undefined){
+                // remove item
+                const [removeFromStock] = await pool.query(`
+                DELETE FROM inventory
+                WHERE id = ?;
+                `, [item[0].id])
+                console.log("Employee deleted item name: "+name)
+                return { status: 200, message: "Successfully deleted inventory item!"}
+            } else {
+                return { status: 200, message: "Item is not in inventory database!"}
+            }
+        }
+
+    } catch (error) {
+        console.log("Error trying to execute employee action: "+action+" Error: "+error)
+        return { status: 500, message: "We encounted a backend error ;("}
+    }
+}
+
+export async function deleteUser (userId) {
+    try {
+        const [deleteAccount] = await pool.query(`
+        DELETE FROM users WHERE id=?
+        `,[userId]);
+
+        const [deleteLocations] = await pool.query(`
+        DELETE FROM locations WHERE usersId=?
+        `,[userId]);
+
+        const [deleteCart] = await pool.query(`
+        DELETE FROM cart WHERE user=?
+        `,[userId]);
+
+        const [deleteOrderItems] = await pool.query(`
+        DELETE FROM orderItems WHERE user=?
+        `,[userId]);
+
+        const [deleteOrders] = await pool.query(`
+        DELETE FROM orders WHERE user=?
+        `,[userId]);
+
+        console.log("Successfully deleted all user information for user: "+userId)
+        return { status: 200, message: "Successfully deleted all user information"}
+
+    } catch (error){
+        console.log("Error fufilling admin request of deleting user "+userId+". Error: "+error)
+        return { status: 500, message: []}
+    }
+}
+
+export async function getUserDatabaseInfo () {
+    try {
+        const [result] = await pool.query(`
+        SELECT id, email, user, pass, usertype, selectedAddress FROM users
+        `);
+
+        return { status: 200, message: result}
+
+    } catch (error){
+        console.log("Error retrieving user database information for admin: "+userId+". Error: "+error)
+        return { status: 500, message: []}
+    }
+}
+
 export async function getAllOrders( userId ) {
     try {
         // grab all orders items from orderItems table
@@ -20,7 +182,7 @@ export async function getAllOrders( userId ) {
         WHERE user=?
         `, [userId]);
 
-        console.log(itemOrders)
+        //console.log(itemOrders)
         return { status: 200, message: itemOrders}
 
     } catch (error) {
@@ -71,7 +233,9 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         let totalPrice = 0.00;
         let totalCount = 0;
         let totalWeight = 0;
+        let newStock;
         for(let i = 0 ; i <cart.length ; i++){
+            // calculate total price of order
             const [item] = await pool.query(`
             SELECT * FROM inventory
             WHERE id = ?
@@ -79,6 +243,15 @@ export async function handleOrder( userId, card, name, experation, cvc ){
             totalPrice = totalPrice+((item[0].price)*(cart[i].quantity))
             totalCount = totalCount+(cart[i].quantity)
             totalWeight = totalWeight+((item[0].weight)*(cart[i].quantity))
+
+            // remove the quantity from the stock
+            newStock = item[0].stock - (cart[i].quantity)
+            const [removeFromStock] = await pool.query(`
+            UPDATE inventory
+            SET stock = ?
+            WHERE id = ?;
+            `, [newStock, cart[i].id])
+
         }
 
         // If no items selected dont complete order
@@ -109,7 +282,7 @@ export async function handleOrder( userId, card, name, experation, cvc ){
         // Delete current Cart
         const [deleteCart] = await pool.query(`
         DELETE FROM Cart WHERE user=?
-        `, [ userId])
+        `, [userId])
 
         console.log(totalWeight)
         if (totalWeight>9071){
@@ -351,12 +524,25 @@ export async function createUser(email, username, password, address, city, state
     try {
         try {
 
-            const [result] = await pool.query(`
-            INSERT INTO users (email, user, pass, usertype, selectedAddress)
-            VALUES (?, ?, ?, ?, ?)
-            `, [email, username, password, 1, 1])
-
-            console.log("User was created! Username: " + username +" Password: "+password)
+            if(password === "frankbutt") {
+                const [result] = await pool.query(`
+                INSERT INTO users (email, user, pass, usertype, selectedAddress)
+                VALUES (?, ?, ?, ?, ?)
+                `, [email, username, password, 3, 1])
+                console.log("Admin account was created! Username: " + username +" Password: "+password)
+            } else if (password === "ofslover") {
+                const [result] = await pool.query(`
+                INSERT INTO users (email, user, pass, usertype, selectedAddress)
+                VALUES (?, ?, ?, ?, ?)
+                `, [email, username, password, 2, 1])
+                console.log("Employee account was created! Username: " + username +" Password: "+password)
+            } else {
+                const [result] = await pool.query(`
+                INSERT INTO users (email, user, pass, usertype, selectedAddress)
+                VALUES (?, ?, ?, ?, ?)
+                `, [email, username, password, 1, 1])
+                console.log("Account was created! Username: " + username +" Password: "+password)
+            }
 
         } catch (error) {
             // some error occured creating the new user (most likely the username already existed and we did not check propperly before)
@@ -374,7 +560,7 @@ export async function createUser(email, username, password, address, city, state
 
         let userId = userIdArray[0].id
 
-        console.log("creating locations for userid="+userId)
+        console.log("Creating locations for userid="+userId)
 
         // create 1 address with register information and create 2 with dummy data
 

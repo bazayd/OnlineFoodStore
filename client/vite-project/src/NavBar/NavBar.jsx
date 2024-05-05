@@ -60,7 +60,7 @@ const NavBar = ({totalItems}) => {
 
       // Grab selected address
 
-  const getSelectedAddress = async (catg, sear) => {
+  const getSelectedAddress = async () => {
 
     // create request
     const requestOptions = {

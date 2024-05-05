@@ -15,6 +15,7 @@ const AccountPage = () => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
+    const [isAdmin, setIsAdmin] = useState(false);
     const [orders, setOrders] = useState([])
     const [users, setUsers] = useState([]);
 
@@ -116,7 +117,14 @@ const AccountPage = () => {
                 if (response.status==200){
                     // We have a session !
                     // Display user data on page
-                    return response.json();
+                    return response.json().then(data => {
+                        // Input User Data Into Site
+                        setAccountName(data.user)
+                        setAccountEmail(data.email)
+                        if(data.usertype === 3){
+                            getAdminInformation()
+                        }
+                    })
 
                 } else {
                     // No session ;(
@@ -127,17 +135,71 @@ const AccountPage = () => {
             }
         ).then( 
             data => {
-                // Input User Data Into Site
-                setAccountName(data.user)
-                setAccountEmail(data.email)
+                
+                
             }
         )
 
     }
 
+    //--------------------- Admin Requests ---------------------
+
+    const getAdminInformation = async () => {
+        // create request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ })
+        }
+        // create account request
+        fetch('/users/adminInfo', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    // We are an admin
+                    // Display users data
+                    return response.json().then(data => {
+                        // Input User Data Into Site
+                        setUsers(data)
+                        setIsAdmin(true)
+                    })
+
+                } else {
+                
+                }
+            }
+        ).then( 
+            data => {
+                
+                
+            }
+        )
+        
+    }
+
+    const removeUser = async (usersId) => {
+        // create request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: usersId })
+        }
+        // create account request
+        fetch('/users/deleteUser', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    // user deleted reload admin information
+                    getAdminInformation()
+
+                } else {
+                
+                }
+            }
+        )
+    }
+
     //--------------------- Address Requests ----------------------
 
-    const getSelectedAddress = async (catg, sear) => {
+    const getSelectedAddress = async () => {
 
         // create request
         const requestOptions = {
@@ -170,7 +232,7 @@ const AccountPage = () => {
     
     }
         
-    const getAllAddresses= async (catg, sear) => {
+    const getAllAddresses= async () => {
 
         // create request
         const requestOptions = {
@@ -273,7 +335,7 @@ const AccountPage = () => {
 
     }
 
-    const loadAllOrders= async (catg, sear) => {
+    const loadAllOrders= async () => {
 
         // create request
         const requestOptions = {
@@ -326,37 +388,40 @@ const AccountPage = () => {
                         </form>
                         <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
                     </div>
-                    <div className='user-data'>
-                        <header>
-                            <h1>Users</h1>
-                        </header>
-                        <table id="user-table">
-                                <thead>
-                                    <tr>
-                                    <th>User ID</th>
-                                    <th>Email</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Address</th>
-                                    <th>Actions</th>
-                                    <th>User Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users.map((user) => (
-                                    <tr key={user}>
-                                        <td>{user.id}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.username}</td>
-                                        <td>{user.password}</td>
-                                        <td>{user.address}</td>
-                                        <td>{user.actions}</td>
-                                        <td>{user.type}</td>
-                                    </tr>
-                                    ))}
-                                </tbody>
-                        </table>
-                    </div>
+                    { isAdmin && (
+                         <div className='user-data'>
+                         <header>
+                             <h1>Users</h1>
+                         </header>
+                         <table id="user-table">
+                                 <thead>
+                                     <tr>
+                                     <th>User ID</th>
+                                     <th>Email</th>
+                                     <th>Username</th>
+                                     <th>Password</th>
+                                     <th>Selected Address</th>
+                                     <th>User Type</th>
+                                     <th>Actions</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     {users.map((user, index) => (
+                                     <tr key={`${user.id}-${index}`}>
+                                         <td>{user.id}</td>
+                                         <td>{user.email}</td>
+                                         <td>{user.user}</td>
+                                         <td>{user.pass}</td>
+                                         <td>{user.selectedAddress}</td>
+                                         <td>{user.usertype}</td>
+                                         <td><span className='categoryscroll-text' onClick={() => removeUser(user.id)}><ins>Remove</ins></span></td>
+                                     </tr>
+                                     ))}
+                                 </tbody>
+                         </table>
+                     </div>   
+                    )}
+                    
                 </div>
                 <div className='otherSettings'> 
                     <div className='locations'>

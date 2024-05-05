@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected, getAllOrders } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected, getAllOrders, getUserDatabaseInfo, deleteUser, createInventoryItem, categoryInterface } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -25,6 +25,133 @@ app.use(express.static(path.join(dir, 'dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(dir, 'dist', 'index.html'));
 });
+
+
+// -------------------------------------- Admin Requests -----------------------------------
+
+app.post("/inventory/categoryInterface", async (req, res) => {
+    if (req.session.authenticated) {
+
+        const { name, image, action } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id,
+            usertype: fullInfo.usertype
+        }
+
+        if (selectInfo.usertype === 2){
+            //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
+
+            const { status, message } = await categoryInterface (name, image, action)
+
+            res.status(status).send(message);
+        } else {
+            res.status(401).send("Nice try buddy");
+        }
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+app.post("/inventory/stockInterface", async (req, res) => {
+    if (req.session.authenticated) {
+
+        const { name, category, description, price, weight, image, action } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id,
+            usertype: fullInfo.usertype
+        }
+
+        if (selectInfo.usertype === 2){
+            //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
+
+            const { status, message } = await createInventoryItem( name, category, description, price, weight, image, action )
+
+            res.status(status).send(message);
+        } else {
+            res.status(401).send("Nice try buddy");
+        }
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+app.post("/users/deleteUser", async (req, res) =>{
+    if (req.session.authenticated) {
+
+        const { id } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id,
+            usertype: fullInfo.usertype
+        }
+
+        if (selectInfo.usertype === 3){
+            console.log("Admin: "+selectInfo.user+" is deleting user with id="+id)
+
+            const { status, message } = await deleteUser( id )
+
+            res.status(status).send(message);
+        } else {
+            res.status(401).send("Nice try buddy");
+        }
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
+
+app.post("/users/adminInfo", async (req, res) =>{
+    if (req.session.authenticated) {
+
+        const {  } = req.body    // sets details to parameters from post request body
+
+        const userData = req.session.user;
+        const userName = userData.username;
+
+        const fullInfo = await getUserInformation(userName)
+        
+        const selectInfo = {
+            user: fullInfo.user,
+            id: fullInfo.id,
+            usertype: fullInfo.usertype
+        }
+
+        if (selectInfo.usertype === 3){
+            console.log("Admin: "+selectInfo.user+" is requesting user information")
+
+            const { status, message } = await getUserDatabaseInfo(  )
+
+            res.status(status).send(message);
+        } else {
+            res.status(401).send("Nice try buddy");
+        }
+        
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+})
 
 // -------------------------------------- Orders Api Handlers -----------------------------------
 
