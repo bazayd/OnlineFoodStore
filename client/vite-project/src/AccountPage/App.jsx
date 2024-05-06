@@ -10,15 +10,16 @@ import cardbackground  from '../assets/cardBackground.png'
 
 
 const AccountPage = () => {
-  
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedButton, setSelectedButton] = useState(null);
     const [accountName, setAccountName] = useState("User");
     const [accountEmail, setAccountEmail] = useState("Email");
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [orders, setOrders] = useState([])
+    const [users, setUsers] = useState([]);
 
     const [address, setAddress] = useState([[],[],[]]);
-
-    const [cart, setCart] = useState([]);
 
     const openModal = (buttonType) => {
         setIsModalOpen(true);
@@ -62,7 +63,7 @@ const AccountPage = () => {
 
         selectedAddress(num);
 
-        console.log("Selected button clicked, location selected.")
+        //console.log("Selected button clicked, location selected.")
         const specifiedLocation = document.getElementsByClassName(location);
         
 
@@ -80,7 +81,7 @@ const AccountPage = () => {
             
 
         for (var i = 0; i < specifiedLocation.length; i++) {
-            console.log(specifiedLocation[i]);
+            //console.log(specifiedLocation[i]);
             specifiedLocation[i].style.border = "3px solid #ccc";
             specifiedLocation[i].style.borderRadius = "10px";
         }
@@ -116,7 +117,14 @@ const AccountPage = () => {
                 if (response.status==200){
                     // We have a session !
                     // Display user data on page
-                    return response.json();
+                    return response.json().then(data => {
+                        // Input User Data Into Site
+                        setAccountName(data.user)
+                        setAccountEmail(data.email)
+                        if(data.usertype === 3){
+                            getAdminInformation()
+                        }
+                    })
 
                 } else {
                     // No session ;(
@@ -127,17 +135,104 @@ const AccountPage = () => {
             }
         ).then( 
             data => {
-                // Input User Data Into Site
-                setAccountName(data.user)
-                setAccountEmail(data.email)
+                
+                
             }
         )
 
     }
 
+    //--------------------- Admin Requests ---------------------
+
+    const getAdminInformation = async () => {
+        // create request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ })
+        }
+        // create account request
+        fetch('/users/adminInfo', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    // We are an admin
+                    // Display users data
+                    return response.json().then(data => {
+                        // Input User Data Into Site
+                        setUsers(data)
+                        setIsAdmin(true)
+                    })
+
+                } else {
+                
+                }
+            }
+        ).then( 
+            data => {
+                
+                
+            }
+        )
+        
+    }
+
+    const removeUser = async (usersId) => {
+        // create request
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: usersId })
+        }
+        // create account request
+        fetch('/users/deleteUser', requestOptions).then(
+            response => {
+                if (response.status==200){
+                    // user deleted reload admin information
+                    getAdminInformation()
+
+                } else {
+                
+                }
+            }
+        )
+    }
+
     //--------------------- Address Requests ----------------------
 
-    const getAllAddresses= async (catg, sear) => {
+    const getSelectedAddress = async () => {
+
+        // create request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ })
+        }
+        // Fetch selected address
+        return fetch('/users/location/getSingle', requestOptions).then((response) => {
+          if (response.status === 200) {
+            // We got data
+            return response.json();
+          } else {
+            console.log("Error retrieving data from backend server!")
+            return null; // Return an empty object in case of error
+          }
+        }).then((data) => {
+            
+            let button = data.id
+            if(button===1){
+                localStorage.setItem('selectedLocation', 'location-one')
+            } else if(button===2){
+                localStorage.setItem('selectedLocation', 'location-two');
+            } else if(button===3){
+                localStorage.setItem('selectedLocation', 'location-three');
+            }
+          
+        })
+        
+    
+    }
+        
+    const getAllAddresses= async () => {
 
         // create request
         const requestOptions = {
@@ -155,11 +250,12 @@ const AccountPage = () => {
             return null; // Return an empty object in case of error
           }
         }).then((data) => {
-            setSelectedButton(data.id)
+            
             setAddress(data)
-            console.log(data)
+            //console.log(data)
           
         })
+        
     
     }
 
@@ -239,9 +335,36 @@ const AccountPage = () => {
 
     }
 
+    const loadAllOrders= async () => {
+
+        // create request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ })
+        }
+        // Fetch selected address
+        return fetch('/users/orders/getAll', requestOptions).then((response) => {
+          if (response.status === 200) {
+            // We got data
+            return response.json();
+          } else {
+            console.log("Error retrieving data from backend server!")
+            return null; // Return an empty object in case of error
+          }
+        }).then((data) => {
+            setOrders(data)
+            //console.log(data)
+          
+        })
+    
+    }
+
     useEffect(() => {
+        loadAllOrders()
         loadUserData()
         getAllAddresses()
+        getSelectedAddress()
     }, [])
     
     return (
@@ -250,23 +373,55 @@ const AccountPage = () => {
                 <img src={OFSLogo} alt="" id='logoIcon'/>
             </a>
             <div className='parentContainer'>
-                <div className='myProfile'>
-                    <header>
-                        <img src={ProfilePicture} alt="Default profile picture image" />
-                        <h1 id="user">{accountName}</h1>
-                    </header>
-                    <form action="" method='POST'>
-                        <div id='secondInput'>
-                            <input type="text" id="usernameInput" placeholder={accountName}/>
-                            <br />
-                        </div>
-                        <div id='secondInput'>
-                            <input type="text" id='emailInput' placeholder={accountEmail}/>
-                            <br />
-                            <input type="submit" id='save' value="Save"/>
-                        </div>
-                    </form>
-                    <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
+                <div className='profile-admin-div'>
+                    <div className='myProfile'>
+                        <header>
+                            <img src={ProfilePicture} alt="Default profile picture image" />
+                            <h1 id="user">{accountName}</h1>
+                        </header>
+                        <form action="" method='POST'>
+                            <div id='secondInput'>
+                                <input type="text" id='emailInput' placeholder={accountEmail}/>
+                                <br />
+                                <input type="submit" id='save' value="Save"/>
+                            </div>
+                        </form>
+                        <input type="submit" id='save' onClick={ () => {signOut()} } value="Sign Out"/>
+                    </div>
+                    { isAdmin && (
+                         <div className='user-data'>
+                         <header>
+                             <h1>Users</h1>
+                         </header>
+                         <table id="user-table">
+                                 <thead>
+                                     <tr>
+                                     <th>User ID</th>
+                                     <th>Email</th>
+                                     <th>Username</th>
+                                     <th>Password</th>
+                                     <th>Selected Address</th>
+                                     <th>User Type</th>
+                                     <th>Actions</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     {users.map((user, index) => (
+                                     <tr key={`${user.id}-${index}`}>
+                                         <td>{user.id}</td>
+                                         <td>{user.email}</td>
+                                         <td>{user.user}</td>
+                                         <td>{user.pass}</td>
+                                         <td>{user.selectedAddress}</td>
+                                         <td>{user.usertype}</td>
+                                         <td><span className='categoryscroll-text' onClick={() => removeUser(user.id)}><ins>Remove</ins></span></td>
+                                     </tr>
+                                     ))}
+                                 </tbody>
+                         </table>
+                     </div>   
+                    )}
+                    
                 </div>
                 <div className='otherSettings'> 
                     <div className='locations'>
@@ -365,49 +520,28 @@ const AccountPage = () => {
                             <h1>Order History</h1>
                         </header>
                         <div className='orders'>
-                            <table>
-                                <tr>
+                            <table id="cart-items">
+                                <thead>
+                                    <tr>
+                                    <th>Order Number</th>
+                                    <th>Order Location</th>
+                                    <th>Total Price</th>
+                                    <th>Item Count</th>
                                     <th>Date</th>
-                                    <th>Order</th>
-                                    <th>Price</th>
-                                </tr>
-                                <tr>
-                                    <td>1/1/2024</td>
-                                    <td>Apples 5x, Pears 10x
-                                    </td>
-                                    <td>$10.99</td>
-                                </tr>
-                                <tr>
-                                    <td>1/9/2024</td>
-                                    <td>Apples 10x, Mango 10x
-                                    </td>
-                                    <td>$17.99</td>
-                                </tr>
-                                <tr>
-                                    <td>1/22/2024</td>
-                                    <td>Rice Bag 2x, Peppers 12x
-                                    </td>
-                                    <td>$17.99</td>
-                                </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {orders.map((order) => (
+                                    <tr key={order.orderNum}>
+                                        <td>{order.orderNum}</td>
+                                        <td>{order.street+", "+order.city+", "+order.state+" "+order.zip}</td>
+                                        <td>${order.totalPrice}</td>
+                                        <td>#{order.totalCount}</td>
+                                        <td>{order.date}</td>
+                                    </tr>
+                                    ))}
+                                </tbody>
                             </table>
-                            {/* <div className='date'>
-                                <h3>Date</h3>
-                                <div className='item'>
-                                    
-                                </div>
-                            </div>
-                            <div className='order-info'>
-                                <h3>Order</h3>
-                                <div className='item'>
-
-                                </div>
-                            </div>
-                            <div className='price'>
-                                <h3>Price</h3>
-                                <div className='item'>
-
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>

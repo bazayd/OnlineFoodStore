@@ -9,7 +9,11 @@ import NavBar from '../NavBar/NavBar.jsx';
 
 const assetPath = '../assets/'
 const loadImage = (name) => {
-  return assetPath+name+'.png'
+  if(name.includes("http")){
+    return name
+  } else {
+    return assetPath+name+'.png'
+  }
 }
 
 const MainPage = () => {
@@ -22,6 +26,101 @@ const MainPage = () => {
   const [loggedIn, setLoggedIn] = useState(false)
 
   const [totalItems, setTotalItems] = useState(0)
+
+  const [isEmployee, setIsEmployee] = useState(false)
+
+  const categoryInterface = async (employeeAction) => {
+
+    let categoryName = document.getElementById("category-name").value
+    let categoryImage = document.getElementById("category-image").value
+
+    // create account request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: categoryName, image: categoryImage, action: employeeAction})
+    }
+
+    // create account request
+    fetch('/inventory/categoryInterface', requestOptions).then(
+        response => {
+            if (response.status==200){
+              // Deleted Item
+              // Refresh Inventoy
+              fetchAllCategories()
+              return response.text().then((data) =>{
+                document.getElementById("categoryInterfaceResponse").textContent = data
+              })
+            } else {
+              return response.text().then((data) =>{
+                document.getElementById("categoryInterfaceResponse").textContent = data
+              })
+            }
+        }
+    )
+
+  }
+
+  const stockInterface = async (employeeAction) => {
+
+    let itemName = document.getElementById("item-name").value
+    let itemCategory = document.getElementById("item-category").value
+    let itemDescription = document.getElementById("item-desc").value
+    let itemPrice = document.getElementById("item-price").value
+    let itemWeight = document.getElementById("item-weight").value
+    let itemImage = document.getElementById("item-image").value
+
+    // create account request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: itemName, category: itemCategory, description: itemDescription, price: itemPrice, weight: itemWeight, image: itemImage, action: employeeAction })
+    }
+    
+    // create account request
+    fetch('/inventory/stockInterface', requestOptions).then(
+        response => {
+            if (response.status==200){
+              // Deleted Item
+              // Refresh Inventoy
+              fetchCurrentItems()
+              return response.text().then((data) =>{
+                document.getElementById("stockInterfaceResponse").textContent = data
+              })
+            } else {
+              return response.text().then((data) =>{
+                document.getElementById("stockInterfaceResponse").textContent = data
+              })
+            }
+        }
+    )
+
+  }
+
+  const loadUserData = () => {
+    // create account request
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify()
+    }
+
+    // create account request
+    fetch('/users/getUserInfo', requestOptions).then(
+        response => {
+            if (response.status==200){
+                // We have a session !
+                // Display user data on page
+                return response.json().then(data => {
+                    if(data.usertype === 2){
+                      setIsEmployee(true)
+                    }
+                })
+            }
+        }
+    )
+
+}
 
   // Grab Inventory From Database
   const fetchCartNum = async () => {
@@ -157,107 +256,102 @@ const MainPage = () => {
     
   };
 
-  useEffect (() => {
-
-    loadAccount()
-
-    // Grab Inventory From Database
-    const fetchItems = async (catg, sear) => {
-      
-      // create request
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category: catg, search: sear })
-      }
-
-      // Fetch Fruit
-      return fetch('/inventory/getItems', requestOptions).then((response) => {
-        if (response.status === 200) {
-          // We got data
-          return response.json();
-        } else {
-          console.log("Error retrieving data from backend server!")
-          return []; // Return an empty object in case of error
-        }
-      }).then((data) => {
-        return data
-      })
-          
+  const fetchCurrentItems = async () => {
+    // get url parameters if they exist
+    let params = new URLSearchParams(document.location.search);
+    let catg = ""
+    let sear = ""
+    if(params.get("c")!=null) {
+      catg = params.get("c")
+    }
+    if(params.get("s")!=null) {
+      sear = params.get("s")
     }
 
-    const fetchCurrentItems = async () => {
-      // get url parameters if they exist
-      let params = new URLSearchParams(document.location.search);
-      let catg = ""
-      let sear = ""
-      if(params.get("c")!=null) {
-        catg = params.get("c")
-      }
-      if(params.get("s")!=null) {
-        sear = params.get("s")
-      }
+    const currentItems = await fetchItems(catg, sear)
+    //console.log(currentItems)
+    
+    setSelectedItems(currentItems)
+    
+  }
 
-      const currentItems = await fetchItems(catg, sear)
-      //console.log(currentItems)
+  // Grab Inventory From Database
+  const fetchItems = async (catg, sear) => {
       
-      setSelectedItems(currentItems)
-      
-    }
-
-
-    const listCategory = async () => {
-      // create request
-      const requestOptions = {
+    // create request
+    const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify()
+        body: JSON.stringify({ category: catg, search: sear })
+    }
+
+    // Fetch Fruit
+    return fetch('/inventory/getItems', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return []; // Return an empty object in case of error
       }
-
-      // Fetch Fruit
-      return fetch('/inventory/listCategory', requestOptions).then((response) => {
-        if (response.status === 200) {
-          // We got data
-          return response.json();
-        } else {
-          console.log("Error retrieving data from backend server!")
-          return []; // Return an empty object in case of error
-        }
-      }).then((data) => {
-        return data
-      })
-
-    }    
-
-
-
-    // Function to fetch all categories
-    const fetchAllCategories = async () => {
-
-      // get all categories
-      try {
-        const databaseCategories = await listCategory();
-        //console.log(databaseCategories)
-
-        const categoryArray = []
-
-        for (let i = 0; i < databaseCategories.length; i++) {
-
-          categoryArray.push({ name: databaseCategories[i].category, image: databaseCategories[i].image})
-          
-        }
+    }).then((data) => {
+      return data
+    })
         
-        setCategories(
-          categoryArray
-        )
+  }
 
-      } catch (error) {
-        console.error("Error listing categories: ", error)
+  const listCategory = async () => {
+    // create request
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify()
+    }
+
+    // Fetch Fruit
+    return fetch('/inventory/listCategory', requestOptions).then((response) => {
+      if (response.status === 200) {
+        // We got data
+        return response.json();
+      } else {
+        console.log("Error retrieving data from backend server!")
+        return []; // Return an empty object in case of error
       }
-    };
-    
+    }).then((data) => {
+      return data
+    })
+
+  }    
+
+  // Function to fetch all categories
+  const fetchAllCategories = async () => {
+
+    // get all categories
+    try {
+      const databaseCategories = await listCategory();
+      //console.log(databaseCategories)
+
+      const categoryArray = []
+
+      for (let i = 0; i < databaseCategories.length; i++) {
+
+        categoryArray.push({ name: databaseCategories[i].category, image: databaseCategories[i].image})
+        
+      }
+      
+      setCategories(
+        categoryArray
+      )
+
+    } catch (error) {
+      console.error("Error listing categories: ", error)
+    }
+  };
+
+  useEffect (() => {
+    loadUserData()
+    loadAccount()
     fetchCurrentItems()
-    // Call the function to fetch all categories when the component mounts
     fetchAllCategories()
     fetchCartNum()
   }, [])
@@ -311,6 +405,37 @@ const MainPage = () => {
           <li onClick={() => handleSort(3)}>A-Z</li>
           <li onClick={() => handleSort(4)}>Z-A</li>
         </ul>
+
+        { isEmployee && (
+          <div className='adminContainer'>
+            <div className='adminPanel'>
+              <h3 className='menuText' id="stockInterfaceResponse"></h3>
+              <form className='adminForm' action="">
+                <input type="text" placeholder='Item Name' id='item-name' />
+                <input type="text"  placeholder='Category' id='item-category' />
+                <input type="text" placeholder='Description' id='item-desc' />
+                <input type="text" placeholder='Price' id="item-price" />
+                <input type="text" placeholder='Weight' id='item-weight' />
+                <input type="text" placeholder='Image Url' id='item-image' />
+                
+              </form>
+              <button className='addStock' onClick={() => stockInterface(1)}>Add Stock</button>
+              <button className='subStock' onClick={() => stockInterface(2)}>Sub Stock</button>
+              <button className='removeStock' onClick={() => stockInterface(3)}>Remove Item</button>
+            </div>
+            <div className='adminPanel2'>
+              <h3 className='menuText' id="categoryInterfaceResponse"></h3>
+              <form className='adminForm' action="">
+                <input type="text" placeholder='Category Name' id='category-name' />
+                <input type="text" placeholder='Image Url' id='category-image' />
+                
+              </form>
+              <button className='addStock' onClick={() => categoryInterface(1)}>Add Category</button>
+              <button className='subStock' onClick={() => categoryInterface(2)}>Remove Category</button>
+            </div>
+          </div>
+        )}
+        
       </div>
       {/* Vertical scroll through items */}
       <div className='categoryscroll'>

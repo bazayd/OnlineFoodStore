@@ -9,7 +9,7 @@ import CartRotateIcon from '../assets/CartRotateIcon.png'
 
 const NavBar = ({totalItems}) => {
 
-    console.log("Nav bar has: "+totalItems+" total items")
+    //("Nav bar has: "+totalItems+" total items")
 
     const [accountHref , accountHrefState] = useState("/login/")
     const [cartPage , cartPageState] = useState("/login/")
@@ -60,7 +60,7 @@ const NavBar = ({totalItems}) => {
 
       // Grab selected address
 
-  const getSelectedAddress = async (catg, sear) => {
+  const getSelectedAddress = async () => {
 
     // create request
     const requestOptions = {
@@ -78,7 +78,7 @@ const NavBar = ({totalItems}) => {
         return null; // Return an empty object in case of error
       }
     }).then((data) => {
-      console.log(data)
+      //console.log(data)
       if(data!=null){
         setLocation(data.street+", "+data.city+", "+data.stte+", "+data.zipc)
       }
