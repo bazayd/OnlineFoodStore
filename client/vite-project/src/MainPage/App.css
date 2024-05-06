@@ -123,7 +123,7 @@
     display: flex;
     align-items: center;
     height: 150px;
-    width: 1350px;
+    width: 1575px;
     border: 2px solid #000;
     border-radius: 15px;
     margin: 10px auto;
@@ -170,7 +170,9 @@
     word-wrap: break-word;
 }
 
-.categoryscroll-name, .categoryscroll-description, .categoryscroll-price, .categoryscroll-weight, .categoryscroll-totalprice, .categoryscroll-totalweight{
+.categoryscroll-name, .categoryscroll-description, .categoryscroll-price, 
+.categoryscroll-weight, .categoryscroll-totalprice, .categoryscroll-totalweight, 
+.categoryscroll-stock, .categoryscroll-category{
     white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -178,7 +180,7 @@
     height: 120px;
 }
 
-.categoryscroll-name{
+.categoryscroll-name, .categoryscroll-category{
     width: 100px;
 }
 
@@ -186,7 +188,7 @@
     min-width: 250px;
 }
 
-.categoryscroll-price, .categoryscroll-weight{
+.categoryscroll-price, .categoryscroll-weight, .categoryscroll-stock{
     min-width: 100px;
 }
 

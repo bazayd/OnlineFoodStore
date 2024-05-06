@@ -453,6 +453,10 @@ const MainPage = () => {
                   <li>
                     <img src={loadImage(item.image)} className='categoryscroll-images'></img>
                   </li>
+                  <li className='categoryscroll-category'>
+                    <span className='categoryscroll-title'>Category</span>
+                    <span className='categoryscroll-text'>{item.category}</span>
+                  </li>
                   <li className='categoryscroll-name'>
                     <span className='categoryscroll-title'>Name</span>
                     <span className='categoryscroll-text'>{item.name}</span>
@@ -460,7 +464,10 @@ const MainPage = () => {
                   <li className='categoryscroll-description'>
                     <span className='categoryscroll-title'>Description</span>
                     <span className='categoryscroll-text'>{item.description}</span>
-                    <span className='categoryscroll-text'>{item.stock} In Stock</span>
+                  </li>
+                  <li className='categoryscroll-stock'>
+                  <span className='categoryscroll-title'>Stock</span>
+                    <span className='categoryscroll-text'>{item.stock}</span>
                   </li>
                   <li className='categoryscroll-price'>
                     <span className='categoryscroll-title'>Price</span>
