@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'path';
 import session from 'express-session';
-import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected, getAllOrders, getUserDatabaseInfo, deleteUser, createInventoryItem, categoryInterface } from './database.js'
+import { createUser, login, getUserInformation, getItems, listCategory, getCart, addToCart, handleOrder, removeFromCart, updateAddress, getAddress, getAllAddress, updateSelected, getAllOrders, accountExist, getUserDatabaseInfo, deleteUser, createInventoryItem, categoryInterface } from './database.js'
 
 // working directory
 const dir = process.cwd();
@@ -31,30 +31,40 @@ app.get('*', (req, res) => {
 
 app.post("/inventory/categoryInterface", async (req, res) => {
     if (req.session.authenticated) {
+        try {
+            const { name, image, action } = req.body    // sets details to parameters from post request body
 
-        const { name, image, action } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id,
-            usertype: fullInfo.usertype
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id,
+                usertype: fullInfo.usertype
+            }
+
+            if (selectInfo.usertype === 2){
+                //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
+
+                const { status, message } = await categoryInterface (name, image, action)
+
+                res.status(status).send(message);
+            } else {
+                res.status(401).send("Nice try buddy");
+            }
+        } catch (error) {
+            console.log(error)
         }
-
-        if (selectInfo.usertype === 2){
-            //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
-
-            const { status, message } = await categoryInterface (name, image, action)
-
-            res.status(status).send(message);
-        } else {
-            res.status(401).send("Nice try buddy");
-        }
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -63,29 +73,40 @@ app.post("/inventory/categoryInterface", async (req, res) => {
 app.post("/inventory/stockInterface", async (req, res) => {
     if (req.session.authenticated) {
 
-        const { name, category, description, price, weight, image, action } = req.body    // sets details to parameters from post request body
+        try {
+            const { name, category, description, price, weight, image, action } = req.body    // sets details to parameters from post request body
 
-        const userData = req.session.user;
-        const userName = userData.username;
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id,
-            usertype: fullInfo.usertype
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id,
+                usertype: fullInfo.usertype
+            }
+
+            if (selectInfo.usertype === 2){
+                //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
+
+                const { status, message } = await createInventoryItem( name, category, description, price, weight, image, action )
+
+                res.status(status).send(message);
+            } else {
+                res.status(401).send("Nice try buddy");
+            }
+        } catch (error) {
+            console.log(error)
         }
-
-        if (selectInfo.usertype === 2){
-            //console.log("Employee: "+selectInfo.user+" is adding item: "+name)
-
-            const { status, message } = await createInventoryItem( name, category, description, price, weight, image, action )
-
-            res.status(status).send(message);
-        } else {
-            res.status(401).send("Nice try buddy");
-        }
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -94,29 +115,40 @@ app.post("/inventory/stockInterface", async (req, res) => {
 app.post("/users/deleteUser", async (req, res) =>{
     if (req.session.authenticated) {
 
-        const { id } = req.body    // sets details to parameters from post request body
+        try {
+            const { id } = req.body    // sets details to parameters from post request body
 
-        const userData = req.session.user;
-        const userName = userData.username;
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id,
-            usertype: fullInfo.usertype
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id,
+                usertype: fullInfo.usertype
+            }
+
+            if (selectInfo.usertype === 3){
+                console.log("Admin: "+selectInfo.user+" is deleting user with id="+id)
+
+                const { status, message } = await deleteUser( id )
+
+                res.status(status).send(message);
+            } else {
+                res.status(401).send("Nice try buddy");
+            }
+        } catch (error) {
+            console.log(error)
         }
-
-        if (selectInfo.usertype === 3){
-            console.log("Admin: "+selectInfo.user+" is deleting user with id="+id)
-
-            const { status, message } = await deleteUser( id )
-
-            res.status(status).send(message);
-        } else {
-            res.status(401).send("Nice try buddy");
-        }
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -125,29 +157,40 @@ app.post("/users/deleteUser", async (req, res) =>{
 app.post("/users/adminInfo", async (req, res) =>{
     if (req.session.authenticated) {
 
-        const {  } = req.body    // sets details to parameters from post request body
+        try {
+            const {  } = req.body    // sets details to parameters from post request body
 
-        const userData = req.session.user;
-        const userName = userData.username;
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id,
-            usertype: fullInfo.usertype
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id,
+                usertype: fullInfo.usertype
+            }
+
+            if (selectInfo.usertype === 3){
+                console.log("Admin: "+selectInfo.user+" is requesting user information")
+
+                const { status, message } = await getUserDatabaseInfo(  )
+
+                res.status(status).send(message);
+            } else {
+                res.status(401).send("Nice try buddy");
+            }
+        } catch (error) {
+            console.log(error)
         }
-
-        if (selectInfo.usertype === 3){
-            console.log("Admin: "+selectInfo.user+" is requesting user information")
-
-            const { status, message } = await getUserDatabaseInfo(  )
-
-            res.status(status).send(message);
-        } else {
-            res.status(401).send("Nice try buddy");
-        }
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -157,29 +200,38 @@ app.post("/users/adminInfo", async (req, res) =>{
 
 app.post("/users/orders", async (req, res) =>{
     if (req.session.authenticated) {
+        try {
+            const { card, name, experation, cvc } = req.body    // sets details to parameters from post request body
 
-        const { card, name, experation, cvc } = req.body    // sets details to parameters from post request body
+            if(card.length>10, name.length>1, experation.length>1, cvc.length>1) {
+                const userData = req.session.user;
+                const userName = userData.username;
 
-        if(card.length>10, name.length>1, experation.length>1, cvc.length>1) {
-            const userData = req.session.user;
-            const userName = userData.username;
+                const userExists = await accountExist(userName)
+                if(!userExists){
+                    req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                    return null;
+                }
+                const fullInfo = await getUserInformation(userName)
+                
+                const selectInfo = {
+                    user: fullInfo.user,
+                    id: fullInfo.id
+                }
+                
+                console.log("User "+selectInfo.user+" is processing an order!")
 
-            const fullInfo = await getUserInformation(userName)
-            
-            const selectInfo = {
-                user: fullInfo.user,
-                id: fullInfo.id
+                const { status, message } = await handleOrder( selectInfo.id, card, name, experation, cvc )
+
+                res.status(status).send(message )
+            } else {
+                res.status(500).send("Please Enter Correct Card Details!");
             }
-            
-            console.log("User "+selectInfo.user+" is processing an order!")
-
-            const { status, message } = await handleOrder( selectInfo.id, card, name, experation, cvc )
-
-            res.status(status).send(message )
-        } else {
-            res.status(500).send("Please Enter Correct Card Details!");
+        } catch (error) {
+            console.log(error)
         }
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -187,25 +239,35 @@ app.post("/users/orders", async (req, res) =>{
 
 app.post("/users/orders/getAll", async (req, res) =>{
     if (req.session.authenticated) {
+        try {
+            const {  } = req.body    // sets details to parameters from post request body
 
-        const {  } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            console.log("User "+selectInfo.user+" retrieving thier order history!")
+
+            const { status, message } = await getAllOrders( selectInfo.id )
+
+            res.status(status).send(message)
+        } catch (error) {
+            console.log(error)
         }
-        
-        console.log("User "+selectInfo.user+" retrieving thier order history!")
-
-        const { status, message } = await getAllOrders( selectInfo.id )
-
-        res.status(status).send(message)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -214,24 +276,35 @@ app.post("/users/orders/getAll", async (req, res) =>{
 // -------------------------------------- Location Api Handlers -----------------------------------
 
 app.post("/users/location/setSelected", async (req, res) => {
-
+    
     if (req.session.authenticated) {
+        try{
+            const { buttonNumber } = req.body    // sets details to parameters from post request body
 
-        const { buttonNumber } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await updateSelected(buttonNumber, selectInfo.id)
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await updateSelected(buttonNumber, selectInfo.id)
-
-        res.status(200).send(response)
         
     } else {
         res.status(401).send('Unauthorized');
@@ -241,23 +314,33 @@ app.post("/users/location/setSelected", async (req, res) => {
 app.post("/users/location/set", async (req, res) => {
 
     if (req.session.authenticated) {
+        try {
+            const { buttonNumber, street, city, state, zip } = req.body    // sets details to parameters from post request body
 
-        const { buttonNumber, street, city, state, zip } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await updateAddress(buttonNumber, street, city, state, zip, selectInfo.id)
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await updateAddress(buttonNumber, street, city, state, zip, selectInfo.id)
-
-        res.status(200).send(response)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -266,23 +349,33 @@ app.post("/users/location/set", async (req, res) => {
 app.post("/users/location/getSingle", async (req, res) => {
 
     if (req.session.authenticated) {
+        try {
+            const { } = req.body    // sets details to parameters from post request body
 
-        const { } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await getAddress(selectInfo.id)
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await getAddress(selectInfo.id)
-
-        res.status(200).send(response)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -291,23 +384,33 @@ app.post("/users/location/getSingle", async (req, res) => {
 app.post("/users/location/getAll", async (req, res) => {
 
     if (req.session.authenticated) {
+        try{
+            const { } = req.body    // sets details to parameters from post request body
 
-        const { } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await getAllAddress(selectInfo.id)
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await getAllAddress(selectInfo.id)
-
-        res.status(200).send(response)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -318,23 +421,33 @@ app.post("/users/location/getAll", async (req, res) => {
 app.post("/users/removeFromCart", async (req, res) => {
 
     if (req.session.authenticated) {
+        try{
+            const { item } = req.body    // sets details to parameters from post request body
 
-        const { item } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await removeFromCart(selectInfo.id, item )
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await removeFromCart(selectInfo.id, item )
-
-        res.status(200).send(response)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -343,23 +456,33 @@ app.post("/users/removeFromCart", async (req, res) => {
 app.post("/users/addToCart", async (req, res) => {
 
     if (req.session.authenticated) {
+        try {
+            const { item, quantity } = req.body    // sets details to parameters from post request body
 
-        const { item, quantity } = req.body    // sets details to parameters from post request body
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const userData = req.session.user;
-        const userName = userData.username;
-
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const response = await addToCart(selectInfo.id, item, quantity)
+
+            res.status(200).send(response)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const response = await addToCart(selectInfo.id, item, quantity)
-
-        res.status(200).send(response)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -367,20 +490,31 @@ app.post("/users/addToCart", async (req, res) => {
 
 app.post("/users/getCart", async (req, res) => {
     if (req.session.authenticated) {
-        const userData = req.session.user;
-        const userName = userData.username;
+        try{
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user,
-            id: fullInfo.id
+            
+            const selectInfo = {
+                user: fullInfo.user,
+                id: fullInfo.id
+            }
+            
+            const cartItems = await getCart(selectInfo.id)
+
+            res.status(200).send(cartItems)
+        } catch (error) {
+            console.log(error)
         }
-        
-        const cartItems = await getCart(selectInfo.id)
-
-        res.status(200).send(cartItems)
-        
     } else {
         res.status(401).send('Unauthorized');
     }
@@ -413,15 +547,27 @@ app.post("/inventory/listCategory", async (req, res) => {
 // Return Username of Session Cookie
 app.post("/users/getUser", async (req, res) => {
     if (req.session.authenticated) {
-        const userData = req.session.user;
-        const userName = userData.username;
+        try{
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            user: fullInfo.user
+            
+            const selectInfo = {
+                user: fullInfo.user
+            }
+            res.status(200).send(selectInfo)
+        } catch (error) {
+            console.log(error)
         }
-        res.status(200).send(selectInfo)
         
     } else {
         res.status(401).send('Unauthorized');
@@ -430,17 +576,29 @@ app.post("/users/getUser", async (req, res) => {
 
 app.post("/users/getUserInfo", async (req, res) => {
     if (req.session.authenticated) {
-        const userData = req.session.user;
-        const userName = userData.username;
+        try {
+            const userData = req.session.user;
+            const userName = userData.username;
 
-        const fullInfo = await getUserInformation(userName)
+            const userExists = await accountExist(userName)
+            if(!userExists){
+                req.session.destroy(); // Destroy the current session
+                res.clearCookie('session-id'); // Clear the session cookie
+                res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+                return null;
+            }
+            const fullInfo = await getUserInformation(userName)
         
-        const selectInfo = {
-            email: fullInfo.email,
-            user: fullInfo.user,
-            usertype: fullInfo.usertype
+            
+            const selectInfo = {
+                email: fullInfo.email,
+                user: fullInfo.user,
+                usertype: fullInfo.usertype
+            }
+            res.status(200).send(selectInfo)
+        } catch (error) {
+            console.log(error)
         }
-        res.status(200).send(selectInfo)
         
     } else {
         res.status(401).send('Unauthorized');
@@ -475,8 +633,12 @@ app.post("/users/login", async (req, res) => {
         // Store the session in the backend
         req.session.authenticated = true;
         // Store the username tied to the session
-        req.session.user = {
-            username: username
+        try{
+            req.session.user = {
+                username: username
+            }
+        } catch (error) {
+            console.log(error)
         }
     } else {
         // If authentication is not successful des
@@ -489,10 +651,14 @@ app.post("/users/login", async (req, res) => {
 
 app.post("/users/signout", async (req, res) => {
     if(req.session.authenticated){
-        // If authentication is successful 
-        req.session.destroy(); // Destroy the current session
-        res.clearCookie('session-id'); // Clear the session cookie
-        res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+        try {
+            // If authentication is successful 
+            req.session.destroy(); // Destroy the current session
+            res.clearCookie('session-id'); // Clear the session cookie
+            res.status(200).type('text').send("Signed Out!");  // returns to our user what our database function returned to us. status 201 indicates item created
+        } catch (error) {
+            console.log(error)
+        }
     } else {
         res.status(401).type('text').send("You are not logged in!");  // returns to our user what our database function returned to us. status 201 indicates item created
     }

@@ -488,7 +488,29 @@ export async function getUserInformation(username){
         const [rows] = await pool.query(`
         SELECT * FROM users WHERE user=?
         `, [username])
+        
         return rows[0] // always returns array, we just grab first item
+        
+        
+    } catch (error){
+        console.log("Error finding user data: "+error)
+    }
+
+}
+
+export async function accountExist(username){
+
+    try{
+        const [checkUsername] = await pool.query(`
+        SELECT id FROM users WHERE user=(?)
+        `, [username])
+        
+        if(checkUsername[0]!=null){
+            return true;
+        } else {
+            return false;
+        }
+        
     } catch (error){
         console.log("Error finding user data: "+error)
     }
