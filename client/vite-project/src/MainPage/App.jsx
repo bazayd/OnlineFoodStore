@@ -453,13 +453,13 @@ const MainPage = () => {
                   <li>
                     <img src={loadImage(item.image)} className='categoryscroll-images'></img>
                   </li>
-                  <li className='categoryscroll-category'>
-                    <span className='categoryscroll-title'>Category</span>
-                    <span className='categoryscroll-text'>{item.category}</span>
-                  </li>
                   <li className='categoryscroll-name'>
                     <span className='categoryscroll-title'>Name</span>
                     <span className='categoryscroll-text'>{item.name}</span>
+                  </li>
+                  <li className='categoryscroll-category'>
+                    <span className='categoryscroll-title'>Category</span>
+                    <span className='categoryscroll-text'>{item.category}</span>
                   </li>
                   <li className='categoryscroll-description'>
                     <span className='categoryscroll-title'>Description</span>
