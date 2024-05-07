@@ -247,6 +247,12 @@
     font-size: 24px;
 }
 
+.reponseText{
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+}
+
 .adminContainer {
     position: relative;
 }

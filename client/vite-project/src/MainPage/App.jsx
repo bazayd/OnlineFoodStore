@@ -409,7 +409,7 @@ const MainPage = () => {
         { isEmployee && (
           <div className='adminContainer'>
             <div className='adminPanel'>
-              <h3 className='menuText' id="stockInterfaceResponse"></h3>
+              <h3 className='reponseText' id="stockInterfaceResponse"></h3>
               <form className='adminForm' action="">
                 <input type="text" placeholder='Item Name' id='item-name' />
                 <input type="text"  placeholder='Category' id='item-category' />
@@ -424,7 +424,7 @@ const MainPage = () => {
               <button className='removeStock' onClick={() => stockInterface(3)}>Remove Item</button>
             </div>
             <div className='adminPanel2'>
-              <h3 className='menuText' id="categoryInterfaceResponse"></h3>
+              <h3 className='reponseText' id="categoryInterfaceResponse"></h3>
               <form className='adminForm' action="">
                 <input type="text" placeholder='Category Name' id='category-name' />
                 <input type="text" placeholder='Image Url' id='category-image' />
