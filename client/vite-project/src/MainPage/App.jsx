@@ -380,7 +380,7 @@ const MainPage = () => {
                   <form method="get">
                     <label>
                       <div style={{ textAlign: 'center' }}>
-                        <img src={loadImage(category.image)} id="submitButton" style={{ cursor: 'pointer' }} />
+                        <img src={loadImage(category.image)} className='Category-Images' id="submitButton" style={{ cursor: 'pointer' }} />
                         <input type="submit" id="submitButton" name="c" value={category.name} style={{ display: 'none' }}/>
                         
                       </div>

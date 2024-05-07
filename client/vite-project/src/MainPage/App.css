@@ -84,11 +84,14 @@
     font-family: 'Courier New', Courier, monospace;
     font-weight: bolder;
     font-size: 25px;
+    white-space: normal;
+    height: 60px;
+    overflow-y: auto;
 }
 
 .Category-Images{
-    height: 100px;
-    width: 100px;
+    height: 90px;
+    width: 90px;
     object-fit: contain;
 }
 
