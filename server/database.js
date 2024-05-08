@@ -60,16 +60,16 @@ export async function createInventoryItem (name, category, description, price, w
         WHERE name = ?
         `, [name])
 
-        price = parseInt(price)
-        weight = parseInt(weight)
+        price = parseFloat(price)
+        weight = parseFloat(weight)
 
         if (action===1){
             if(item[0]===undefined){
-                if (!Number.isInteger(price)) {
+                if (!Number.isInteger(parseInt(price*10))) {
                     return { status: 400, message: "Price must be an integer." };
                 }
             
-                if (!Number.isInteger(weight)) {
+                if (!Number.isInteger(parseInt(weight*10))) {
                     return { status: 400, message: "Weight must be an integer." };
                 }
                 // item doesn't exist
