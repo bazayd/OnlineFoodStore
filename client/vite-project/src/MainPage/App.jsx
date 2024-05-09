@@ -400,10 +400,10 @@ const MainPage = () => {
       <div className='menu'>
         <h1 className='menuText'>Sort By:</h1>
         <ul>
-          <li onClick={() => handleSort(1)}>Price</li>
-          <li onClick={() => handleSort(2)}>Weight</li>
-          <li onClick={() => handleSort(3)}>A-Z</li>
-          <li onClick={() => handleSort(4)}>Z-A</li>
+          <li className='sortsText' onClick={() => handleSort(1)}>Price</li>
+          <li className='sortsText' onClick={() => handleSort(2)}>Weight</li>
+          <li className='sortsText' onClick={() => handleSort(3)}>A-Z</li>
+          <li className='sortsText' onClick={() => handleSort(4)}>Z-A</li>
         </ul>
 
         { isEmployee && (
