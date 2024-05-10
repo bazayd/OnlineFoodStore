@@ -150,14 +150,21 @@ If all works well the webpage should be successfully up and running. if any erro
 
 ![Registration page image](Images/RegisterPage.png)
 
-#### To open an account, one would simply do the generic email, username, street address, and password to complete the registration.
+#### To open an account, one would simply do the generic email, username, street address, and password to complete the registration. For testing purposes, there is already a premade account for full store access. 
 
 > [!NOTE]
->  Under these modules, the system would also check for repeated email addresses, and would send out a warning that an account had been registered with the email address.
+>  Under these modules, the system would also check for repeated email addresses, and would send out a warning that an account had been registered with the email address. 
 
 ![Login page image](Images/LoginPage.png)
 
-### Once you have created an account, you get a login button that prompts you to the login page. 
+### Once you have created an account, you get a login button that prompts you to the login page.
+### The premade account credentials for accessing the website is as shown below:
+
+| Username | Password| 
+| ------- | ------- |
+| user | asdf |
+
+
 
 
 ## Main Page 
@@ -168,11 +175,14 @@ If all works well the webpage should be successfully up and running. if any erro
 
 
 
+
 ## Account Page
 
 ![Account Page Image](Images/AccountPage.png)
 
 #### If you were to click on the account icon, the system would take the user to a separate account page which shows the user’s name, location, and order history, which is shown in the picture below. The addresses could also be edited and changed, and the changed address would be shown on the main page as well. These are all saved in the database. 
+
+
 
 
 ## Cart
@@ -187,6 +197,9 @@ If all works well the webpage should be successfully up and running. if any erro
 > [!NOTE]
 > If you need to access your order history or any receipts, they will be in the account page under 'Order History'
 
+
+
+
 ## Admin Account 
 
 ![Admin account page](Images/AdminAccount.png)
@@ -194,8 +207,21 @@ If all works well the webpage should be successfully up and running. if any erro
 
 ### Admin accounts can be created by using a secret passcode in the account registration page. When typed in “frankbutt” as the password, an admin account is automatically generated. The main page of the admin account would look exactly the same as it would on an user webpage, but when clicked in the account, the admin would have full access to all the users that are registered and their order history. User type is also shown as 1 being the regular user, 2 being a storefront employee, and 3 being admin. The option to remove the user is also there too. 
 
+### The premade account credentials for admin access is:
+| Username | Password |
+| ------------- | ------------- |
+| admin | frankbutt | 
+
+
+
+
 ## Employee Account
 ![Employee Account page](Images/EmployeeAccount.png)
 
 ### An employee account follows the same concept, only this time, the secret password is going to be “ofslover”, and this would allow the system to generate an employee account. As shown in the picture below, the employee account has an added functionality which is shown in the very left column. This functionality allows the employee to add, delete, increase, decrease and change the weight of any products. This again is very straightforward to produce. The employee could also add a category to the list, in case the store increase their scope of services. 
+
+### The premade account credentials for employee access is:
+| Username | Password |
+| ------------- | ------------- |
+| employee | ofslover | 
 
