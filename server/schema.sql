@@ -10,6 +10,12 @@ CREATE TABLE users (
   selectedAddress integer NOT NULL
 );
 
+INSERT INTO users (email, user, pass, usertype, selectedAddress)
+VALUES
+('admin@test.com', 'admin', 'frankbutt', 3, 1),
+('employee@test.com', 'employee', 'ofslover', 2, 1),
+('user@test.com', 'user', 'asdf', 1, 1);
+
 CREATE TABLE locations (
   usersID integer NOT NULL,
   id integer NOT NULL,
@@ -18,6 +24,18 @@ CREATE TABLE locations (
   stte VARCHAR(255) NOT NULL,
   zipc VARCHAR(255) NOT NULL
 );
+
+INSERT INTO locations (usersID, id, street, city, stte, zipc)
+VALUES 
+(1, 1, 'Admin Street 1', 'Admin City 1', 'Admin State 1', 'Admin Zip 1'),
+(1, 2, 'Admin Street 2', 'Admin City 2', 'Admin State 2', 'Admin Zip 2'),
+(1, 3, 'Admin Street 3', 'Admin City 3', 'Admin State 3', 'Admin Zip 3'),
+(2, 1, 'Employee Street 1', 'Employee City 1', 'Employee State 1', 'Employee Zip 1'),
+(2, 2, 'Employee Street 2', 'Employee City 2', 'Employee State 2', 'Employee Zip 2'),
+(2, 3, 'Employee Street 3', 'Employee City 3', 'Employee State 3', 'Employee Zip 3'),
+(3, 1, 'User Street 1', 'User City 1', 'User State 1', 'User Zip 1'),
+(3, 2, 'User Street 2', 'User City 2', 'User State 2', 'User Zip 2'),
+(3, 3, 'User Street 3', 'User City 3', 'User State 3', 'User Zip 3');
 
 CREATE TABLE cart (
   user integer NOT NULL,
