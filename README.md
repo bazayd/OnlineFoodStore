@@ -87,7 +87,7 @@ Paste everything w/ right click (should do multiple commands at once to create d
 
 Make sure to press enter to run last command
 
-run: show databaes;
+run: show databases;
 
 Make sure there is the ofsfood database
 
