@@ -95,29 +95,20 @@ run: use ofsfood;
 
 run: show tables;
 
-Should respond:
+Should respond with the following tables:
 
-+-------------------+
 
 | Tables_in_ofsfood |
-
-+-------------------+
-
+| ------------- | 
 | cart              |
-
 | category          |
-
 | inventory         |
-
 | locations         |
-
 | orderitems        |
-
 | orders            |
-
 | users             |
 
-+-------------------+
+
 
 Make sure there is inventory table (as above)
 
@@ -206,5 +197,5 @@ If all works well the webpage should be successfully up and running. if any erro
 ## Employee Account
 ![Employee Account page](Images/EmployeeAccount.png)
 
-### An employee account follows the same concept, only this time, the secret password is going to be “ofstore”, and this would allow the system to generate an employee account. As shown in the picture below, the employee account has an added functionality which is shown in the very left column. This functionality allows the employee to add, delete, increase, decrease and change the weight of any products. This again is very straightforward to produce. The employee could also add a category to the list, in case the store increase their scope of services. 
+### An employee account follows the same concept, only this time, the secret password is going to be “ofslover”, and this would allow the system to generate an employee account. As shown in the picture below, the employee account has an added functionality which is shown in the very left column. This functionality allows the employee to add, delete, increase, decrease and change the weight of any products. This again is very straightforward to produce. The employee could also add a category to the list, in case the store increase their scope of services. 
 
