@@ -247,6 +247,13 @@
     font-size: 24px;
 }
 
+.sortsText:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    color: yellow;
+    font-weight: bold;
+}
+
 .reponseText{
     color: white;
     font-family: 'Courier New', Courier, monospace;

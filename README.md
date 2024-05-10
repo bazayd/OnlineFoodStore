@@ -11,11 +11,11 @@
 6. Admin Account
 7. Employee Account
 
-##Install and Setup Guide:
+## Install and Setup Guide:
 
 If you have any issues setting up the project contact: jeremy.greatorex@sjsu.edu
 
-###Requirements:
+### Requirements:
 
 Install Node.js LTS
 
@@ -39,7 +39,7 @@ past in the path)
 
 (remember the password you give mysql we will remove later it for the sake of development)
 
-###Pre-Setup (USE IF ZIPPED FILES DON'T WORK):
+### Pre-Setup (USE IF ZIPPED FILES DON'T WORK):
 
 Make folder for project
 
@@ -51,9 +51,9 @@ run: git init
 
 run: git remote add origin git@github.com:bazayd/OnlineFoodStore
 
-run: git pull origin main
+run: git pull origin main (if this doesn't work try running git branch main and then try again)
 
-###MySQL-Set-Up:
+### MySQL-Set-Up:
 
 Open VSCode (this is what we used, any terminal is fine)
 
@@ -96,16 +96,27 @@ run: use ofsfood;
 run: show tables;
 
 Should respond:
+
 +-------------------+
+
 | Tables_in_ofsfood |
+
 +-------------------+
+
 | cart              |
+
 | category          |
+
 | inventory         |
+
 | locations         |
+
 | orderitems        |
+
 | orders            |
+
 | users             |
+
 +-------------------+
 
 Make sure there is inventory table (as above)
@@ -116,7 +127,7 @@ Should have around 89 food items
 
 run: exit
 
-###Node.js-Set-Up:
+### Node.js-Set-Up:
 
 Get in server directory
 
@@ -124,9 +135,9 @@ run: node app.js        (this starts backend node.js server)
 
 Allow any permissions
 
-####NOTE: In this tutorial we are going to be using our webpage via the react development server (the one we run from /WebProject/client/vite-project). Though we can "compile" the react and run the webserver soley from the node.js backend server.  THIS IS NOT MANDITORY TO SEE FUNCTIONALITY OF SITE: To do this in the /WebProject/client/vite-project run: npm run build.  This will generate a new dist folder located WebProject/client/vite-project/dist.  To run the webpage in development drag this dist folder into WebProject/server.  Additionally you will have to copy in all images.  To do this copy all images from the client/vite-project/src/assets folder into the new assets folder within the dist folder now in /WebProject/server.  Now to access the webpage (after starting node.js backend) access the page from the localhost:8080 port of the backend rather than the localhost:5173 port of the react development server
+#### NOTE: In this tutorial we are going to be using our webpage via the react development server (the one we run from /WebProject/client/vite-project). Though we can "compile" the react and run the webserver soley from the node.js backend server.  THIS IS NOT MANDITORY TO SEE FUNCTIONALITY OF SITE: To do this in the /WebProject/client/vite-project run: npm run build.  This will generate a new dist folder located WebProject/client/vite-project/dist.  To run the webpage in development drag this dist folder into WebProject/server.  Additionally you will have to copy in all images.  To do this copy all images from the client/vite-project/src/assets folder into the new assets folder within the dist folder now in /WebProject/server.  Now to access the webpage (after starting node.js backend) in the browser url use localhost:8080 port of the backend rather than the localhost:5173 port of the react development server
 
-###Vite&React-Set-Up:
+### Vite&React-Set-Up:
 
 Click onto vite-project (within client folder) terminal
 
